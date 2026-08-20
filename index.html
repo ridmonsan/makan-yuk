@@ -1223,7 +1223,7 @@
           </div>
           <div>
             <h2 class="catch-title">Tangkap Aku!</h2>
-            <p class="catch-sub">Bapak lagi ngumpet nih... coba tangkap sebelum dia pindah tempat.</p>
+            <p class="catch-sub">Bapak lagi ngumpet nih... ayo kejar bapak.</p>
           </div>
         </div>
 
@@ -1235,7 +1235,7 @@
           </button>
 
           <div class="catch-score" id="catchScore">Tangkap: 0</div>
-          <div class="catch-reward" id="catchReward">Tangkap aku lagi... hadiahnya bisa muncul kapan aja 💛</div>
+          <div class="catch-reward" id="catchReward">Ayo semangat sayang... ada hadiahnya lho 💛</div>
         </div>
 
         <div class="catch-message" id="catchMessage">
@@ -1839,7 +1839,7 @@
     function catchPrepareReward(){
       catchState.rewardAt=catchRandomInt(1,10);
       catchState.reward="";
-      $("catchReward").textContent="Tangkap aku lagi... hadiahnya bisa muncul kapan aja 💛";
+      $("catchReward").textContent="Ayo semangat sayang... ada hadiahnya lho 💛";
     }
 
     
@@ -1910,7 +1910,7 @@ function catchNextReward(){
         running:true
       };
       $("catchScore").textContent="Tangkap: 0";
-      $("catchReward").textContent="Tangkap aku lagi... hadiahnya bisa muncul kapan aja 💛";
+      $("catchReward").textContent="Ayo semangat sayang... ada hadiahnya lho 💛";
       $("catchMessage").textContent="Ayo tangkap aku! Hehe...";
       catchPickTarget();
       requestAnimationFrame(catchMoveTarget);
@@ -2206,7 +2206,7 @@ async function loadProfileStats(){ await loadHome(); await loadMoodStats(); }
       $("catchScore").textContent=`Tangkap: ${catchState.score}`;
       $("catchReward").textContent=catchState.reward
         ? `🎁 ${catchState.reward}`
-        : "Tangkap aku lagi... hadiahnya bisa muncul kapan aja 💛";
+        : "Ayo semangat sayang... ada hadiahnya lho 💛";
 
       const current=catchTargets.find(t=>t.id===catchState.targetId)||catchTargets[0];
       $("catchTargetSvg").innerHTML=catchSvg(current.kind);
