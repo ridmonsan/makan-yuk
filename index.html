@@ -875,6 +875,26 @@
     }
     .answer-grid{grid-template-columns:repeat(2,1fr)}
     .mood-selection-note{margin-top:8px;font-size:10px;color:#9A846A;font-weight:700}
+
+    .mood-stat-card{margin-top:12px;background:rgba(255,255,255,.88);border:1px solid rgba(239,215,124,.86);border-radius:24px;box-shadow:var(--shadow);padding:17px;position:relative;overflow:hidden}
+    .mood-stat-card:before{content:"";position:absolute;right:-26px;top:-24px;width:80px;height:80px;border-radius:50%;background:rgba(255,234,143,.35)}
+    .mood-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+    .mood-summary-item{background:#FFFDF2;border:1px solid #F0DFA3;border-radius:16px;padding:10px;text-align:center}
+    .mood-summary-number{font-family:"Fredoka","Nunito",sans-serif;font-size:20px;color:#76552F;line-height:1}
+    .mood-summary-label{margin-top:4px;font-size:9px;line-height:1.25;color:#9A846A;font-weight:800}
+    .mood-stat-list{display:grid;gap:9px;margin-top:12px;position:relative;z-index:1}
+    .mood-stat-row{display:grid;grid-template-columns:48px 1fr 34px;align-items:center;gap:8px}
+    .mood-stat-art{width:44px;height:40px;display:flex;align-items:center;justify-content:center}
+    .mood-stat-art .piyo-art{width:42px;height:38px}
+    .mood-stat-name{font-size:10px;color:#6F5946;font-weight:800;margin-bottom:4px}
+    .mood-stat-bar{height:8px;background:#F6EED1;border-radius:999px;overflow:hidden}
+    .mood-stat-fill{height:100%;background:linear-gradient(90deg,#FFD95A,#F4BB35);border-radius:999px}
+    .mood-stat-count{text-align:right;font-family:"Fredoka","Nunito",sans-serif;font-size:14px;color:#76552F}
+    .mood-stat-empty{text-align:center;padding:12px 4px 2px;color:#A18C76;font-size:11px;font-weight:700}
+    .mood-top{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px;border-radius:17px;background:#FFF6C9;border:1px solid #EED78C}
+    .mood-top-copy{min-width:0}.mood-top-title{font-family:"Fredoka","Nunito",sans-serif;font-size:12px;color:#6B5034;font-weight:600}
+    .mood-top-sub{font-size:9px;color:#9A846A;font-weight:800;margin-top:3px}
+    @media(max-width:390px){.mood-summary{grid-template-columns:1fr 1fr}.mood-summary-item:last-child{grid-column:1/-1}}
 </style>
 </head>
 <body>
@@ -948,7 +968,7 @@
         <p class="section-sub">Pilih aja menu nya ya sayang.</p>
         <div class="quick-grid">
           <button class="quick-btn" data-go="makan"><span class="piyo-ui inline-piyo" data-piyo-ui="food"></span> Menu makanan ada disini →</button>
-          <button class="quick-btn" data-go="riwayat"><span class="piyo-ui inline-piyo" data-piyo-ui="history"></span> Riwayat kamu ada disini →</button>
+          <button class="quick-btn" data-go="riwayat"><span class="piyo-ui inline-piyo" data-piyo-ui="history"></span> Cerita-cerita Kamu ada disini →</button>
         </div>
       </section>
 
@@ -1056,7 +1076,7 @@
     <!-- RIWAYAT -->
     <section id="page-riwayat" class="page">
       <header style="padding:10px 6px 14px;">
-        <div class="page-title"><span class="piyo-ui inline-piyo" data-piyo-ui="history"></span> Riwayat Kamu</div>
+        <div class="page-title"><span class="piyo-ui inline-piyo" data-piyo-ui="history"></span> Cerita Kamu</div>
         <div class="page-subtitle">Lihat lagi semua yang sudah kamu ceritakan.</div>
       </header>
 
@@ -1074,8 +1094,8 @@
     <!-- AKU -->
     <section id="page-aku" class="page">
       <header style="padding:10px 6px 14px;">
-        <div class="page-title"><span class="piyo-ui inline-piyo" data-piyo-ui="love"></span> Aku</div>
-        <div class="page-subtitle">Sedikit tentang kamu.</div>
+        <div class="page-title"><span class="piyo-ui inline-piyo" data-piyo-ui="love"></span>Ruang Kecilmu</div>
+        <div class="page-subtitle">Di sini, cerita kecil tentang harimu punya tempat untuk disimpan.</div>
       </header>
 
       <section class="card profile-card">
@@ -1086,8 +1106,8 @@
             <div class="blush right"></div>
           </div>
         </div>
-        <div class="profile-name">Istriku Tersayang</div>
-        <div class="profile-note">Ini adalah ruang kecil yang aku buat khusus untuk kamu. Semoga kamu selalu sehat, senang dan bahagia selalu ya.</div>
+        <div class="profile-name">Untuk Istriku Tersayang</div>
+        <div class="profile-note">Ruang kecil ini aku buat khusus untuk kamu, istriku. Untuk menyimpan sedikit cerita tentang hari-harimu, tentang apa yang kamu rasa, dan tentang hal-hal kecil yang mungkin sering terlewat. Semoga kamu selalu sehat, selalu bahagia, dan selalu tahu bahwa ada aku yang ingin mendengar semua ceritamu.</div>
 
         <div class="home-stats" style="margin-top:18px;">
           <div class="mini-card">
@@ -1101,12 +1121,36 @@
         </div>
       </section>
 
-      <section class="card" style="margin-top:12px;">
+            <section class="mood-stat-card">
+        <div class="section-head">
+          <div class="section-icon"><span class="piyo-ui" id="moodStatsHeaderArt"></span></div>
+          <div><h2 class="section-title">Statistik Mood Kamu</h2></div>
+        </div>
+        <p class="section-sub">Lihat mood yang paling sering menemani kamu.</p>
+
+        <div class="mood-summary">
+          <div class="mood-summary-item"><div class="mood-summary-number" id="moodStatTotal">0</div><div class="mood-summary-label">total mood</div></div>
+          <div class="mood-summary-item"><div class="mood-summary-number" id="moodStatKinds">0</div><div class="mood-summary-label">jenis mood</div></div>
+          <div class="mood-summary-item"><div class="mood-summary-number" id="moodStatFavorite">—</div><div class="mood-summary-label">mood paling sering</div></div>
+        </div>
+
+        <div id="moodStatTop" class="mood-top" style="display:none;">
+          <div id="moodStatTopArt" class="mood-stat-art"></div>
+          <div class="mood-top-copy">
+            <div class="mood-top-title" id="moodStatTopName">—</div>
+            <div class="mood-top-sub" id="moodStatTopCount">—</div>
+          </div>
+        </div>
+
+        <div id="moodStatsList" class="mood-stat-list"><div class="mood-stat-empty">Belum ada statistik mood.</div></div>
+      </section>
+
+<section class="card" style="margin-top:12px;">
         <div class="section-head">
           <div class="section-icon"><span class="piyo-ui" data-piyo-ui="love"></span></div>
-          <div><h2 class="section-title">Login</h2></div>
+          <div><h2 class="section-title">Logout</h2></div>
         </div>
-        <p class="section-sub">Session tersimpan di perangkat ini sampai kamu keluar.</p>
+        <p class="section-sub">Selama kamu tetap di sini, ruang kecil ini akan selalu siap menemani ceritamu.</p>
         <button id="logoutButton" class="danger-btn">Keluar dari akun</button>
       </section>
     </section>
@@ -1468,9 +1512,61 @@
       } else $("lastMoodCard").textContent="Belum ada catatan.";
     }
 
-    async function loadProfileStats(){
-      await loadHome();
+        async function loadMoodStats(){
+      const {data,error}=await db.from("food_logs").select("mood_id").limit(1000);
+      if(error){
+        console.error(error);
+        $("moodStatTotal").textContent="—";
+        $("moodStatKinds").textContent="—";
+        $("moodStatFavorite").textContent="—";
+        $("moodStatsList").innerHTML='<div class="mood-stat-empty">Statistik mood belum bisa dimuat.</div>';
+        return;
+      }
+
+      const counts={};
+      let totalMoodSelections=0;
+      (data||[]).forEach(row=>{
+        const ids=Array.isArray(row.mood_id)?row.mood_id:(row.mood_id?[row.mood_id]:[]);
+        ids.forEach(id=>{counts[id]=(counts[id]||0)+1; totalMoodSelections++;});
+      });
+
+      const entries=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+      const favoriteId=entries[0]?.[0]||"";
+      const favoriteMood=moods.find(m=>m.id===favoriteId);
+
+      $("moodStatTotal").textContent=totalMoodSelections;
+      $("moodStatKinds").textContent=entries.length;
+      $("moodStatFavorite").textContent=favoriteMood?favoriteMood.label:"—";
+
+      if(favoriteMood){
+        $("moodStatTop").style.display="flex";
+        $("moodStatTopArt").innerHTML=piyoArt(favoriteMood.moodClass);
+        $("moodStatTopName").textContent=favoriteMood.label;
+        $("moodStatTopCount").textContent=`Paling sering dipilih • ${entries[0][1]} kali`;
+      }else{
+        $("moodStatTop").style.display="none";
+      }
+
+      if(!entries.length){
+        $("moodStatsList").innerHTML='<div class="mood-stat-empty">Belum ada mood yang tercatat.</div>';
+        return;
+      }
+
+      const maxCount=entries[0][1];
+      $("moodStatsList").innerHTML=entries.map(([id,count])=>{
+        const mood=moods.find(m=>m.id===id);
+        if(!mood) return "";
+        const percent=Math.round(count/maxCount*100);
+        return `<div class="mood-stat-row">
+          <div class="mood-stat-art">${piyoArt(mood.moodClass)}</div>
+          <div><div class="mood-stat-name">${escapeHtml(mood.label)}</div>
+          <div class="mood-stat-bar"><div class="mood-stat-fill" style="width:${percent}%"></div></div></div>
+          <div class="mood-stat-count">${count}</div>
+        </div>`;
+      }).join("");
     }
+
+async function loadProfileStats(){ await loadHome(); await loadMoodStats(); }
 
     async function loadHistory(){
       $("historyList").innerHTML=`<div class="history-loading">Memuat catatan...</div>`;
@@ -1578,6 +1674,8 @@
       $("homeDate").textContent=formatDate(new Date());
       render();
       await loadHome();
+      if($("moodStatsHeaderArt")) $("moodStatsHeaderArt").innerHTML=piyoArt("happy");
+      await loadMoodStats();
       if($("customFood")) $("customFood").addEventListener("input",render);
       if($("historyRefresh")) $("historyRefresh").addEventListener("click",loadHistory);
     }
