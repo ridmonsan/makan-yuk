@@ -696,16 +696,116 @@
       .title{font-size:28px}
       .today-pill{padding:8px 9px}
     }
-  </style>
+  
+    /* Authentication */
+    .login-screen{
+      position:fixed;
+      inset:0;
+      z-index:9999;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:20px;
+      background:
+        radial-gradient(circle at 20% 10%,rgba(255,255,255,.92),transparent 25%),
+        linear-gradient(180deg,#FFF8D6,#FFFDF3);
+    }
+    .login-card{
+      width:min(100%,360px);
+      background:#FFFEF4;
+      border:1px solid #F0DFA3;
+      border-radius:28px;
+      padding:28px 22px;
+      text-align:center;
+      box-shadow:0 15px 40px rgba(118,93,39,.14);
+    }
+    .login-card h1{
+      font-family:"Fredoka","Nunito",sans-serif;
+      color:#5A4433;
+      font-size:28px;
+      margin:12px 0 6px;
+    }
+    .login-card p{
+      font-size:12px;
+      color:#90775E;
+      font-weight:700;
+      margin-bottom:18px;
+    }
+    #loginCode{
+      width:100%;
+      padding:14px;
+      border:2px dashed #EFD995;
+      border-radius:17px;
+      background:#FFFDF2;
+      color:#5C4536;
+      text-align:center;
+      font-size:18px;
+      letter-spacing:.2em;
+      outline:none;
+    }
+    #loginCode:focus{
+      border-style:solid;
+      border-color:#E5C95E;
+      box-shadow:0 0 0 4px rgba(255,230,105,.24);
+    }
+    #loginButton{
+      width:100%;
+      margin-top:12px;
+      border:0;
+      border-radius:19px;
+      padding:15px;
+      background:linear-gradient(180deg,#FFD95A,#F4BB35);
+      color:#5D442B;
+      font-family:"Fredoka","Nunito",sans-serif;
+      font-size:16px;
+      font-weight:600;
+      cursor:pointer;
+    }
+    #loginError{
+      min-height:18px;
+      margin-top:10px;
+      color:#C96D5E;
+      font-size:11px;
+      font-weight:800;
+    }
+    .logout-button{
+      margin-top:10px;
+      border:0;
+      background:none;
+      color:#A28D75;
+      font-size:10px;
+      font-weight:800;
+      cursor:pointer;
+      text-decoration:underline;
+    }
+</style>
 </head>
 
 <body>
+  <div id="loginScreen" class="login-screen">
+    <div class="login-card">
+      <div class="login-piyo">
+        <div class="piyo-face">
+          <div class="beak"></div>
+          <div class="blush left"></div>
+          <div class="blush right"></div>
+        </div>
+      </div>
+      <h1>Hello Istriku 💛</h1>
+      <p>Masukkan kode rahasianya ya.</p>
+      <input id="loginCode" type="password" inputmode="numeric" autocomplete="current-password" placeholder="Masukkan kode...">
+      <button id="loginButton" type="button">Masuk 💛</button>
+      <div id="loginError"></div>
+    </div>
+  </div>
+
+
   <div class="deco egga"></div>
   <div class="deco star1">•</div>
   <div class="deco star2">•</div>
   <div class="deco heart">♥</div>
 
-  <main class="app">
+  <main class="app" id="appContent" style="display:none;">
     <header>
       <div class="brand-row">
         <div>
@@ -844,6 +944,8 @@
 
     <footer>
       dibuat khusus untuk kamu
+      <br>
+      <button id="logoutButton" type="button" class="logout-button">Keluar dari akun</button>
     </footer>
   </main>
 
@@ -867,6 +969,41 @@
       APP_CONFIG.SUPABASE_URL,
       APP_CONFIG.SUPABASE_ANON_KEY
     );
+
+    const WIFE_EMAIL = APP_CONFIG.WIFE_EMAIL;
+
+    async function loginWife(){
+      const code = $("loginCode").value.trim();
+      const errorBox = $("loginError");
+
+      errorBox.textContent = "";
+
+      if(!code){
+        errorBox.textContent = "Masukkan kodenya dulu ya ❤️";
+        return;
+      }
+
+      const { error } = await db.auth.signInWithPassword({
+        email: WIFE_EMAIL,
+        password: code
+      });
+
+      if(error){
+        console.error(error);
+        errorBox.textContent = "Kodenya belum benar, coba lagi ya ❤️";
+        return;
+      }
+
+      $("loginScreen").style.display = "none";
+      $("appContent").style.display = "";
+      await startApp();
+    }
+
+    async function checkExistingSession(){
+      const { data: { session } } = await db.auth.getSession();
+      return !!session;
+    }
+
 
     const meals = [
       {id:"breakfast", icon:"🌤️", label:"Sarapan"},
@@ -1306,7 +1443,15 @@
           foodIds.push("custom::" + customFood);
         }
 
+        const { data: { user }, error: userError } = await db.auth.getUser();
+
+        if(userError || !user){
+          showToast("Sesi login sudah tidak aktif");
+          return;
+        }
+
         const payload = {
+          user_id:user.id,
           meal_type:state.meal,
           food_ids:foodIds,
           mood_id:state.mood,
@@ -1337,13 +1482,52 @@
       }
     });
 
-    $("date").textContent = formatDate(new Date());
-    render();
-    loadTodayCount();
-    loadHistory();
 
-    $("customFood").addEventListener("input", render);
-    $("historyRefresh").addEventListener("click", loadHistory);
+    async function startApp(){
+      const loggedIn = await checkExistingSession();
+
+      if(!loggedIn){
+        $("loginScreen").style.display = "flex";
+        $("appContent").style.display = "none";
+        return;
+      }
+
+      $("loginScreen").style.display = "none";
+      $("appContent").style.display = "";
+
+      $("date").textContent = formatDate(new Date());
+      render();
+      loadTodayCount();
+      loadHistory();
+
+      if($("customFood")){
+        $("customFood").addEventListener("input", render);
+      }
+      if($("historyRefresh")){
+        $("historyRefresh").addEventListener("click", loadHistory);
+      }
+    }
+
+    if($("loginButton")){
+      $("loginButton").addEventListener("click", loginWife);
+    }
+
+    if($("loginCode")){
+      $("loginCode").addEventListener("keydown", event => {
+        if(event.key === "Enter"){
+          loginWife();
+        }
+      });
+    }
+
+    if($("logoutButton")){
+      $("logoutButton").addEventListener("click", async () => {
+        await db.auth.signOut();
+        window.location.reload();
+      });
+    }
+
+    startApp();
   </script>
 </body>
 </html>

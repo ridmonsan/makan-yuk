@@ -121,13 +121,40 @@ button{font:inherit}
   .wrap{padding:14px 11px 30px}.title{font-size:27px}.header{gap:10px}.refresh{padding:8px 9px}
   .cards{gap:9px}.barrow{grid-template-columns:95px 1fr 24px}
 }
+
+    .login-screen{position:fixed;inset:0;z-index:9999;display:flex;justify-content:center;align-items:center;padding:20px;background:radial-gradient(circle at 20% 10%,rgba(255,255,255,.92),transparent 25%),linear-gradient(180deg,#FFF8D6,#FFFDF3)}
+    .login-card{width:min(100%,380px);background:#FFFEF4;border:1px solid #F0DFA3;border-radius:28px;padding:30px 24px;text-align:center;box-shadow:0 15px 40px rgba(118,93,39,.14)}
+    .login-card h1{font-family:"Fredoka","Nunito",sans-serif;color:#5A4433;font-size:29px;margin:12px 0 6px}
+    .login-card p{font-size:12px;color:#90775E;font-weight:700;margin:0 0 18px}
+    #loginCode{width:100%;padding:14px;border:2px dashed #EFD995;border-radius:17px;background:#FFFDF2;color:#5C4536;text-align:center;font-size:18px;letter-spacing:.2em;outline:none}
+    #loginButton{width:100%;margin-top:12px;border:0;border-radius:19px;padding:15px;background:linear-gradient(180deg,#FFD95A,#F4BB35);color:#5D442B;font-family:"Fredoka","Nunito",sans-serif;font-size:16px;font-weight:600;cursor:pointer}
+    #loginError{min-height:18px;margin-top:10px;color:#C96D5E;font-size:11px;font-weight:800}
+    .logout-button{margin-top:12px;border:0;background:none;color:#A28D75;font-size:10px;font-weight:800;cursor:pointer;text-decoration:underline}
 </style></head>
 <body>
+  <div id="loginScreen" class="login-screen">
+    <div class="login-card">
+      <div class="brand" style="justify-content:center">
+        <div class="piyo-face">
+          <div class="piyo-beak"></div>
+          <div class="piyo-blush left"></div>
+          <div class="piyo-blush right"></div>
+        </div>
+      </div>
+      <h1>Dashboard 💛</h1>
+      <p>Masukkan kode untuk melihat catatan.</p>
+      <input id="loginCode" type="password" autocomplete="current-password" placeholder="Masukkan kode...">
+      <button id="loginButton" type="button">Masuk 💛</button>
+      <div id="loginError"></div>
+    </div>
+  </div>
+
+
   <div class="deco egga"></div>
   <div class="deco star">✦</div>
   <div class="deco heart">♡</div>
 
-  <main class="wrap">
+  <main class="wrap" id="appContent" style="display:none;">
     <header class="header">
       <div>
         <div class="kicker">
@@ -206,12 +233,47 @@ button{font:inherit}
       <div id="list" class="list"></div>
     </section>
 
-    <div class="footer">dibuat khusus untuk kalian 💛</div>
+    <div class="footer">dibuat khusus untuk kalian 💛<br><button id="logoutButton" class="logout-button">Keluar dari akun</button></div>
   </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script>
 <script>
 const db=supabase.createClient(APP_CONFIG.SUPABASE_URL,APP_CONFIG.SUPABASE_ANON_KEY);
+const HUSBAND_EMAIL = APP_CONFIG.HUSBAND_EMAIL;
+
+async function loginHusband(){
+  const code=$("loginCode").value.trim();
+  $("loginError").textContent="";
+  if(!code){
+    $("loginError").textContent="Masukkan kode dulu.";
+    return;
+  }
+  const {error}=await db.auth.signInWithPassword({
+    email:HUSBAND_EMAIL,
+    password:code
+  });
+  if(error){
+    console.error(error);
+    $("loginError").textContent="Kode belum benar.";
+    return;
+  }
+  $("loginScreen").style.display="none";
+  $("appContent").style.display="";
+  load();
+}
+
+async function startDashboard(){
+  const {data:{session}}=await db.auth.getSession();
+  if(session){
+    $("loginScreen").style.display="none";
+    $("appContent").style.display="";
+    load();
+  }else{
+    $("loginScreen").style.display="flex";
+    $("appContent").style.display="none";
+  }
+}
+
 const foods=[["rice","🍚","Nasi"],["sate","🍢","Sate"],["soto_mie","🍜","Soto Mie"],["pempek","🥟","Pempek"],["telur_dadar","🍳","Telur Dadar"],["indomie","🍜","Indomie"],["mie_sedap_laksa","🍜","Mie Sedap Laksa"],["ayam_penyet","🍗","Ayam Penyet"],["brokoli","🥦","Brokoli"],["tahu","🟫","Tahu"],["tempe","🟫","Tempe"],["mie_ayam","🍜","Mie Ayam"]];
 const meals=[["breakfast","🌤️","Sarapan"],["lunch","☀️","Makan siang"],["dinner","🌙","Makan malam"],["snack","🍪","Snack"]];
 const moods=[["happy","😊","Senang"],["love","🥰","Bahagia"],["good","🙂","Biasa"],["neutral","😐","Netral"],["tired","😴","Capek"],["sad","😞","Sedih"],["angry","😡","Kesal"],["stressed","😩","Stres"],["sick","🤢","Tidak enak"],["excited","🤩","Semangat"]];
@@ -253,7 +315,10 @@ async function load(){
  $("moodBars").innerHTML=topM.map(([id,n])=>{const m=moods.find(x=>x[0]===id)||["","🙂",id];return `<div class="barrow"><div>${m[1]} ${m[2]}</div><div class="bar"><div class="fill" style="width:${n/maxM*100}%"></div></div><div>${n}</div></div>`}).join("");
  $("list").innerHTML=data.length?data.map(x=>{const meal=meals.find(m=>m[0]===x.meal_type),mood=moods.find(m=>m[0]===x.mood_id),names=(x.food_ids||[]).map(id=>{if(String(id).startsWith("custom::"))return "🐥 "+String(id).slice("custom::".length);const f=foods.find(f=>f[0]===id);return f?f[1]+" "+f[2]:null;}).filter(Boolean).join(" · "),t=new Date(x.eaten_at).toLocaleString("id-ID",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});return `<div class="entry"><div class="row"><span>${meal?meal[1]+" "+meal[2]:x.meal_type}</span><span>${t}</span></div><div class="main"><div class="foods">${names}</div><div class="mood">${piyoDashArt(mood?mood[0]:"neutral")}</div></div>${x.comment?`<div class="comment">💬 ${String(x.comment).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}</div>`}).join(""):'<div class="empty">Belum ada catatan.</div>';
 }
-$("refresh").onclick=load;load();
+$("refresh").onclick=load;$("loginButton").addEventListener("click",loginHusband);
+$("loginCode").addEventListener("keydown",e=>{if(e.key==="Enter")loginHusband();});
+$("logoutButton").addEventListener("click",async()=>{await db.auth.signOut();window.location.reload();});
+startDashboard();
 </script>
 </body>
 </html>
