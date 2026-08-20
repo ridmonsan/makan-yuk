@@ -1041,6 +1041,99 @@
       position:relative;
       z-index:1;
     }
+
+    .reward-modal{
+      position:fixed;
+      inset:0;
+      z-index:10020;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:22px;
+    }
+    .reward-modal.show{display:flex}
+    .reward-backdrop{
+      position:absolute;
+      inset:0;
+      background:rgba(75,56,43,.34);
+      backdrop-filter:blur(5px);
+    }
+    .reward-card{
+      position:relative;
+      z-index:1;
+      width:min(100%,340px);
+      padding:24px 20px 20px;
+      text-align:center;
+      border-radius:28px;
+      border:2px solid #E8C83F;
+      background:linear-gradient(180deg,#FFF8B9 0%,#FFFEF4 100%);
+      box-shadow:0 20px 55px rgba(71,48,25,.24);
+      animation:rewardIn .28s ease;
+    }
+    @keyframes rewardIn{
+      0%{transform:translateY(12px) scale(.88);opacity:0}
+      100%{transform:translateY(0) scale(1);opacity:1}
+    }
+    .reward-close{
+      position:absolute;
+      top:8px;
+      right:10px;
+      width:32px;
+      height:32px;
+      border:0;
+      border-radius:50%;
+      background:#FFF1A1;
+      color:#76552F;
+      font-size:22px;
+      line-height:1;
+      cursor:pointer;
+    }
+    .reward-piyo-wrap{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      min-height:84px;
+    }
+    .reward-piyo-wrap svg{
+      width:84px;
+      height:84px;
+      display:block;
+    }
+    .reward-kicker{
+      margin-top:5px;
+      font-size:10px;
+      color:#9A846A;
+      font-weight:800;
+    }
+    .reward-title{
+      margin-top:8px;
+      font-family:"Fredoka","Nunito",sans-serif;
+      font-size:28px;
+      line-height:1.05;
+      color:#76552F;
+      font-weight:700;
+      word-break:break-word;
+    }
+    .reward-sub{
+      margin-top:7px;
+      font-size:11px;
+      color:#90775E;
+      font-weight:700;
+    }
+    .reward-button{
+      width:100%;
+      margin-top:15px;
+      border:0;
+      border-radius:18px;
+      padding:13px 14px;
+      background:linear-gradient(180deg,#FFD95A,#F4BB35);
+      color:#5D442B;
+      font-family:"Fredoka","Nunito",sans-serif;
+      font-size:16px;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow:0 8px 18px rgba(212,166,40,.2);
+    }
 </style>
 </head>
 <body>
@@ -1093,19 +1186,7 @@
         </div>
       </div>
 
-      <div class="home-stats">
-        <div class="mini-card">
-          <div class="mini-number" id="homeTodayCount">0</div>
-          <div class="mini-label">cerita hari ini</div>
-        </div>
-        <div class="mini-card">
-          <div class="mini-number" id="homeTotalCount">0</div>
-          <div class="mini-label">cerita tersimpan</div>
-        </div>
-      </div>
-
-      
-      <section class="card catch-game">
+<section class="card catch-game">
         <div class="catch-head">
           <div class="section-icon">
             <span class="piyo-ui" data-piyo-ui="happy"></span>
@@ -1136,6 +1217,20 @@
           <button type="button" class="catch-tool" id="catchChangeTarget">Ganti aku</button>
         </div>
       </section>
+
+      <div class="home-stats">
+        <div class="mini-card">
+          <div class="mini-number" id="homeTodayCount">0</div>
+          <div class="mini-label">cerita hari ini</div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-number" id="homeTotalCount">0</div>
+          <div class="mini-label">cerita tersimpan</div>
+        </div>
+      </div>
+
+      
+      
 
 <section class="card" style="margin-top:12px;">
         <div class="section-head">
@@ -1745,14 +1840,44 @@
       $("catchReward").textContent="Tangkap aku lagi... hadiahnya bisa muncul kapan aja 💛";
     }
 
-    function catchNextReward(){
+    
+    function rewardPiyoArt(){
+      return `
+        <svg viewBox="0 0 80 80" aria-hidden="true">
+          <path d="M40 11 Q21 11 20 31 Q19 53 40 59 Q61 53 60 31 Q59 11 40 11Z" fill="#FFE26A" stroke="#7A5A3C" stroke-width="2"/>
+          <circle cx="32" cy="30" r="2.2" fill="#5C4536"/><circle cx="48" cy="30" r="2.2" fill="#5C4536"/>
+          <path d="M35 36 Q40 45 45 36" fill="none" stroke="#6B4B37" stroke-width="2" stroke-linecap="round"/>
+          <path d="M35 36 L40 40 L45 36 Q40 32 35 36Z" fill="#EF9E26" stroke="#7A5A3C" stroke-width="1.4"/>
+          <circle cx="26" cy="40" r="3.2" fill="#F2A0A0"/><circle cx="54" cy="40" r="3.2" fill="#F2A0A0"/>
+          <path d="M15 31 Q6 22 15 16" fill="none" stroke="#7A5A3C" stroke-width="3" stroke-linecap="round"/>
+          <path d="M65 31 Q74 22 65 16" fill="none" stroke="#7A5A3C" stroke-width="3" stroke-linecap="round"/>
+          <path d="M18 61 C28 52 52 52 62 61" fill="#FFD857" stroke="#7A5A3C" stroke-width="2"/>
+        </svg>`;
+    }
+
+    function showRewardPopup(reward){
+      $("rewardTitle").textContent=reward;
+      $("rewardPiyoArt").innerHTML=rewardPiyoArt();
+
+      const modal=$("rewardModal");
+      modal.classList.add("show");
+      modal.setAttribute("aria-hidden","false");
+
+      setTimeout(()=>{$("rewardOkay")?.focus();},30);
+    }
+
+    function closeRewardPopup(){
+      const modal=$("rewardModal");
+      modal.classList.remove("show");
+      modal.setAttribute("aria-hidden","true");
+    }
+
+function catchNextReward(){
       const reward=catchRewards[catchRandomInt(0,catchRewards.length-1)];
       catchState.reward=reward;
-      $("catchReward").textContent=`🎁 ${reward}`;
-      $("catchReward").classList.remove("show");
-      void $("catchReward").offsetWidth;
-      $("catchReward").classList.add("show");
+      $("catchReward").textContent="Hadiah sudah siap 💛";
       catchState.rewardAt=catchState.score+catchRandomInt(1,10);
+      showRewardPopup(reward);
       catchSaveDayState();
     }
 
@@ -2086,7 +2211,36 @@ async function loadProfileStats(){ await loadHome(); await loadMoodStats(); }
       requestAnimationFrame(catchMoveTarget);
     }
 
+
+    if($("rewardOkay")) $("rewardOkay").addEventListener("click",closeRewardPopup);
+    if($("rewardClose")) $("rewardClose").addEventListener("click",closeRewardPopup);
+    if(document.querySelector("#rewardModal .reward-backdrop")){
+      document.querySelector("#rewardModal .reward-backdrop").addEventListener("click",closeRewardPopup);
+    }
+    document.addEventListener("keydown",event=>{
+      if(event.key==="Escape") closeRewardPopup();
+    });
+
     startApp();
   </script>
+
+  <div id="rewardModal" class="reward-modal" aria-hidden="true">
+    <div class="reward-backdrop"></div>
+    <div class="reward-card" role="dialog" aria-modal="true" aria-labelledby="rewardTitle">
+      <button type="button" class="reward-close" id="rewardClose" aria-label="Tutup">×</button>
+
+      <div class="reward-piyo-wrap">
+        <div id="rewardPiyoArt"></div>
+      </div>
+
+      <div class="reward-kicker">Hadiah kecil buat Ibuk 💛</div>
+      <div class="reward-title" id="rewardTitle">LOVE YOU!!!</div>
+      <div class="reward-sub">Bapak kasih hadiah dulu ya.</div>
+
+      <button type="button" class="reward-button" id="rewardOkay">
+        Yeay! 💛
+      </button>
+    </div>
+  </div>
 </body>
 </html>
