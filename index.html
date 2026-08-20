@@ -1150,6 +1150,9 @@
     .home-bapak{height:92px;display:flex;align-items:center;justify-content:center;margin:8px 0 2px;position:relative;z-index:1}
     .home-bapak svg{width:86px;height:86px;display:block}
     @media(max-width:390px){.home-choice-grid{grid-template-columns:1fr}}
+
+    .section-title .piyo-ui{width:22px;height:22px;vertical-align:-6px;margin-right:4px}
+    .home-response .piyo-ui,.catch-reward .piyo-ui,.reward-kicker .piyo-ui{width:18px;height:18px;vertical-align:-5px;margin-right:3px}
 </style>
 </head>
 <body>
@@ -1236,9 +1239,9 @@
       <section class="card home-interactive-card">
         <div class="section-head">
           <div class="section-icon"><span class="piyo-ui" data-piyo-ui="love"></span></div>
-          <div><h2 class="section-title">🌷 Hari ini ibuk udah...</h2></div>
+          <div><h2 class="section-title"><span class="piyo-ui" data-piyo-ui="food"></span> Hari ini ibuk udah...</h2></div>
         </div>
-        <p class="section-sub">Ceklis yang sudah kamu lakukan hari ini ya sayang.</p>
+        <p class="section-sub">Jangan lupa mam sama minum ya sayang.</p>
         <div class="home-checklist">
           <label class="home-check">
             <input type="checkbox" data-home-check="drink">
@@ -1258,13 +1261,13 @@
       <section class="card home-interactive-card">
         <div class="section-head">
           <div class="section-icon"><span class="piyo-ui" data-piyo-ui="love"></span></div>
-          <div><h2 class="section-title">🌤️ Hari ini aku pengen...</h2></div>
+          <div><h2 class="section-title"><span class="piyo-ui" data-piyo-ui="home"></span> Hari ini ibuk pengen...</h2></div>
         </div>
-        <p class="section-sub">Pilih yang paling pengen kamu rasain hari ini.</p>
+        <p class="section-sub">Mau apa hayo?</p>
         <div class="home-checklist">
-          <label class="home-check"><input type="checkbox" data-home-want="eat_good"><span>Makan enak</span></label>
-          <label class="home-check"><input type="checkbox" data-home-want="sleep_well"><span>Tidur nyenyak</span></label>
-          <label class="home-check"><input type="checkbox" data-home-want="watch"><span>Nonton</span></label>
+          <label class="home-check"><input type="checkbox" data-home-want="eat_good"><span>Mam enak</span></label>
+          <label class="home-check"><input type="checkbox" data-home-want="sleep_well"><span>Bobok nyenyak</span></label>
+          <label class="home-check"><input type="checkbox" data-home-want="watch"><span>Netpikan</span></label>
           <label class="home-check"><input type="checkbox" data-home-want="pacalan"><span>Pacalan</span></label>
           <label class="home-check"><input type="checkbox" data-home-want="hug"><span>Dipeluk</span></label>
           <label class="home-check"><input type="checkbox" data-home-want="pampered"><span>Dimanja</span></label>
@@ -1274,7 +1277,7 @@
       <section class="card home-interactive-card">
         <div class="section-head">
           <div class="section-icon"><span class="piyo-ui" data-piyo-ui="love"></span></div>
-          <div><h2 class="section-title">💛 Pilih Pelukan Hari Ini</h2></div>
+          <div><h2 class="section-title"><span class="piyo-ui" data-piyo-ui="love"></span> Pilih Pelukan Hari Ini</h2></div>
         </div>
         <p class="section-sub">Hari ini Ibuk pengen dipeluk yang mana?</p>
         <div class="home-choice-grid" id="hugChoices">
@@ -1284,13 +1287,13 @@
           <button type="button" class="home-choice" data-hug="Peluk sambil diem">Peluk sambil diem</button>
           <button type="button" class="home-choice" data-hug="Peluk sampai ketiduran">Peluk sampai ketiduran</button>
         </div>
-        <div class="home-response" id="hugResponse">Pilih satu ya sayang 💛</div>
+        <div class="home-response" id="hugResponse">Pilih satu ya sayang</div>
       </section>
 
       <section class="card home-interactive-card">
         <div class="section-head">
           <div class="section-icon"><span class="piyo-ui" data-piyo-ui="love"></span></div>
-          <div><h2 class="section-title">👨 Bapak Hari Ini</h2></div>
+          <div><h2 class="section-title"><span class="piyo-ui" data-piyo-ui="happy"></span> Bapak Hari Ini</h2></div>
         </div>
         <p class="section-sub">Menurut Ibuk, Bapak hari ini lagi apa?</p>
         <div class="home-bapak" id="bapakTodayArt"></div>
@@ -1301,7 +1304,7 @@
           <button type="button" class="home-choice" data-bapak="Pengen dipeluk">Pengen dipeluk</button>
           <button type="button" class="home-choice" data-bapak="Lagi jail">Lagi jail</button>
         </div>
-        <div class="home-response" id="bapakResponse">Coba tebak dulu ya... 💛</div>
+        <div class="home-response" id="bapakResponse">Coba tebak dulu ya...</div>
       </section>
 
 
@@ -1325,7 +1328,7 @@
           </button>
 
           <div class="catch-score" id="catchScore">Tangkap: 0</div>
-          <div class="catch-reward" id="catchReward">Ayo semangat sayang... ada hadiahnya lho 💛</div>
+          <div class="catch-reward" id="catchReward">Ayo semangat sayang... ada hadiahnya lho</div>
         </div>
 
         <div class="catch-message" id="catchMessage">
@@ -1392,7 +1395,7 @@
 
             <section class="card">
         <div class="section-head">
-          <div class="section-icon"><span style="font-size:20px;">🎵</span></div>
+          <div class="section-icon"><span class="piyo-ui" data-piyo-ui="happy"></span></div>
           <div><h2 class="section-title">Soundtrack apa hari ini?</h2></div>
         </div>
         <p class="section-sub">Lagu apa yang nemenin kamu hari ini atau yang sesusai dengan mood kamu sekarang?</p>
@@ -1401,7 +1404,7 @@
 
       <section class="card">
         <div class="section-head">
-          <div class="section-icon"><span style="font-size:20px;">💛</span></div>
+          <div class="section-icon"><span class="piyo-ui" data-piyo-ui="love"></span></div>
           <div><h2 class="section-title">Ibuk sayang Bapak nda?</h2></div>
         </div>
         <p class="section-sub">Pilih satu ya sayang.</p>
@@ -1415,7 +1418,7 @@
 
       <section class="card">
         <div class="section-head">
-          <div class="section-icon"><span style="font-size:20px;">✏️</span></div>
+          <div class="section-icon"><span class="piyo-ui" data-piyo-ui="chat"></span></div>
           <div><h2 class="section-title">Satu kata buat hari ini</h2></div>
         </div>
         <p class="section-sub">Satu kata aja, boleh apa aja.</p>
@@ -1550,10 +1553,10 @@
     const WIFE_EMAIL = APP_CONFIG.WIFE_EMAIL;
 
     const meals = [
-      {id:"breakfast", icon:"🌤️", label:"Sarapan"},
-      {id:"lunch", icon:"☀️", label:"Makan siang"},
-      {id:"dinner", icon:"🌙", label:"Makan malam"},
-      {id:"snack", icon:"🍪", label:"Snack"}];
+      {id:"breakfast", icon:"morning", label:"Sarapan"},
+      {id:"lunch", icon:"noon", label:"Makan siang"},
+      {id:"dinner", icon:"night", label:"Makan malam"},
+      {id:"snack", icon:"snack", label:"Snack"}];
     const foods = [
       {id:"rice", icon:"rice", label:"Nasi"},
       {id:"sate", icon:"sate", label:"Sate"},
@@ -1569,7 +1572,7 @@
       {id:"mie_ayam", icon:"mie_ayam", label:"Mie Ayam"}];
     const moods = [
       {id:"happy", moodClass:"happy", label:"Aku lagi seneng, yeaayyy", face:"⌣"},
-      {id:"love", moodClass:"love", label:"Aku lagi kangen", face:"♥"},
+      {id:"love", moodClass:"love", label:"Aku lagi kangen", face:"love"},
       {id:"good", moodClass:"good", label:"Im good", face:"ᴗ"},
       {id:"neutral", moodClass:"neutral", label:"Aku biasa aja", face:"—"},
       {id:"tired", moodClass:"tired", label:"Aku lagi capek", face:"﹀"},
@@ -1723,7 +1726,7 @@
         case "happy":
           return base(mouth("M24 29 Q28 34 32 29"));
         case "love":
-          return base(`<path d="M28 30 C23 24 18 31 28 37 C38 31 33 24 28 30Z" fill="#E97E8C"/>`);
+          return base(`<path d="M28 30 C23 24 18 31 28 37 C38 31 33 24 28 30Z" fill="#FFD95A"/>`);
         case "good":
           return base(mouth("M24 30 Q28 33 32 30"));
         case "neutral":
@@ -1766,7 +1769,7 @@
         case "food": return base(`<path class="white outline" d="M13 31 Q19 19 28 20 Q37 19 43 31 Q36 35 28 35 Q20 35 13 31Z"/>`);
         case "egg": return base(`<path class="white outline" d="M22 33 Q17 27 21 19 Q24 13 28 11 Q32 13 35 19 Q39 27 34 33 Q28 38 22 33Z"/>`);
         case "history": return base(`<path class="white outline" d="M20 17 H37 Q40 17 40 20 V33 Q40 36 37 36 H20 Q17 36 17 33 V20 Q17 17 20 17Z"/><path d="M21 23 H36 M21 28 H36 M21 33 H31" fill="none" stroke="#7A5A3C" stroke-width="1.5" stroke-linecap="round"/>`);
-        case "love": return base(`<path d="M28 31 C23 25 18 31 28 37 C38 31 33 25 28 31Z" fill="#E97E8C"/>`);
+        case "love": return base(`<path d="M28 31 C23 25 18 31 28 37 C38 31 33 25 28 31Z" fill="#FFD95A"/>`);
         case "chat": return base(`<path class="white outline" d="M16 18 Q16 14 20 14 H36 Q40 14 40 18 V28 Q40 32 36 32 H27 L22 37 V32 H20 Q16 32 16 28Z"/><circle cx="23" cy="23" r="1.4" fill="#7A5A3C"/><circle cx="28" cy="23" r="1.4" fill="#7A5A3C"/><circle cx="33" cy="23" r="1.4" fill="#7A5A3C"/>`);
         case "kicker": return base(mouth("M24 29 Q28 33 32 29"));
         case "happy": default: return base(mouth("M24 29 Q28 34 32 29"));
@@ -1806,12 +1809,12 @@
     ];
 
     const catchMessages=[
-      "Hehe... ketangkep juga! 💛",
-      "Aduh, hampir kabur! 💛",
-      "Kok bisa ketangkep terus sih? 😆",
-      "Sini, jangan dilepas dulu. 💛",
-      "Wah, Ibuk jago banget! 💛",
-      "Yang ketangkep kali ini siapa ya? 😆"
+      "Hehe... ketangkep juga!",
+      "Aduh, hampir kabur!",
+      "Kok bisa ketangkep terus sih?",
+      "Sini, jangan dilepas dulu.",
+      "Wah, Ibuk jago banget!",
+      "Yang ketangkep kali ini siapa ya?"
     ];
 
     let catchState={
@@ -1972,7 +1975,8 @@
     function catchPrepareReward(){
       catchState.rewardAt=catchRandomInt(1,10);
       catchState.reward="";
-      $("catchReward").textContent="Ayo semangat sayang... ada hadiahnya lho 💛";
+      $("catchReward").innerHTML=`<span class="piyo-ui inline-piyo" data-piyo-ui="love"></span>Ayo semangat sayang... ada hadiahnya lho`;
+      fillPiyoUI();
     }
 
     
@@ -2010,7 +2014,8 @@
 function catchNextReward(){
       const reward=catchRewards[catchRandomInt(0,catchRewards.length-1)];
       catchState.reward=reward;
-      $("catchReward").textContent="Hadiah sudah siap 💛";
+      $("catchReward").innerHTML=`<span class="piyo-ui inline-piyo" data-piyo-ui="love"></span>Hadiah sudah siap`;
+      fillPiyoUI();
       catchState.rewardAt=catchState.score+catchRandomInt(1,10);
       showRewardPopup(reward);
       catchSaveDayState();
@@ -2043,7 +2048,8 @@ function catchNextReward(){
         running:true
       };
       $("catchScore").textContent="Tangkap: 0";
-      $("catchReward").textContent="Ayo semangat sayang... ada hadiahnya lho 💛";
+      $("catchReward").innerHTML=`<span class="piyo-ui inline-piyo" data-piyo-ui="love"></span>Ayo semangat sayang... ada hadiahnya lho`;
+      fillPiyoUI();
       $("catchMessage").textContent="Ayo tangkap aku! Hehe...";
       catchPickTarget();
       requestAnimationFrame(catchMoveTarget);
@@ -2075,7 +2081,7 @@ function catchNextReward(){
       document.querySelectorAll("[data-bapak]").forEach(x=>x.classList.toggle("selected",x.dataset.bapak===saved.bapak));
 
       if(saved.hug){
-        $("hugResponse").textContent=`Oke, dicatat. Nanti Bapak kasih ${saved.hug.toLowerCase()} ya 💛`;
+        $("hugResponse").textContent=`Oke, dicatat. Nanti Bapak kasih ${saved.hug.toLowerCase()} ya`;
       }
       if(saved.bapak){
         $("bapakResponse").textContent=homeBapakResponse(saved.bapak);
@@ -2104,13 +2110,13 @@ function catchNextReward(){
     }
     function homeBapakResponse(v){
       const map={
-        "Kangen":"Iya... Bapak lagi kangen Ibuk. 💛",
-        "Lapar":"Bapak kek nya laper banget deh. 😆",
+        "Kangen":"Iya... Bapak lagi kangen Ibuk.",
+        "Lapar":"Bapak kek nya laper banget deh.",
         "Ngantuk":"Hoaamh... Eh... ketahuan, Bapak nguap aja kok.",
-        "Pengen dipeluk":"Peluuukkkkkkkkk. 💛",
-        "Lagi jail":"Ehehehe bapak mam ibuk ah. 😆"
+        "Pengen dipeluk":"Peluuukkkkkkkkk.",
+        "Lagi jail":"Ehehehe bapak mam ibuk ah."
       };
-      return map[v]||"Tebak lagi sayang... 💛";
+      return map[v]||"Tebak lagi sayang...";
     }
 
 function goPage(page){
@@ -2129,10 +2135,10 @@ function goPage(page){
     async function loginWife(){
       const code = $("loginCode").value.trim();
       $("loginError").textContent="";
-      if(!code){ $("loginError").textContent="Masukkan kodenya dulu ya ❤️"; return; }
+      if(!code){ $("loginError").textContent="Masukkan kodenya dulu ya"; return; }
 
       const {error} = await db.auth.signInWithPassword({email:WIFE_EMAIL,password:code});
-      if(error){ console.error(error); $("loginError").textContent="Kodenya belum benar, coba lagi ya ❤️"; return; }
+      if(error){ console.error(error); $("loginError").textContent="Kodenya belum benar, coba lagi ya"; return; }
 
       $("loginScreen").style.display="none";
       $("appContent").style.display="";
@@ -2395,8 +2401,8 @@ async function loadProfileStats(){ await loadHome();
 
       $("catchScore").textContent=`Tangkap: ${catchState.score}`;
       $("catchReward").textContent=catchState.reward
-        ? `🎁 ${catchState.reward}`
-        : "Ayo semangat sayang... ada hadiahnya lho 💛";
+        ? `${catchState.reward}`
+        : "Ayo semangat sayang... ada hadiahnya lho";
 
       const current=catchTargets.find(t=>t.id===catchState.targetId)||catchTargets[0];
       $("catchTargetSvg").innerHTML=catchSvg(current.kind);
@@ -2415,7 +2421,7 @@ async function loadProfileStats(){ await loadHome();
       if(hug){
         document.querySelectorAll("[data-hug]").forEach(x=>x.classList.remove("selected"));
         hug.classList.add("selected");
-        $("hugResponse").textContent=`Oke, dicatat. Nanti Bapak kasih ${hug.dataset.hug.toLowerCase()} ya 💛`;
+        $("hugResponse").textContent=`Oke, dicatat. Nanti Bapak kasih ${hug.dataset.hug.toLowerCase()} ya`;
         saveHomeInteractive();
         return;
       }
@@ -2440,12 +2446,12 @@ async function loadProfileStats(){ await loadHome();
         <div id="rewardPiyoArt"></div>
       </div>
 
-      <div class="reward-kicker">Hadiah kecil buat Ibuk 💛</div>
+      <div class="reward-kicker"><span class="piyo-ui inline-piyo" data-piyo-ui="love"></span> Hadiah kecil buat Ibuk</div>
       <div class="reward-title" id="rewardTitle">LOVE YOU!!!</div>
       <div class="reward-sub">Bapak kasih hadiah dulu ya.</div>
 
       <button type="button" class="reward-button" id="rewardOkay">
-        Yeay! 💛
+        Yeay!
       </button>
     </div>
   </div>
