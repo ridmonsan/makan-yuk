@@ -33,12 +33,12 @@ h1{font-size:31px;letter-spacing:-.04em;margin:4px 0 0}.date{font-size:13px;colo
 </header>
 
 <section class="card">
-<h2 class="section-title">Kamu sedang makan apa?</h2><p class="section-sub">Pilih waktu makan.</p>
+<h2 class="section-title">Mau makan kapan Istriku?</h2><p class="section-sub">Pilih waktu makannya ya..</p>
 <div class="grid meal-grid" id="mealGrid"></div>
 </section>
 
 <section class="card">
-<h2 class="section-title">Makanannya apa saja?</h2><p class="section-sub">Boleh pilih lebih dari satu.</p>
+<h2 class="section-title">Mau makan apa istriku?</h2><p class="section-sub">Boleh pilih lebih dari satu, kalau bingung, tulis aja di level mood dan nanti tulis di kolom komen ya sayang.</p>
 <div class="grid food-grid" id="foodGrid"></div>
 <div class="chips" id="selectedFoods"></div>
 </section>
@@ -48,7 +48,32 @@ h1{font-size:31px;letter-spacing:-.04em;margin:4px 0 0}.date{font-size:13px;colo
 <div class="grid mood-grid" id="moodGrid"></div>
 </section>
 
-<section class="card"><button id="saveBtn" class="save" disabled>Simpan ❤️</button></section>
+<section class="card">
+  <h2 class="section-title">Apa yg mau kamu ceritain nda sayang?</h2>
+  <p class="section-sub">Tulis apa saja yang ingin kamu ceritakan ❤️</p>
+
+  <textarea
+    id="commentInput"
+    placeholder="Tulis ceritamu di sini..."
+    style="
+      width:100%;
+      min-height:120px;
+      resize:vertical;
+      border:1px solid var(--line);
+      border-radius:17px;
+      padding:13px;
+      font:inherit;
+      font-size:14px;
+      color:var(--text);
+      background:#fff;
+      outline:none;
+    "
+  ></textarea>
+</section>
+
+<section class="card">
+  <button id="saveBtn" class="save" disabled>Simpan ❤️</button>
+</section>
 
 <section class="card">
 <h2 class="section-title">Riwayat terbaru</h2>
@@ -71,11 +96,19 @@ const db = supabase.createClient(cfg.SUPABASE_URL,cfg.SUPABASE_ANON_KEY);
 
 const meals=[{id:"breakfast",icon:"🌤️",label:"Sarapan"},{id:"lunch",icon:"☀️",label:"Makan siang"},{id:"dinner",icon:"🌙",label:"Makan malam"},{id:"snack",icon:"🍪",label:"Snack"}];
 const foods=[
-{id:"rice",icon:"🍚",label:"Nasi"},{id:"chicken",icon:"🍗",label:"Ayam"},{id:"egg",icon:"🍳",label:"Telur"},
-{id:"fish",icon:"🐟",label:"Ikan"},{id:"beef",icon:"🥩",label:"Daging"},{id:"noodles",icon:"🍜",label:"Mie"},
-{id:"bread",icon:"🍞",label:"Roti"},{id:"vegetable",icon:"🥬",label:"Sayur"},{id:"fruit",icon:"🍎",label:"Buah"},
-{id:"soup",icon:"🍲",label:"Sup"},{id:"cake",icon:"🍰",label:"Kue"},{id:"chocolate",icon:"🍫",label:"Cokelat"},
-{id:"coffee",icon:"☕",label:"Kopi"},{id:"tea",icon:"🍵",label:"Teh"},{id:"milk",icon:"🥛",label:"Susu"}];
+  {id:"rice",icon:"🍚",label:"Nasi"},
+  {id:"sate",icon:"🍢",label:"Sate"},
+  {id:"soto_mie",icon:"🍜",label:"Soto Mie"},
+  {id:"pempek",icon:"🥟",label:"Pempek"},
+  {id:"telur_dadar",icon:"🍳",label:"Telur Dadar"},
+  {id:"indomie",icon:"🍜",label:"Indomie"},
+  {id:"mie_sedap_laksa",icon:"🍜",label:"Mie Sedap Laksa"},
+  {id:"ayam_penyet",icon:"🍗",label:"Ayam Penyet"},
+  {id:"brokoli",icon:"🥦",label:"Brokoli"},
+  {id:"tahu",icon:"🟫",label:"Tahu"},
+  {id:"tempe",icon:"🟫",label:"Tempe"},
+  {id:"mie_ayam",icon:"🍜",label:"Mie Ayam"}
+];
 const moods=[
 {id:"happy",emoji:"😊",label:"Senang"},{id:"love",emoji:"🥰",label:"Bahagia"},{id:"good",emoji:"🙂",label:"Biasa"},
 {id:"neutral",emoji:"😐",label:"Netral"},{id:"tired",emoji:"😴",label:"Capek"},{id:"sad",emoji:"😞",label:"Sedih"},
@@ -110,7 +143,33 @@ async function loadHistory(){
     const meal=meals.find(m=>m.id===x.meal_type), mood=moods.find(m=>m.id===x.mood_id);
     const names=(x.food_ids||[]).map(id=>foods.find(f=>f.id===id)).filter(Boolean).map(f=>f.icon+" "+f.label).join(" · ");
     const time=new Date(x.eaten_at).toLocaleString("id-ID",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
-    return `<div class="entry"><div class="top"><span>${meal?meal.icon+" "+meal.label:x.meal_type}</span><span>${time}</span></div><div class="main"><div class="foods">${names}</div><div class="mood">${mood?mood.emoji:"🙂"}</div></div></div>`;
+    return `
+  <div class="entry">
+    <div class="top">
+      <span>${meal?meal.icon+" "+meal.label:x.meal_type}</span>
+      <span>${time}</span>
+    </div>
+
+    <div class="main">
+      <div class="foods">${names}</div>
+      <div class="mood">${mood?mood.emoji:"🙂"}</div>
+    </div>
+
+    ${x.comment ? `
+      <div style="
+        margin-top:9px;
+        padding:10px 11px;
+        background:#fff4ef;
+        border-radius:13px;
+        font-size:12px;
+        line-height:1.5;
+        color:var(--text);
+      ">
+        💬 ${x.comment.replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+      </div>
+    ` : ""}
+  </div>
+`;
   }).join(""):'<div class="empty">Belum ada catatan.</div>';
 }
 
@@ -120,9 +179,33 @@ document.addEventListener("click",async e=>{
   const mo=e.target.closest("[data-mood]"); if(mo){state.mood=mo.dataset.mood;render();return}
   if(e.target.closest("#refreshBtn")){await loadHistory();return}
   if(e.target.closest("#saveBtn")){
-    const {error}=await db.from("food_logs").insert({meal_type:state.meal,food_ids:[...state.foods],mood_id:state.mood,eaten_at:new Date().toISOString()});
-    if(error){console.error(error);showToast("Belum tersimpan — cek database");return}
-    state={meal:"",foods:new Set(),mood:""};render();await loadHistory();showToast("Tersimpan ❤️");
+    const comment = el("commentInput").value.trim();
+
+    const {error}=await db.from("food_logs").insert({
+        meal_type:state.meal,
+        food_ids:[...state.foods],
+        mood_id:state.mood,
+        comment:comment,
+        eaten_at:new Date().toISOString()
+    });
+
+    if(error){
+        console.error(error);
+        showToast("Belum tersimpan — cek database");
+        return;
+    }
+
+    state={
+        meal:"",
+        foods:new Set(),
+        mood:""
+    };
+
+    el("commentInput").value="";
+
+    render();
+    await loadHistory();
+    showToast("Tersimpan ❤️");
   }
 });
 render(); loadHistory();
