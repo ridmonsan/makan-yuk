@@ -2018,11 +2018,13 @@ function catchNextReward(){
       fillPiyoUI();
       catchState.rewardAt=catchState.score+catchRandomInt(1,10);
       showRewardPopup(reward);
+      void logActivity("game_reward",`Mendapat reward: ${reward}`,{reward,score:catchState.score});
       catchSaveDayState();
     }
 
     function catchHit(){
       catchState.score++;
+      void logActivity("game_catch",`Tangkap Aku: ${catchState.targetId}`,{target:catchState.targetId,score:catchState.score});
       $("catchScore").textContent=`Tangkap: ${catchState.score}`;
 
       const message=catchMessages[catchRandomInt(0,catchMessages.length-1)];
@@ -2058,6 +2060,7 @@ function catchNextReward(){
 
     function catchChangeTarget(){
       catchPickTarget();
+      void logActivity("game_target_change",`Mengganti target game: ${catchState.targetId}`,{target:catchState.targetId});
       catchMoveTarget();
       $("catchMessage").textContent="Hehe... coba tangkap yang ini!";
       catchSaveDayState();
@@ -2119,7 +2122,24 @@ function catchNextReward(){
       return map[v]||"Tebak lagi sayang...";
     }
 
+
+    async function logActivity(type,label,meta={}){
+      try{
+        const {data:{user}}=await db.auth.getUser();
+        if(!user) return;
+        await db.from("activity_logs").insert({
+          user_id:user.id,
+          activity_type:type,
+          activity_label:label,
+          meta
+        });
+      }catch(err){
+        console.debug("activity log skipped",err);
+      }
+    }
+
 function goPage(page){
+      void logActivity("navigation",`Membuka halaman ${page}`,{page});
       document.querySelectorAll(".page").forEach(el=>el.classList.remove("active"));
       document.querySelectorAll(".nav-btn").forEach(el=>el.classList.remove("active"));
       const target = $("page-" + page);
@@ -2143,7 +2163,9 @@ function goPage(page){
       $("loginScreen").style.display="none";
       $("appContent").style.display="";
       $("navBar").style.display="";
+      void logActivity("login","Istri berhasil masuk");
       await startApp();
+      void logActivity("session_start","Membuka web istri");
     }
 
     async function checkExistingSession(){
@@ -2310,16 +2332,17 @@ async function loadProfileStats(){ await loadHome();
       if(go){ goPage(go.dataset.go); return; }
 
       const mb=event.target.closest("[data-meal]");
-      if(mb){ state.meal=mb.dataset.meal; render(); return; }
+      if(mb){ state.meal=mb.dataset.meal; void logActivity("meal_select",`Memilih waktu makan: ${mb.dataset.meal}`,{meal:mb.dataset.meal}); render(); return; }
 
       const fb=event.target.closest("[data-food]");
-      if(fb){ const id=fb.dataset.food; state.foods.has(id)?state.foods.delete(id):state.foods.add(id); render(); return; }
+      if(fb){ const id=fb.dataset.food; const selected=!state.foods.has(id); selected?state.foods.add(id):state.foods.delete(id); void logActivity("food_select",selected?`Memilih makanan: ${id}`:`Membatalkan makanan: ${id}`,{food_id:id,selected}); render(); return; }
 
       const moodBtn=event.target.closest("[data-mood]");
       if(moodBtn){
         const id=moodBtn.dataset.mood;
-        if(state.moods.has(id)) state.moods.delete(id);
-        else state.moods.add(id);
+        const selected=!state.moods.has(id);
+        selected?state.moods.add(id):state.moods.delete(id);
+        void logActivity("mood_select",selected?`Memilih mood: ${id}`:`Membatalkan mood: ${id}`,{mood_id:id,selected});
         render();
         return;
       }
@@ -2327,6 +2350,7 @@ async function loadProfileStats(){ await loadHome();
       const loveAnswerBtn=event.target.closest("[data-love-answer]");
       if(loveAnswerBtn){
         state.loveAnswer=loveAnswerBtn.dataset.loveAnswer;
+        void logActivity("love_answer",`Menjawab: ${state.loveAnswer}`,{answer:state.loveAnswer});
         document.querySelectorAll("[data-love-answer]").forEach(btn=>btn.classList.toggle("sel",btn===loveAnswerBtn));
         return;
       }
@@ -2353,6 +2377,7 @@ async function loadProfileStats(){ await loadHome();
         };
         const {error}=await db.from("food_logs").insert(payload);
         if(error){ console.error(error); showToast("Belum tersimpan"); return; }
+        void logActivity("food_log_saved","Menyimpan cerita makanan",{meal_type:payload.meal_type,food_ids:payload.food_ids,mood_id:payload.mood_id,soundtrack:payload.soundtrack,love_answer:payload.love_answer,one_word:payload.one_word,has_comment:!!payload.comment});
 
         state.meal=""; state.foods=new Set(); state.moods=new Set(); state.loveAnswer=""; $("comment").value=""; $("customFood").value=""; $("soundtrack").value=""; $("oneWord").value=""; document.querySelectorAll("[data-love-answer]").forEach(btn=>btn.classList.remove("sel"));
         render(); await loadHome(); await loadHistory(); goPage("riwayat"); showToast("Tersimpan");
@@ -2385,7 +2410,7 @@ async function loadProfileStats(){ await loadHome();
 
     $("loginButton").addEventListener("click",loginWife);
     $("loginCode").addEventListener("keydown",e=>{if(e.key==="Enter")loginWife();});
-    $("logoutButton").addEventListener("click",async()=>{await db.auth.signOut();window.location.reload();});
+    $("logoutButton").addEventListener("click",async()=>{ await logActivity("logout","Istri keluar dari web"); await db.auth.signOut(); window.location.reload(); });
 
 
     if($("catchTarget")){
@@ -2413,6 +2438,9 @@ async function loadProfileStats(){ await loadHome();
 
     document.addEventListener("change",event=>{
       if(event.target.matches("[data-home-check]") || event.target.matches("[data-home-want]")){
+        const kind=event.target.matches("[data-home-check]")?"check":"want";
+        const value=event.target.dataset.homeCheck||event.target.dataset.homeWant;
+        void logActivity(kind==="check"?"checklist_done":"daily_want",kind==="check"?`${event.target.checked?"Mencentang":"Membatalkan"}: ${value}`:`Memilih keinginan: ${value}`,{item:value,checked:event.target.checked});
         saveHomeInteractive();
       }
     });
@@ -2421,6 +2449,7 @@ async function loadProfileStats(){ await loadHome();
       if(hug){
         document.querySelectorAll("[data-hug]").forEach(x=>x.classList.remove("selected"));
         hug.classList.add("selected");
+        void logActivity("hug_choice",`Memilih pelukan: ${hug.dataset.hug}`,{choice:hug.dataset.hug});
         $("hugResponse").textContent=`Oke, dicatat. Nanti Bapak kasih ${hug.dataset.hug.toLowerCase()} ya`;
         saveHomeInteractive();
         return;
@@ -2430,6 +2459,7 @@ async function loadProfileStats(){ await loadHome();
       if(bapak){
         document.querySelectorAll("[data-bapak]").forEach(x=>x.classList.remove("selected"));
         bapak.classList.add("selected");
+        void logActivity("bapak_guess",`Menebak Bapak: ${bapak.dataset.bapak}`,{choice:bapak.dataset.bapak});
         $("bapakResponse").textContent=homeBapakResponse(bapak.dataset.bapak);
         saveHomeInteractive();
       }

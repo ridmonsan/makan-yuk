@@ -137,6 +137,21 @@ button{font:inherit}
     .dashboard-mood-summary-item{background:#FFFDF2;border:1px solid #F0DFA3;border-radius:15px;padding:9px;text-align:center}
     .dashboard-mood-summary-number{font-family:"Fredoka","Nunito",sans-serif;font-size:19px;color:#76552F}
     .dashboard-mood-summary-label{font-size:9px;color:#9A846A;font-weight:800;margin-top:2px}
+
+    .piyo-inline-dash{width:22px;height:22px;display:inline-flex;vertical-align:-6px}
+    .activity-card{margin-top:12px}
+    .activity-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 14px}
+    .activity-summary-item{background:#FFFDF2;border:1px solid #F0DFA3;border-radius:15px;padding:9px;text-align:center}
+    .activity-summary-number{font-family:"Fredoka","Nunito",sans-serif;font-size:19px;color:#76552F}
+    .activity-summary-label{font-size:9px;color:#9A846A;font-weight:800;margin-top:2px}
+    .activity-feed{display:grid;gap:8px;max-height:520px;overflow:auto}
+    .activity-item{display:grid;grid-template-columns:34px 1fr auto;gap:9px;align-items:center;background:#FFFDF2;border:1px solid #F0DFA3;border-radius:14px;padding:9px}
+    .activity-icon{width:30px;height:30px;border-radius:10px;background:#FFF1A1;display:grid;place-items:center}
+    .activity-main{min-width:0}
+    .activity-label{font-size:10px;font-weight:800;color:#604A37;line-height:1.35}
+    .activity-meta{font-size:9px;color:#9A846A;margin-top:2px;line-height:1.3}
+    .activity-time{font-size:9px;color:#9A846A;white-space:nowrap}
+    .dashboard-piyo-icon{width:28px;height:28px;display:block}
 </style></head>
 <body>
   <div id="loginScreen" class="login-screen">
@@ -148,10 +163,10 @@ button{font:inherit}
           <div class="piyo-blush right"></div>
         </div>
       </div>
-      <h1>Dashboard 💛</h1>
+      <h1>Dashboard</h1>
       <p>Masukkan kode untuk melihat catatan.</p>
       <input id="loginCode" type="password" autocomplete="current-password" placeholder="Masukkan kode...">
-      <button id="loginButton" type="button">Masuk 💛</button>
+      <button id="loginButton" type="button">Masuk</button>
       <div id="loginError"></div>
     </div>
   </div>
@@ -159,7 +174,7 @@ button{font:inherit}
 
   <div class="deco egga"></div>
   <div class="deco star">✦</div>
-  <div class="deco heart">♡</div>
+  <div class="deco heart"></div>
 
   <main class="wrap" id="appContent" style="display:none;">
     <header class="header">
@@ -183,7 +198,7 @@ button{font:inherit}
           </div>
           <div>
             <div class="title">Makan Yuk — Cerita Istriku</div>
-            <div class="subtitle">Lihat cerita-cerita istriku 💛</div>
+            <div class="subtitle">Lihat cerita-cerita istriku</div>
             <div class="updated" id="range"></div>
           </div>
         </div>
@@ -214,7 +229,7 @@ button{font:inherit}
     <section class="grid2">
       <div class="card mood-dashboard-card">
         <div class="card-head">
-          <div class="card-icon">🐥</div>
+          <div class="card-icon" id="foodCardIcon"></div>
           <div><h2>Makanan yang sering dipilih</h2></div>
         </div>
         <div class="mini">Menu yang paling sering muncul di ceritanya.</div>
@@ -229,7 +244,7 @@ button{font:inherit}
 
       <div class="card">
         <div class="card-head">
-          <div class="card-icon">💛</div>
+          <div class="card-icon" id="moodCardIcon"></div>
           <div><h2>Mood</h2></div>
         </div>
         <div class="mini">Perasaan yang paling sering muncul.</div>
@@ -239,14 +254,31 @@ button{font:inherit}
 
     <section class="card" style="margin-top:12px">
       <div class="card-head">
-        <div class="card-icon">💬</div>
+        <div class="card-icon" id="storyCardIcon"></div>
         <div><h2>Cerita istriku</h2></div>
       </div>
       <div class="mini">Semua cerita yang tersimpan dari web istri.</div>
       <div id="list" class="list"></div>
     </section>
 
-    <div class="footer">dibuat khusus untuk kalian 💛<br><button id="logoutButton" class="logout-button">Keluar dari akun</button></div>
+    
+    <section class="card activity-card">
+      <div class="card-head">
+        <div class="card-icon" id="activityCardIcon"></div>
+        <div><h2>Aktivitas Istriku</h2></div>
+      </div>
+      <div class="mini">Semua aktivitas penting yang dilakukan di web istri.</div>
+      <div class="activity-summary">
+        <div class="activity-summary-item"><div class="activity-summary-number" id="activityTotal">0</div><div class="activity-summary-label">aktivitas</div></div>
+        <div class="activity-summary-item"><div class="activity-summary-number" id="activityToday">0</div><div class="activity-summary-label">hari ini</div></div>
+        <div class="activity-summary-item"><div class="activity-summary-number" id="activityLastType">—</div><div class="activity-summary-label">terakhir</div></div>
+      </div>
+      <div id="activityList" class="activity-feed">
+        <div class="empty">Memuat aktivitas...</div>
+      </div>
+    </section>
+
+<div class="footer">dibuat khusus untuk kalian<br><button id="logoutButton" class="logout-button">Keluar dari akun</button></div>
   </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script>
@@ -280,6 +312,10 @@ async function startDashboard(){
   if(session){
     $("loginScreen").style.display="none";
     $("appContent").style.display="";
+    $("foodCardIcon").innerHTML=dashboardPiyoIcon("happy");
+    $("moodCardIcon").innerHTML=dashboardPiyoIcon("love");
+    $("storyCardIcon").innerHTML=dashboardPiyoIcon("happy");
+    $("activityCardIcon").innerHTML=dashboardPiyoIcon("love");
     load();
   }else{
     $("loginScreen").style.display="flex";
@@ -303,7 +339,7 @@ function piyoDashArt(kind="happy"){
   `);
   const mouth=d=>`<path d="${d}" fill="none" stroke="#6B4B37" stroke-width="1.35" stroke-linecap="round"/>`;
   switch(kind){
-    case "love": return base(`<path d="M28 30 C23 24 18 31 28 37 C38 31 33 24 28 30Z" fill="#E97E8C"/>`);
+    case "love": return base(`<path d="M28 30 C23 24 18 31 28 37 C38 31 33 24 28 30Z" fill="#FFD95A"/>`);
     case "neutral": return base(mouth("M24 30 H32"));
     case "tired": return base(`<path fill="#5C4536" d="M20 21 h5 l-2 2 h-3z"/><path fill="#5C4536" d="M31 21 h5 l-2 2 h-3z"/>`);
     case "sleepy": return base(`<path d="M20 22 Q23 20 26 22 M30 22 Q33 20 36 22" fill="none" stroke="#5C4536" stroke-width="1.5"/><text x="42" y="11" font-size="9" font-family="Fredoka,Arial" font-weight="700" fill="#8B7BAA">z</text>`);
@@ -315,6 +351,65 @@ function piyoDashArt(kind="happy"){
     case "happy": default: return base(mouth("M24 29 Q28 34 32 29"));
   }
 }
+
+    function dashboardPiyoIcon(kind="happy"){
+      const S=inner=>`<svg class="dashboard-piyo-icon" viewBox="0 0 56 48" aria-hidden="true">${inner}</svg>`;
+      const base=(extra="")=>S(`
+        <path fill="#FFE26A" stroke="#7A5A3C" stroke-width="1.7" d="M10 23 Q10 10 28 8 Q46 10 46 23 Q46 39 28 40 Q10 39 10 23Z"/>
+        <circle fill="#F2A0A0" cx="16" cy="27" r="2.7"/><circle fill="#F2A0A0" cx="40" cy="27" r="2.7"/>
+        <circle fill="#5C4536" cx="22" cy="22" r="1.6"/><circle fill="#5C4536" cx="34" cy="22" r="1.6"/>
+        <path fill="#EF9E26" stroke="#7A5A3C" stroke-width="1.6" d="M24 26 L28 30 L32 26 Q28 22 24 26Z"/>
+        ${extra}`);
+      if(kind==="love") return base('<path d="M28 30 C23 24 18 31 28 37 C38 31 33 24 28 30Z" fill="#FFD95A"/>');
+      if(kind==="sad") return base('<path d="M24 33 Q28 29 32 33" fill="none" stroke="#6B4B37" stroke-width="1.35"/><path fill="#8FC9EA" d="M38 25 Q41 30 38 33 Q35 30 38 25Z"/>');
+      return base('<path d="M24 29 Q28 34 32 29" fill="none" stroke="#6B4B37" stroke-width="1.35"/>');
+    }
+
+    function activityIcon(type){
+      if(type==="mood_select") return dashboardPiyoIcon("love");
+      if(type==="hug_choice") return dashboardPiyoIcon("love");
+      if(type==="bapak_guess") return dashboardPiyoIcon("happy");
+      if(type.startsWith("game_")) return dashboardPiyoIcon("happy");
+      if(type==="food_select" || type==="meal_select") return dashboardPiyoIcon("happy");
+      if(type==="food_log_saved") return dashboardPiyoIcon("love");
+      if(type==="login" || type==="session_start") return dashboardPiyoIcon("happy");
+      return dashboardPiyoIcon("happy");
+    }
+
+    async function loadActivities(){
+      const {data,error}=await db.from("activity_logs").select("id,activity_type,activity_label,meta,created_at").order("created_at",{ascending:false}).limit(200);
+      if(error){
+        console.error(error);
+        $("activityList").innerHTML='<div class="empty">Aktivitas belum bisa dimuat. Pastikan tabel activity_logs sudah dibuat.</div>';
+        return;
+      }
+      const rows=data||[];
+      const todayKey=new Date().toISOString().slice(0,10);
+      const todayRows=rows.filter(x=>x.created_at.slice(0,10)===todayKey);
+      $("activityTotal").textContent=rows.length;
+      $("activityToday").textContent=todayRows.length;
+      $("activityLastType").textContent=rows[0]?.activity_type||"—";
+
+      if(!rows.length){
+        $("activityList").innerHTML='<div class="empty">Belum ada aktivitas yang tercatat.</div>';
+        return;
+      }
+
+      $("activityList").innerHTML=rows.map(row=>{
+        const t=new Date(row.created_at);
+        const time=new Intl.DateTimeFormat("id-ID",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}).format(t);
+        const typeLabel=row.activity_type.replaceAll("_"," ");
+        return `<div class="activity-item">
+          <div class="activity-icon">${activityIcon(row.activity_type)}</div>
+          <div class="activity-main">
+            <div class="activity-label">${String(row.activity_label||typeLabel).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>
+            <div class="activity-meta">${typeLabel}</div>
+          </div>
+          <div class="activity-time">${time}</div>
+        </div>`;
+      }).join("");
+    }
+
 async function load(){
  $("list").innerHTML='<div class="empty">Memuat...</div>';
  const {data,error}=await db.from("food_logs").select("*").order("eaten_at",{ascending:false}).limit(500);
@@ -350,6 +445,7 @@ async function load(){
 ${x.love_answer?`<div class="extra-info">💛 ${String(x.love_answer).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}
 ${x.one_word?`<div class="extra-info">✏️ ${String(x.one_word).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}
 ${x.comment?`<div class="comment">💬 ${String(x.comment).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}</div>`}).join(""):'<div class="empty">Belum ada catatan.</div>';
+  await loadActivities();
 }
 $("refresh").onclick=load;$("loginButton").addEventListener("click",loginHusband);
 $("loginCode").addEventListener("keydown",e=>{if(e.key==="Enter")loginHusband();});
