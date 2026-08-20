@@ -431,6 +431,36 @@
       color:#917963;
       margin-top:4px;
     }
+    .custom-food-wrap{
+      position:relative;
+      z-index:1;
+      margin-top:12px;
+    }
+    .custom-food-label{
+      display:block;
+      font-size:10px;
+      font-weight:800;
+      color:#7A624A;
+      margin-bottom:6px;
+    }
+    .custom-food-input{
+      width:100%;
+      border:2px dashed #EFD995;
+      border-radius:17px;
+      padding:11px 12px;
+      background:#FFFDF2;
+      color:#5C4536;
+      outline:none;
+      font-size:12px;
+      line-height:1.4;
+    }
+    .custom-food-input::placeholder{color:#B19A7E}
+    .custom-food-input:focus{
+      border-style:solid;
+      border-color:#E5C95E;
+      box-shadow:0 0 0 4px rgba(255,230,105,.24);
+    }
+
     .selected-foods{
       display:flex;
       flex-wrap:wrap;
@@ -730,6 +760,18 @@
 
       <div id="selectedFoods" class="selected-foods">
         <div class="empty">Belum ada makanan yang dipilih.</div>
+      </div>
+
+      <div class="custom-food-wrap">
+        <label class="custom-food-label" for="customFood">🐥 Makanan lainnya</label>
+        <input
+          id="customFood"
+          class="custom-food-input"
+          type="text"
+          maxlength="100"
+          placeholder="Ketik makanan lain yang kamu makan..."
+          autocomplete="off"
+        >
       </div>
     </section>
 
@@ -1062,9 +1104,15 @@
       `).join("");
 
       const selected = foods.filter(f => state.foods.has(f.id));
+      const customFood = $("customFood") ? $("customFood").value.trim() : "";
 
-      $("selectedFoods").innerHTML = selected.length
-        ? selected.map(f => `<span class="chip">• ${f.label}</span>`).join("")
+      const chips = [
+        ...selected.map(f => `<span class="chip">• ${f.label}</span>`),
+        ...(customFood ? [`<span class="chip">• ${escapeHtml(customFood)}</span>`] : [])
+      ];
+
+      $("selectedFoods").innerHTML = chips.length
+        ? chips.join("")
         : `<div class="empty">Belum ada makanan yang dipilih.</div>`;
 
       $("moodGrid").innerHTML = moods.map(m => `
@@ -1074,7 +1122,8 @@
         </button>
       `).join("");
 
-      $("save").disabled = !(state.meal && state.foods.size && state.mood);
+      const hasCustomFood = $("customFood") ? $("customFood").value.trim().length > 0 : false;
+      $("save").disabled = !(state.meal && (state.foods.size || hasCustomFood) && state.mood);
     }
 
     async function loadTodayCount(){
@@ -1170,9 +1219,14 @@
         const mood = getMoodInfo(item.mood_id);
 
         const foodNames = (item.food_ids || [])
-          .map(id => foods.find(food => food.id === id))
+          .map(id => {
+            if(String(id).startsWith("custom::")){
+              return String(id).slice("custom::".length);
+            }
+            const food = foods.find(food => food.id === id);
+            return food ? food.label : null;
+          })
           .filter(Boolean)
-          .map(food => food.label)
           .join(" • ");
 
         const moodArt = piyoArt(mood.moodClass);
@@ -1246,9 +1300,15 @@
       if(event.target.closest("#save")){
         const comment = $("comment").value.trim();
 
+        const customFood = $("customFood").value.trim();
+        const foodIds = Array.from(state.foods);
+        if(customFood){
+          foodIds.push("custom::" + customFood);
+        }
+
         const payload = {
           meal_type:state.meal,
-          food_ids:Array.from(state.foods),
+          food_ids:foodIds,
           mood_id:state.mood,
           comment:comment,
           eaten_at:new Date().toISOString()
@@ -1268,6 +1328,7 @@
         state.foods = new Set();
         state.mood = "";
         $("comment").value = "";
+        $("customFood").value = "";
 
         render();
         await loadTodayCount();
@@ -1281,6 +1342,7 @@
     loadTodayCount();
     loadHistory();
 
+    $("customFood").addEventListener("input", render);
     $("historyRefresh").addEventListener("click", loadHistory);
   </script>
 </body>
