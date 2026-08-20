@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#f7f8fb"><title>Makan Yuk — Dashboard</title>
+<meta name="theme-color" content="#f7f8fb"><title>Makan Yuk — Cerita Istriku</title>
 <style>
 :root{
   --bg:#FFF8D6;
@@ -131,6 +131,12 @@ button{font:inherit}
     #loginButton{width:100%;margin-top:12px;border:0;border-radius:19px;padding:15px;background:linear-gradient(180deg,#FFD95A,#F4BB35);color:#5D442B;font-family:"Fredoka","Nunito",sans-serif;font-size:16px;font-weight:600;cursor:pointer}
     #loginError{min-height:18px;margin-top:10px;color:#C96D5E;font-size:11px;font-weight:800}
     .logout-button{margin-top:12px;border:0;background:none;color:#A28D75;font-size:10px;font-weight:800;cursor:pointer;text-decoration:underline}
+
+    .mood-dashboard-card{background:linear-gradient(145deg,#FFF7BC,#FFFDF1)}
+    .dashboard-mood-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 14px}
+    .dashboard-mood-summary-item{background:#FFFDF2;border:1px solid #F0DFA3;border-radius:15px;padding:9px;text-align:center}
+    .dashboard-mood-summary-number{font-family:"Fredoka","Nunito",sans-serif;font-size:19px;color:#76552F}
+    .dashboard-mood-summary-label{font-size:9px;color:#9A846A;font-weight:800;margin-top:2px}
 </style></head>
 <body>
   <div id="loginScreen" class="login-screen">
@@ -176,8 +182,8 @@ button{font:inherit}
             <div class="piyo-blush right"></div>
           </div>
           <div>
-            <div class="title">Makan Yuk — Dashboard</div>
-            <div class="subtitle">Lihat cerita dan catatan istriku 💛</div>
+            <div class="title">Makan Yuk — Cerita Istriku</div>
+            <div class="subtitle">Lihat cerita-cerita istriku 💛</div>
             <div class="updated" id="range"></div>
           </div>
         </div>
@@ -189,7 +195,7 @@ button{font:inherit}
     <section class="cards">
       <div class="stat">
         <div class="n" id="total">0</div>
-        <div class="l">Total catatan</div>
+        <div class="l">Cerita tersimpan</div>
       </div>
       <div class="stat">
         <div class="n" id="today">0</div>
@@ -201,17 +207,23 @@ button{font:inherit}
       </div>
       <div class="stat">
         <div class="n" id="comments">0</div>
-        <div class="l">Cerita / komentar</div>
+        <div class="l">Cerita yang dibagikan</div>
       </div>
     </section>
 
     <section class="grid2">
-      <div class="card">
+      <div class="card mood-dashboard-card">
         <div class="card-head">
           <div class="card-icon">🐥</div>
-          <div><h2>Makanan paling sering</h2></div>
+          <div><h2>Makanan yang sering dipilih</h2></div>
         </div>
-        <div class="mini">Menu yang paling sering dipilih.</div>
+        <div class="mini">Menu yang paling sering muncul di ceritanya.</div>
+         <div class="dashboard-mood-summary">
+           <div class="dashboard-mood-summary-item"><div class="dashboard-mood-summary-number" id="dashboardMoodTotal">0</div><div class="dashboard-mood-summary-label">total mood</div></div>
+           <div class="dashboard-mood-summary-item"><div class="dashboard-mood-summary-number" id="dashboardMoodKinds">0</div><div class="dashboard-mood-summary-label">jenis mood</div></div>
+           <div class="dashboard-mood-summary-item"><div class="dashboard-mood-summary-number" id="dashboardMoodFavorite">—</div><div class="dashboard-mood-summary-label">mood favorit</div></div>
+         </div>
+
         <div id="foodBars" class="bars"></div>
       </div>
 
@@ -228,9 +240,9 @@ button{font:inherit}
     <section class="card" style="margin-top:12px">
       <div class="card-head">
         <div class="card-icon">💬</div>
-        <div><h2>Catatan istriku</h2></div>
+        <div><h2>Cerita istriku</h2></div>
       </div>
-      <div class="mini">Semua catatan yang tersimpan dari web istri.</div>
+      <div class="mini">Semua cerita yang tersimpan dari web istri.</div>
       <div id="list" class="list"></div>
     </section>
 
@@ -308,6 +320,12 @@ async function load(){
  const {data,error}=await db.from("food_logs").select("*").order("eaten_at",{ascending:false}).limit(500);
  if(error){console.error(error);$("list").innerHTML='<div class="empty">Gagal memuat data.</div>';return}
  const total=data.length,todayKey=new Date().toISOString().slice(0,10),today=data.filter(x=>x.eaten_at.slice(0,10)===todayKey).length;
+  let moodTotalSelections=0;
+  data.forEach(x=>{
+    const ids=Array.isArray(x.mood_id)?x.mood_id:(x.mood_id?[x.mood_id]:[]);
+    moodTotalSelections += ids.length;
+  });
+  $("dashboardMoodTotal").textContent=moodTotalSelections;
  $("total").textContent=total;$("today").textContent=today;$("comments").textContent=data.filter(x=>x.comment&&x.comment.trim()).length;
  const posIds=new Set(["happy","love","good","excited"]);
   const positiveRows=data.filter(x=>{
@@ -321,6 +339,9 @@ async function load(){
     const ids=Array.isArray(x.mood_id)?x.mood_id:[x.mood_id];
     ids.forEach(id=>mc[id]=(mc[id]||0)+1);
   });const topM=Object.entries(mc).sort((a,b)=>b[1]-a[1]),maxM=topM[0]?.[1]||1;
+  $("dashboardMoodKinds").textContent=topM.length;
+  const favoriteDashboardMood=moods.find(x=>x[0]===topM[0]?.[0]);
+  $("dashboardMoodFavorite").textContent=favoriteDashboardMood?favoriteDashboardMood[2]:"—";
  $("moodBars").innerHTML=topM.map(([id,n])=>{
   const m=moods.find(x=>x[0]===id)||["neutral","",id];
   return `<div class="barrow"><div><span style="display:inline-flex;vertical-align:middle">${piyoDashArt(m[0]||"neutral")}</span> ${m[2]}</div><div class="bar"><div class="fill" style="width:${n/maxM*100}%"></div></div><div>${n}</div></div>`;

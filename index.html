@@ -950,11 +950,11 @@
       <div class="home-stats">
         <div class="mini-card">
           <div class="mini-number" id="homeTodayCount">0</div>
-          <div class="mini-label">catatan hari ini</div>
+          <div class="mini-label">cerita hari ini</div>
         </div>
         <div class="mini-card">
           <div class="mini-number" id="homeTotalCount">0</div>
-          <div class="mini-label">total catatan</div>
+          <div class="mini-label">cerita tersimpan</div>
         </div>
       </div>
 
@@ -978,7 +978,7 @@
           <div><h2 class="section-title">Mood terakhir</h2></div>
         </div>
         <p class="section-sub">Yang terakhir kamu pilih.</p>
-        <div id="lastMoodCard" class="empty">Belum ada catatan.</div>
+        <div id="lastMoodCard" class="empty">Belum ada cerita yang kamu titipkan di sini..</div>
       </section>
     </section>
 
@@ -1069,21 +1069,21 @@
         <button id="save" class="save" disabled>
           <span class="piyo-ui inline-piyo" data-piyo-ui="happy"></span> Simpan Ceritaku
         </button>
-        <div class="save-note">Catatanmu akan tersimpan online.</div>
+        <div class="save-note">Aku simpan ceritamu di sini ya.</div>
       </section>
     </section>
 
     <!-- RIWAYAT -->
     <section id="page-riwayat" class="page">
       <header style="padding:10px 6px 14px;">
-        <div class="page-title"><span class="piyo-ui inline-piyo" data-piyo-ui="history"></span> Cerita Kamu</div>
-        <div class="page-subtitle">Lihat lagi semua yang sudah kamu ceritakan.</div>
+        <div class="page-title"><span class="piyo-ui inline-piyo" data-piyo-ui="history"></span> Ceritaku</div>
+        <div class="page-subtitle">Lihat lagi cerita-cerita kecilmu di sini.</div>
       </header>
 
       <section class="card history-section">
         <div class="history-toolbar">
-          <div class="history-date-label" id="historySummary">Memuat riwayat...</div>
-          <button type="button" class="history-refresh" id="historyRefresh">↻ Refresh</button>
+          <div class="history-date-label" id="historySummary">Sebentar ya, lagi buka cerita kamu...</div>
+          <button type="button" class="history-refresh" id="historyRefresh">↻ Lihat lagi</button>
         </div>
         <div id="historyList" class="history-list">
           <div class="history-loading">Memuat catatan...</div>
@@ -1112,7 +1112,7 @@
         <div class="home-stats" style="margin-top:18px;">
           <div class="mini-card">
             <div class="mini-number" id="profileTotal">0</div>
-            <div class="mini-label">total catatan</div>
+            <div class="mini-label">cerita tersimpan</div>
           </div>
           <div class="mini-card">
             <div class="mini-number" id="profileToday">0</div>
@@ -1148,10 +1148,10 @@
 <section class="card" style="margin-top:12px;">
         <div class="section-head">
           <div class="section-icon"><span class="piyo-ui" data-piyo-ui="love"></span></div>
-          <div><h2 class="section-title">Logout</h2></div>
+          <div><h2 class="section-title">Akses Ruang Kecilku</h2></div>
         </div>
         <p class="section-sub">Selama kamu tetap di sini, ruang kecil ini akan selalu siap menemani ceritamu.</p>
-        <button id="logoutButton" class="danger-btn">Keluar dari akun</button>
+        <button id="logoutButton" class="danger-btn">Atur Akses Ruangku</button>
       </section>
     </section>
 
@@ -1165,8 +1165,8 @@
     <div class="nav-inner">
       <button class="nav-btn active" data-page="home"><span class="nav-icon"><span class="piyo-ui" data-piyo-ui="home"></span></span><span class="nav-label">Beranda</span></button>
       <button class="nav-btn" data-page="makan"><span class="nav-icon"><span class="piyo-ui" data-piyo-ui="food"></span></span><span class="nav-label">Makan</span></button>
-      <button class="nav-btn" data-page="riwayat"><span class="nav-icon"><span class="piyo-ui" data-piyo-ui="history"></span></span><span class="nav-label">Riwayat</span></button>
-      <button class="nav-btn" data-page="aku"><span class="nav-icon"><span class="piyo-ui" data-piyo-ui="love"></span></span><span class="nav-label">Aku</span></button>
+      <button class="nav-btn" data-page="riwayat"><span class="nav-icon"><span class="piyo-ui" data-piyo-ui="history"></span></span><span class="nav-label">Ceritaku</span></button>
+      <button class="nav-btn" data-page="aku"><span class="nav-icon"><span class="piyo-ui" data-piyo-ui="love"></span></span><span class="nav-label">Ruang Kecilku</span></button>
     </div>
   </nav>
 
@@ -1508,8 +1508,8 @@
       const mood=moods.find(m=>m.id===lastMoodId);
         $("lastMoodCard").innerHTML = mood
           ? `<div style="display:flex;align-items:center;gap:10px">${piyoArt(mood.moodClass)}<div><b>${escapeHtml(mood.label)}</b><div style="font-size:10px;color:#9A846A;margin-top:3px">Pilihan mood terakhir</div></div></div>`
-          : "Belum ada catatan.";
-      } else $("lastMoodCard").textContent="Belum ada catatan.";
+          : "Belum ada cerita yang kamu titipkan di sini..";
+      } else $("lastMoodCard").textContent="Belum ada cerita yang kamu titipkan di sini..";
     }
 
         async function loadMoodStats(){
@@ -1571,11 +1571,11 @@ async function loadProfileStats(){ await loadHome(); await loadMoodStats(); }
     async function loadHistory(){
       $("historyList").innerHTML=`<div class="history-loading">Memuat catatan...</div>`;
       const {data,error}=await db.from("food_logs").select("id,eaten_at,meal_type,food_ids,mood_id,comment,soundtrack,love_answer,one_word").order("eaten_at",{ascending:false}).limit(100);
-      if(error){ $("historySummary").textContent="Riwayat belum bisa dimuat"; $("historyList").innerHTML=`<div class="history-empty">Maaf sayang, riwayatnya belum bisa dibuka sekarang.</div>`; return; }
-      if(!data.length){ $("historySummary").textContent="Belum ada catatan"; $("historyList").innerHTML=`<div class="history-empty">Belum ada cerita di sini. Yuk mulai isi hari ini.</div>`; return; }
+      if(error){ $("historySummary").textContent="Hmm, ceritanya belum kebuka. Coba lagi ya sayang."; $("historyList").innerHTML=`<div class="history-empty">Maaf sayang, riwayatnya belum bisa dibuka sekarang.</div>`; return; }
+      if(!data.length){ $("historySummary").textContent="Belum ada cerita yang kamu titipkan di sini."; $("historyList").innerHTML=`<div class="history-empty">Belum ada cerita di sini. Yuk mulai isi hari ini.</div>`; return; }
       const todayKey=new Date().toISOString().slice(0,10);
       const todayCount=data.filter(x=>x.eaten_at.slice(0,10)===todayKey).length;
-      $("historySummary").textContent=todayCount?`${todayCount} catatan hari ini • ${data.length} total tersimpan`:`${data.length} catatan tersimpan`;
+      $("historySummary").textContent=todayCount?`${todayCount} cerita hari ini • ${data.length} total tersimpan`:`${data.length} cerita tersimpan`;
 
       $("historyList").innerHTML=data.map(item=>{
         const meal=meals.find(m=>m.id===item.meal_type)||{label:item.meal_type};
