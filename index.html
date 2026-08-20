@@ -1202,6 +1202,20 @@
         </div>
       </div>
 
+      <section class="card" style="margin-top:12px;">
+        <div class="section-head">
+          <div class="section-icon"><span class="piyo-ui" data-piyo-ui="food"></span></div>
+          <div>
+            <h2 class="section-title">Mau mam atau cerita?</h2>
+          </div>
+        </div>
+        <p class="section-sub">Pilih aja di menu ya sayang.</p>
+        <div class="quick-grid">
+          <button class="quick-btn" data-go="makan"><span class="piyo-ui inline-piyo" data-piyo-ui="food"></span> Menu makanan dan kolom cerita ada disini →</button>
+          <button class="quick-btn" data-go="riwayat"><span class="piyo-ui inline-piyo" data-piyo-ui="history"></span> Cerita-cerita yg udah kamu buat ada disini →</button>
+        </div>
+      </section>
+
 
 
       <div class="home-stats">
@@ -1222,7 +1236,7 @@
       <section class="card home-interactive-card">
         <div class="section-head">
           <div class="section-icon"><span class="piyo-ui" data-piyo-ui="love"></span></div>
-          <div><h2 class="section-title">🌷 Hari ini aku sudah...</h2></div>
+          <div><h2 class="section-title">🌷 Hari ini ibuk udah...</h2></div>
         </div>
         <p class="section-sub">Ceklis yang sudah kamu lakukan hari ini ya sayang.</p>
         <div class="home-checklist">
@@ -1232,7 +1246,7 @@
           </label>
           <label class="home-check">
             <input type="checkbox" data-home-check="eat">
-            <span>Sudah makan</span>
+            <span>Mam atau nyemil</span>
           </label>
           <label class="home-check">
             <input type="checkbox" data-home-check="rest">
@@ -1285,24 +1299,12 @@
           <button type="button" class="home-choice" data-bapak="Lapar">Lapar</button>
           <button type="button" class="home-choice" data-bapak="Ngantuk">Ngantuk</button>
           <button type="button" class="home-choice" data-bapak="Pengen dipeluk">Pengen dipeluk</button>
-          <button type="button" class="home-choice" data-bapak="Lagi jahil">Lagi jahil</button>
+          <button type="button" class="home-choice" data-bapak="Lagi jail">Lagi jail</button>
         </div>
         <div class="home-response" id="bapakResponse">Coba tebak dulu ya... 💛</div>
       </section>
 
-<section class="card" style="margin-top:12px;">
-        <div class="section-head">
-          <div class="section-icon"><span class="piyo-ui" data-piyo-ui="food"></span></div>
-          <div>
-            <h2 class="section-title">Mau mam atau cerita?</h2>
-          </div>
-        </div>
-        <p class="section-sub">Pilih aja di menu ya sayang.</p>
-        <div class="quick-grid">
-          <button class="quick-btn" data-go="makan"><span class="piyo-ui inline-piyo" data-piyo-ui="food"></span> Menu makanan dan kolom cerita ada disini →</button>
-          <button class="quick-btn" data-go="riwayat"><span class="piyo-ui inline-piyo" data-piyo-ui="history"></span> Cerita-cerita yg udah kamu buat ada disini →</button>
-        </div>
-      </section>
+
 
       <section class="card catch-game">
         <div class="catch-head">
@@ -2103,12 +2105,12 @@ function catchNextReward(){
     function homeBapakResponse(v){
       const map={
         "Kangen":"Iya... Bapak lagi kangen Ibuk. 💛",
-        "Lapar":"Bapak kayaknya memang butuh makan dulu deh. 😆",
-        "Ngantuk":"Hehe... ketahuan, Bapak memang ngantuk.",
-        "Pengen dipeluk":"Nah, ini jawaban yang paling Bapak tunggu. 💛",
-        "Lagi jahil":"Waduh... jangan-jangan Bapak lagi jahil beneran. 😆"
+        "Lapar":"Bapak kek nya laper banget deh. 😆",
+        "Ngantuk":"Hoaamh... Eh... ketahuan, Bapak nguap aja kok.",
+        "Pengen dipeluk":"Peluuukkkkkkkkk. 💛",
+        "Lagi jail":"Ehehehe bapak mam ibuk ah. 😆"
       };
-      return map[v]||"Coba tebak lagi ya... 💛";
+      return map[v]||"Tebak lagi sayang... 💛";
     }
 
 function goPage(page){
