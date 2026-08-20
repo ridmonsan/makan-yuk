@@ -1186,7 +1186,37 @@
         </div>
       </div>
 
-<section class="card catch-game">
+
+
+      <div class="home-stats">
+        <div class="mini-card">
+          <div class="mini-number" id="homeTodayCount">0</div>
+          <div class="mini-label">cerita hari ini</div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-number" id="homeTotalCount">0</div>
+          <div class="mini-label">cerita tersimpan</div>
+        </div>
+      </div>
+
+      
+      
+
+<section class="card" style="margin-top:12px;">
+        <div class="section-head">
+          <div class="section-icon"><span class="piyo-ui" data-piyo-ui="food"></span></div>
+          <div>
+            <h2 class="section-title">Mau mam atau cerita?</h2>
+          </div>
+        </div>
+        <p class="section-sub">Pilih aja di menu ya sayang.</p>
+        <div class="quick-grid">
+          <button class="quick-btn" data-go="makan"><span class="piyo-ui inline-piyo" data-piyo-ui="food"></span> Menu makanan dan kolom cerita ada disini →</button>
+          <button class="quick-btn" data-go="riwayat"><span class="piyo-ui inline-piyo" data-piyo-ui="history"></span> Cerita-cerita yg udah kamu buat ada disini →</button>
+        </div>
+      </section>
+
+      <section class="card catch-game">
         <div class="catch-head">
           <div class="section-icon">
             <span class="piyo-ui" data-piyo-ui="happy"></span>
@@ -1215,34 +1245,6 @@
         <div class="catch-tools">
           <button type="button" class="catch-tool" id="catchStart">Mulai lagi</button>
           <button type="button" class="catch-tool" id="catchChangeTarget">Ganti aku</button>
-        </div>
-      </section>
-
-      <div class="home-stats">
-        <div class="mini-card">
-          <div class="mini-number" id="homeTodayCount">0</div>
-          <div class="mini-label">cerita hari ini</div>
-        </div>
-        <div class="mini-card">
-          <div class="mini-number" id="homeTotalCount">0</div>
-          <div class="mini-label">cerita tersimpan</div>
-        </div>
-      </div>
-
-      
-      
-
-<section class="card" style="margin-top:12px;">
-        <div class="section-head">
-          <div class="section-icon"><span class="piyo-ui" data-piyo-ui="food"></span></div>
-          <div>
-            <h2 class="section-title">Mau mam atau cerita?</h2>
-          </div>
-        </div>
-        <p class="section-sub">Pilih aja di menu ya sayang.</p>
-        <div class="quick-grid">
-          <button class="quick-btn" data-go="makan"><span class="piyo-ui inline-piyo" data-piyo-ui="food"></span> Menu makanan dan kolom cerita ada disini →</button>
-          <button class="quick-btn" data-go="riwayat"><span class="piyo-ui inline-piyo" data-piyo-ui="history"></span> Cerita-cerita yg udah kamu buat ada disini →</button>
         </div>
       </section>
 
@@ -2212,22 +2214,13 @@ async function loadProfileStats(){ await loadHome(); await loadMoodStats(); }
     }
 
 
-    if($("rewardOkay")) $("rewardOkay").addEventListener("click",closeRewardPopup);
-    if($("rewardClose")) $("rewardClose").addEventListener("click",closeRewardPopup);
-    if(document.querySelector("#rewardModal .reward-backdrop")){
-      document.querySelector("#rewardModal .reward-backdrop").addEventListener("click",closeRewardPopup);
-    }
-    document.addEventListener("keydown",event=>{
-      if(event.key==="Escape") closeRewardPopup();
-    });
-
     startApp();
   </script>
 
   <div id="rewardModal" class="reward-modal" aria-hidden="true">
     <div class="reward-backdrop"></div>
     <div class="reward-card" role="dialog" aria-modal="true" aria-labelledby="rewardTitle">
-      <button type="button" class="reward-close" id="rewardClose" aria-label="Tutup">×</button>
+      <button type="button" class="reward-close" id="rewardClose" aria-label="Tutup hadiah">×</button>
 
       <div class="reward-piyo-wrap">
         <div id="rewardPiyoArt"></div>
@@ -2242,5 +2235,34 @@ async function loadProfileStats(){ await loadHome(); await loadMoodStats(); }
       </button>
     </div>
   </div>
+
+  <script>
+    (function(){
+      function bindRewardPopup(){
+        const modal=document.getElementById("rewardModal");
+        if(!modal) return;
+
+        const okay=document.getElementById("rewardOkay");
+        const close=document.getElementById("rewardClose");
+        const backdrop=modal.querySelector(".reward-backdrop");
+
+        if(okay) okay.addEventListener("click",closeRewardPopup);
+        if(close) close.addEventListener("click",closeRewardPopup);
+        if(backdrop) backdrop.addEventListener("click",closeRewardPopup);
+
+        document.addEventListener("keydown",event=>{
+          if(event.key==="Escape" && modal.classList.contains("show")){
+            closeRewardPopup();
+          }
+        });
+      }
+
+      if(document.readyState==="loading"){
+        document.addEventListener("DOMContentLoaded",bindRewardPopup,{once:true});
+      }else{
+        bindRewardPopup();
+      }
+    })();
+  </script>
 </body>
 </html>
