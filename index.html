@@ -365,6 +365,43 @@
     .food-art .shadow{fill:#F3DFA0}
     .food-art .face-eye{fill:#5C4536}
     .food-art .face-mouth{fill:none;stroke:#5C4536;stroke-width:1.3;stroke-linecap:round}
+
+    /* Piyo-style illustrations used instead of emoji icons throughout the UI */
+    .piyo-art{
+      width:44px;
+      height:44px;
+      display:block;
+      margin:0 auto;
+      overflow:visible;
+    }
+    .piyo-art .outline{
+      stroke:#7A5A3C;
+      stroke-width:1.7;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+    .piyo-art .body{fill:#FFE26A}
+    .piyo-art .body2{fill:#FFD454}
+    .piyo-art .beakfill{fill:#EF9E26}
+    .piyo-art .cheekfill{fill:#F2A0A0}
+    .piyo-art .eyeFill{fill:#5C4536}
+    .piyo-art .wing{fill:#FFD857}
+    .piyo-art .white{fill:#FFFDF1}
+    .piyo-art .green{fill:#9FC57C}
+    .piyo-art .brown{fill:#A86F47}
+    .piyo-art .orange{fill:#F2A347}
+    .piyo-art .pink{fill:#F2A2A2}
+    .piyo-art .blue{fill:#8FC9EA}
+    .piyo-art .mouth{fill:none;stroke:#6B4B37;stroke-width:1.35;stroke-linecap:round}
+    .piyo-art .zzzText{font-family:"Fredoka","Nunito",sans-serif;font-weight:700;fill:#8B7BAA}
+    .piyo-art .sparkText{fill:#F1B93A}
+    .piyo-art .steamText{fill:#A1A1A1}
+    .icon .piyo-art{width:48px;height:42px}
+    .meal-btn .icon .piyo-art{width:52px;height:46px}
+    .section-icon .piyo-art{width:28px;height:28px}
+    .kicker .piyo-art{width:18px;height:18px;margin:0}
+    .save .piyo-art{width:23px;height:23px;display:inline-block;vertical-align:-6px;margin-right:4px}
+
     .food-btn.sel .food-art{
       transform:translateY(-1px) scale(1.04);
       filter:drop-shadow(0 4px 4px rgba(184,140,30,.13));
@@ -394,162 +431,6 @@
       color:#917963;
       margin-top:4px;
     }
-    .piyo-mood{
-      position:relative;
-      width:48px;
-      height:40px;
-      margin:0 auto;
-    }
-
-    .piyo-mood .head{
-      position:absolute;
-      left:3px;
-      top:1px;
-      width:42px;
-      height:36px;
-      border-radius:48% 48% 45% 45% / 52% 52% 48% 48%;
-      background:linear-gradient(180deg,#FFE97D,#FFD857);
-      border:1.5px solid #E5C94C;
-      box-shadow:0 3px 7px rgba(118,93,39,.10);
-    }
-
-    .piyo-mood .eye{
-      position:absolute;
-      top:14px;
-      width:5px;
-      height:6px;
-      border-radius:50%;
-      background:#5C4536;
-    }
-    .piyo-mood .eye.left{left:12px}
-    .piyo-mood .eye.right{right:12px}
-
-    .piyo-mood .beak{
-      position:absolute;
-      left:50%;
-      top:19px;
-      width:0;
-      height:0;
-      transform:translateX(-50%);
-      border-left:5px solid transparent;
-      border-right:5px solid transparent;
-      border-top:6px solid #EF9E26;
-    }
-
-    .piyo-mood .cheek{
-      position:absolute;
-      top:22px;
-      width:6px;
-      height:3px;
-      border-radius:50%;
-      background:#F2A0A0;
-      opacity:.7;
-    }
-    .piyo-mood .cheek.left{left:7px}
-    .piyo-mood .cheek.right{right:7px}
-
-    .piyo-mood .mouth{
-      position:absolute;
-      left:50%;
-      transform:translateX(-50%);
-      color:#6B4B37;
-      font-size:10px;
-      line-height:1;
-      font-weight:900;
-    }
-
-    .piyo-mood.happy .mouth{top:23px}
-    .piyo-mood.love .mouth{top:23px}
-    .piyo-mood.good .mouth{top:23px}
-    .piyo-mood.neutral .mouth{top:23px}
-    .piyo-mood.tired .mouth{top:24px}
-    .piyo-mood.sleepy .mouth{top:24px}
-    .piyo-mood.sad .mouth{top:24px}
-    .piyo-mood.angry .mouth{top:24px}
-    .piyo-mood.stressed .mouth{top:23px}
-    .piyo-mood.sick .mouth{top:23px}
-    .piyo-mood.excited .mouth{top:23px}
-
-    .piyo-mood.happy .mouth:before{content:"⌣"}
-    .piyo-mood.love .mouth:before{content:"♥";color:#E37B7B;font-size:12px}
-    .piyo-mood.good .mouth:before{content:"ᴗ"}
-    .piyo-mood.neutral .mouth:before{content:"—"}
-    .piyo-mood.tired .mouth:before{content:"﹀"}
-    .piyo-mood.sleepy .mouth:before{content:"o";font-size:11px}
-    .piyo-mood.sad .mouth:before{content:"⌢"}
-    .piyo-mood.angry .mouth:before{content:"︿"}
-    .piyo-mood.stressed .mouth:before{content:"~"}
-    .piyo-mood.sick .mouth:before{content:"O";font-size:10px}
-    .piyo-mood.excited .mouth:before{content:"◡"}
-
-    .piyo-mood .zzz{
-      position:absolute;
-      right:-2px;
-      top:-7px;
-      font-family:"Fredoka","Nunito",sans-serif;
-      font-weight:700;
-      font-size:11px;
-      color:#8B7BAA;
-      transform:rotate(12deg);
-    }
-
-    .piyo-mood .tear{
-      position:absolute;
-      right:9px;
-      top:20px;
-      width:4px;
-      height:7px;
-      background:#79B8E8;
-      border-radius:70% 30% 60% 40%;
-      transform:rotate(18deg);
-    }
-
-    .piyo-mood .steam{
-      position:absolute;
-      right:5px;
-      top:-9px;
-      font-size:9px;
-      color:#A1A1A1;
-      letter-spacing:-2px;
-    }
-
-    .piyo-mood .spark{
-      position:absolute;
-      right:-2px;
-      top:1px;
-      color:#F1B93A;
-      font-size:10px;
-    }
-
-    .piyo-mood.sleepy .eye{
-      height:2px;
-      top:16px;
-      border-radius:999px;
-      transform:rotate(-8deg);
-    }
-
-    .piyo-mood.tired .eye.left,
-    .piyo-mood.tired .eye.right{
-      height:2px;
-      top:16px;
-      border-radius:999px;
-    }
-
-    .piyo-mood.angry .eye.left{transform:rotate(18deg)}
-    .piyo-mood.angry .eye.right{transform:rotate(-18deg)}
-
-    .piyo-mood.excited .eye{
-      width:6px;
-      height:8px;
-      top:12px;
-    }
-
-    .piyo-mood.sick .eye{
-      height:4px;
-      top:15px;
-    }
-
-
     .selected-foods{
       display:flex;
       flex-wrap:wrap;
@@ -694,15 +575,15 @@
 
 <body>
   <div class="deco egga"></div>
-  <div class="deco star1">✦</div>
-  <div class="deco star2">✧</div>
-  <div class="deco heart">♡</div>
+  <div class="deco star1">•</div>
+  <div class="deco star2">•</div>
+  <div class="deco heart">♥</div>
 
   <main class="app">
     <header>
       <div class="brand-row">
         <div>
-          <div class="kicker">🐥 Untuk istriku tercinta</div>
+          <div class="kicker"><span class="piyo-art" aria-hidden="true"><svg viewBox="0 0 56 48" aria-hidden="true"><path class="body outline" d="M10 23 Q10 10 28 8 Q46 10 46 23 Q46 39 28 40 Q10 39 10 23Z"/><circle class="eyeFill" cx="22" cy="22" r="1.6"/><circle class="eyeFill" cx="34" cy="22" r="1.6"/><path class="beakfill outline" d="M24 26 L28 30 L32 26 Q28 22 24 26Z"/></svg></span> Untuk istriku tercinta</div>
 
           <div class="brand">
             <div class="piyo-face" aria-label="Piyo inspired chick">
@@ -730,7 +611,7 @@
     <!-- WAKTU MAKAN -->
     <section class="card">
       <div class="section-head">
-        <div class="section-icon">🥚</div>
+        <div class="section-icon"><svg class="piyo-art" viewBox="0 0 56 48" aria-hidden="true"><ellipse class="white" cx="28" cy="42" rx="13" ry="3"/><path class="body outline" d="M10 23 Q10 10 28 8 Q46 10 46 23 Q46 39 28 40 Q10 39 10 23Z"/><path class="beakfill outline" d="M24 26 L28 30 L32 26 Q28 22 24 26Z"/><circle class="eyeFill" cx="22" cy="22" r="1.6"/><circle class="eyeFill" cx="34" cy="22" r="1.6"/></svg></div>
         <div>
           <h2 class="section-title">Mau makan kapan Istriku?</h2>
         </div>
@@ -742,7 +623,7 @@
     <!-- MAKANAN -->
     <section class="card">
       <div class="section-head">
-        <div class="section-icon">🍚</div>
+        <div class="section-icon"><svg class="piyo-art" viewBox="0 0 56 48" aria-hidden="true"><path class="white outline" d="M13 27 Q15 19 22 18 Q28 12 34 18 Q42 18 45 27 Q39 31 28 31 Q19 31 13 27Z"/><circle class="eyeFill" cx="24" cy="24" r="1.6"/><circle class="eyeFill" cx="32" cy="24" r="1.6"/><path class="beakfill outline" d="M25 27 L28 30 L31 27 Q28 24 25 27Z"/></svg></div>
         <div>
           <h2 class="section-title">Makan apa kamu hari ini istriku?</h2>
         </div>
@@ -759,7 +640,7 @@
     <!-- MOOD -->
     <section class="card">
       <div class="section-head">
-        <div class="section-icon">💛</div>
+        <div class="section-icon"><svg class="piyo-art" viewBox="0 0 56 48" aria-hidden="true"><path class="body outline" d="M10 23 Q10 10 28 8 Q46 10 46 23 Q46 39 28 40 Q10 39 10 23Z"/><path d="M28 32 C24 27 20 31 28 37 C36 31 32 27 28 32Z" fill="#E97E8C"/><circle class="eyeFill" cx="22" cy="22" r="1.6"/><circle class="eyeFill" cx="34" cy="22" r="1.6"/></svg></div>
         <div>
           <h2 class="section-title">Mood kamu sekarang?</h2>
         </div>
@@ -771,7 +652,7 @@
     <!-- KOMENTAR -->
     <section class="card">
       <div class="section-head">
-        <div class="section-icon">💬</div>
+        <div class="section-icon"><svg class="piyo-art" viewBox="0 0 56 48" aria-hidden="true"><path class="body outline" d="M10 23 Q10 10 28 8 Q46 10 46 23 Q46 39 28 40 Q10 39 10 23Z"/><path class="mouth" d="M23 30 Q28 35 33 30"/><circle class="eyeFill" cx="22" cy="22" r="1.6"/><circle class="eyeFill" cx="34" cy="22" r="1.6"/></svg></div>
         <div>
           <h2 class="section-title">Apa yg mau kamu ceritain nda sayang?</h2>
         </div>
@@ -789,17 +670,17 @@
     <!-- SIMPAN -->
     <section class="card save-card">
       <button id="save" class="save" disabled>
-        🐥 Simpan Ceritaku 💛
+        <svg class="piyo-art" viewBox="0 0 56 48" aria-hidden="true"><path class="body outline" d="M10 23 Q10 10 28 8 Q46 10 46 23 Q46 39 28 40 Q10 39 10 23Z"/><circle class="eyeFill" cx="22" cy="22" r="1.6"/><circle class="eyeFill" cx="34" cy="22" r="1.6"/><path class="beakfill outline" d="M24 26 L28 30 L32 26 Q28 22 24 26Z"/></svg> Simpan Ceritaku 💛
       </button>
       <div class="save-note">Catatanmu akan tersimpan online.</div>
     </section>
 
     <footer>
-      dibuat khusus untuk kamu 💛
+      dibuat khusus untuk kamu
     </footer>
   </main>
 
-  <div id="toast" class="toast">Tersimpan 💛</div>
+  <div id="toast" class="toast">Tersimpan</div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
@@ -989,10 +870,61 @@
       }
     }
 
+
+    function piyoArt(kind="happy"){
+      const S = inner => `<svg class="piyo-art" viewBox="0 0 56 48" aria-hidden="true" focusable="false">${inner}</svg>`;
+      const eye = (x,y) => `<circle class="eyeFill" cx="${x}" cy="${y}" r="1.6"/>`;
+      const cheek = (x,y) => `<ellipse class="cheekfill" cx="${x}" cy="${y}" rx="3.2" ry="1.7"/>`;
+      const mouth = d => `<path class="mouth" d="${d}"/>`;
+      const base = (extras="", face="happy") => S(`
+        <ellipse class="white" cx="28" cy="42" rx="13" ry="3.2" opacity=".9"/>
+        <path class="body outline" d="M10 23 Q10 10 28 8 Q46 10 46 23 Q46 39 28 40 Q10 39 10 23Z"/>
+        <path class="wing outline" d="M10 25 Q3 23 7 31 Q9 35 15 32"/>
+        <path class="wing outline" d="M46 25 Q53 23 49 31 Q47 35 41 32"/>
+        ${eye(22,22)}${eye(34,22)}${cheek(16,27)}${cheek(40,27)}
+        <path class="beakfill outline" d="M24 26 L28 30 L32 26 Q28 22 24 26Z"/>
+        ${extras}
+      `);
+      switch(kind){
+        case "morning":
+          return base(`<path class="orange outline" d="M8 8 Q28 1 48 8"/><path class="orange outline" d="M12 6 L12 2 M20 4 L19 1 M36 4 L37 1 M44 6 L46 2"/>`);
+        case "noon":
+          return base(`<circle class="orange outline" cx="44" cy="9" r="5"/><path class="orange outline" d="M44 1 V0 M51 9 H55 M44 17 V19 M37 9 H34"/>`);
+        case "night":
+          return base(`<path class="white outline" d="M41 4 Q48 9 43 15 Q37 20 32 14 Q40 15 41 8 Q42 5 41 4Z"/><circle class="orange" cx="47" cy="20" r="1.5"/><circle class="orange" cx="51" cy="14" r="1.2"/>`);
+        case "snack":
+          return base(`<path class="pink outline" d="M38 16 Q43 12 47 16 L45 25 Q40 27 36 23Z"/><path class="orange outline" d="M39 17 L44 22"/>`);
+        case "happy":
+          return base(mouth("M24 29 Q28 34 32 29"));
+        case "love":
+          return base(`<path d="M28 30 C23 24 18 31 28 37 C38 31 33 24 28 30Z" fill="#E97E8C"/>`);
+        case "good":
+          return base(mouth("M24 30 Q28 33 32 30"));
+        case "neutral":
+          return base(`<path class="mouth" d="M24 30 H32"/>`);
+        case "tired":
+          return base(`<path class="mouth" d="M24 31 Q28 28 32 31"/><path class="eyeFill" d="M20 21 h5 l-2 2 h-3z"/><path class="eyeFill" d="M31 21 h5 l-2 2 h-3z"/>`);
+        case "sleepy":
+          return base(`<path class="mouth" d="M24 31 Q28 35 32 31"/><path class="eyeFill" d="M20 22 Q23 20 26 22" fill="none" stroke="#5C4536" stroke-width="1.5"/><path class="eyeFill" d="M30 22 Q33 20 36 22" fill="none" stroke="#5C4536" stroke-width="1.5"/><text class="zzzText" x="42" y="11" font-size="9">z</text>`);
+        case "sad":
+          return base(`<path class="mouth" d="M24 33 Q28 29 32 33"/><path class="blue outline" d="M38 25 Q41 30 38 33 Q35 30 38 25Z"/>`);
+        case "angry":
+          return base(`<path class="mouth" d="M24 31 Q28 28 32 31"/><path class="eyeFill" d="M19 20 L26 22 L25 24 L18 22Z"/><path class="eyeFill" d="M30 22 L37 20 L38 22 L31 24Z"/>`);
+        case "stressed":
+          return base(`<path class="mouth" d="M24 31 Q28 28 32 31"/><text class="steamText" x="41" y="10" font-size="10">〰</text>`);
+        case "sick":
+          return base(`<path class="mouth" d="M24 31 Q28 29 32 31"/><path class="blue outline" d="M39 26 Q42 30 39 33 Q36 30 39 26Z"/><path class="green outline" d="M15 11 Q19 7 21 11"/>`);
+        case "excited":
+          return base(`<path class="mouth" d="M23 29 Q28 36 33 29"/><text class="sparkText" x="42" y="12" font-size="9">✦</text>`);
+        default:
+          return base(mouth("M24 30 Q28 33 32 30"));
+      }
+    }
+
     function render(){
       $("mealGrid").innerHTML = meals.map(m => `
         <button class="pick meal-btn ${state.meal===m.id ? "sel" : ""}" data-meal="${m.id}">
-          <span class="icon">${m.icon}</span>
+          <span class="icon">${piyoArt(m.id==="breakfast"?"morning":m.id==="lunch"?"noon":m.id==="dinner"?"night":"snack")}</span>
           <span class="label">${m.label}</span>
         </button>
       `).join("");
@@ -1007,26 +939,12 @@
       const selected = foods.filter(f => state.foods.has(f.id));
 
       $("selectedFoods").innerHTML = selected.length
-        ? selected.map(f => `<span class="chip">🍽️ ${f.label}</span>`).join("")
+        ? selected.map(f => `<span class="chip">• ${f.label}</span>`).join("")
         : `<div class="empty">Belum ada makanan yang dipilih.</div>`;
 
       $("moodGrid").innerHTML = moods.map(m => `
         <button class="pick mood-btn ${state.mood===m.id ? "sel" : ""}" data-mood="${m.id}">
-          <span class="icon">
-            <span class="piyo-mood ${m.moodClass}">
-              <span class="head"></span>
-              <span class="eye left"></span>
-              <span class="eye right"></span>
-              <span class="beak"></span>
-              <span class="cheek left"></span>
-              <span class="cheek right"></span>
-              <span class="mouth"></span>
-              ${m.id==="sleepy" ? '<span class="zzz">z</span>' : ""}
-              ${m.id==="stressed" ? '<span class="steam">〰</span>' : ""}
-              ${m.id==="sick" ? '<span class="tear"></span>' : ""}
-              ${m.id==="excited" ? '<span class="spark">✦</span>' : ""}
-            </span>
-          </span>
+          <span class="icon">${piyoArt(m.moodClass)}</span>
           <span class="label">${m.label}</span>
         </button>
       `).join("");
