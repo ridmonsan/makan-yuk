@@ -1134,6 +1134,22 @@
       cursor:pointer;
       box-shadow:0 8px 18px rgba(212,166,40,.2);
     }
+
+    .home-interactive-card{margin-top:12px}
+    .home-checklist{display:grid;gap:8px;position:relative;z-index:1}
+    .home-check{display:flex;align-items:center;gap:10px;width:100%;padding:12px 13px;border:1px solid #EED78C;border-radius:16px;background:#FFFDF2;color:#6A513B;font-size:11px;font-weight:800;cursor:pointer;transition:.14s ease}
+    .home-check:has(input:checked){background:linear-gradient(180deg,#FFF1A1,#FFE47A);border-color:#E8C83F;box-shadow:0 5px 12px rgba(215,168,29,.14)}
+    .home-check input{appearance:none;-webkit-appearance:none;width:20px;height:20px;flex:0 0 auto;margin:0;border:2px solid #E2C85F;border-radius:7px;background:#FFFDF2;position:relative}
+    .home-check input:checked{background:#FFD95A;border-color:#D9B53D}
+    .home-check input:checked:after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;color:#6C512F;font-size:13px;font-weight:900}
+    .home-choice-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;position:relative;z-index:1}
+    .home-choice{border:1px solid #EED78C;background:#FFFDF2;border-radius:16px;padding:11px 9px;color:#6A513B;font-size:10px;font-weight:800;cursor:pointer;transition:.14s ease}
+    .home-choice:active{transform:scale(.98)}
+    .home-choice.selected{background:linear-gradient(180deg,#FFF1A1,#FFE47A);border-color:#E8C83F;box-shadow:0 5px 12px rgba(215,168,29,.14)}
+    .home-response{min-height:32px;margin-top:10px;padding:8px 10px;border-radius:13px;background:#FFF3CC;border:1px solid #EED78C;color:#715738;text-align:center;font-size:10px;font-weight:800;line-height:1.4}
+    .home-bapak{height:92px;display:flex;align-items:center;justify-content:center;margin:8px 0 2px;position:relative;z-index:1}
+    .home-bapak svg{width:86px;height:86px;display:block}
+    @media(max-width:390px){.home-choice-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -1201,6 +1217,78 @@
 
       
       
+
+
+      <section class="card home-interactive-card">
+        <div class="section-head">
+          <div class="section-icon"><span class="piyo-ui" data-piyo-ui="love"></span></div>
+          <div><h2 class="section-title">🌷 Hari ini aku sudah...</h2></div>
+        </div>
+        <p class="section-sub">Ceklis yang sudah kamu lakukan hari ini ya sayang.</p>
+        <div class="home-checklist">
+          <label class="home-check">
+            <input type="checkbox" data-home-check="drink">
+            <span>Minum air</span>
+          </label>
+          <label class="home-check">
+            <input type="checkbox" data-home-check="eat">
+            <span>Sudah makan</span>
+          </label>
+          <label class="home-check">
+            <input type="checkbox" data-home-check="rest">
+            <span>Istirahat sebentar</span>
+          </label>
+        </div>
+      </section>
+
+      <section class="card home-interactive-card">
+        <div class="section-head">
+          <div class="section-icon"><span class="piyo-ui" data-piyo-ui="love"></span></div>
+          <div><h2 class="section-title">🌤️ Hari ini aku pengen...</h2></div>
+        </div>
+        <p class="section-sub">Pilih yang paling pengen kamu rasain hari ini.</p>
+        <div class="home-checklist">
+          <label class="home-check"><input type="checkbox" data-home-want="eat_good"><span>Makan enak</span></label>
+          <label class="home-check"><input type="checkbox" data-home-want="sleep_well"><span>Tidur nyenyak</span></label>
+          <label class="home-check"><input type="checkbox" data-home-want="watch"><span>Nonton</span></label>
+          <label class="home-check"><input type="checkbox" data-home-want="pacalan"><span>Pacalan</span></label>
+          <label class="home-check"><input type="checkbox" data-home-want="hug"><span>Dipeluk</span></label>
+          <label class="home-check"><input type="checkbox" data-home-want="pampered"><span>Dimanja</span></label>
+        </div>
+      </section>
+
+      <section class="card home-interactive-card">
+        <div class="section-head">
+          <div class="section-icon"><span class="piyo-ui" data-piyo-ui="love"></span></div>
+          <div><h2 class="section-title">💛 Pilih Pelukan Hari Ini</h2></div>
+        </div>
+        <p class="section-sub">Hari ini Ibuk pengen dipeluk yang mana?</p>
+        <div class="home-choice-grid" id="hugChoices">
+          <button type="button" class="home-choice" data-hug="Peluk biasa">Peluk biasa</button>
+          <button type="button" class="home-choice" data-hug="Peluk lama">Peluk lama</button>
+          <button type="button" class="home-choice" data-hug="Peluk erat">Peluk erat</button>
+          <button type="button" class="home-choice" data-hug="Peluk sambil diem">Peluk sambil diem</button>
+          <button type="button" class="home-choice" data-hug="Peluk sampai ketiduran">Peluk sampai ketiduran</button>
+        </div>
+        <div class="home-response" id="hugResponse">Pilih satu ya sayang 💛</div>
+      </section>
+
+      <section class="card home-interactive-card">
+        <div class="section-head">
+          <div class="section-icon"><span class="piyo-ui" data-piyo-ui="love"></span></div>
+          <div><h2 class="section-title">👨 Bapak Hari Ini</h2></div>
+        </div>
+        <p class="section-sub">Menurut Ibuk, Bapak hari ini lagi apa?</p>
+        <div class="home-bapak" id="bapakTodayArt"></div>
+        <div class="home-choice-grid" id="bapakChoices">
+          <button type="button" class="home-choice" data-bapak="Kangen">Kangen</button>
+          <button type="button" class="home-choice" data-bapak="Lapar">Lapar</button>
+          <button type="button" class="home-choice" data-bapak="Ngantuk">Ngantuk</button>
+          <button type="button" class="home-choice" data-bapak="Pengen dipeluk">Pengen dipeluk</button>
+          <button type="button" class="home-choice" data-bapak="Lagi jahil">Lagi jahil</button>
+        </div>
+        <div class="home-response" id="bapakResponse">Coba tebak dulu ya... 💛</div>
+      </section>
 
 <section class="card" style="margin-top:12px;">
         <div class="section-head">
@@ -1698,6 +1786,8 @@
 
     const catchTargets=[
       {id:"bapak",label:"Bapak",kind:"bapak"},
+      {id:"dedek",label:"Dedek",kind:"dedek"},
+      {id:"kakak",label:"Kakak",kind:"kakak"},
       {id:"piyo",label:"Piyo",kind:"piyo"},
       {id:"heart",label:"Hati",kind:"heart"},
       {id:"food",label:"Makanan",kind:"food"}
@@ -1715,11 +1805,11 @@
 
     const catchMessages=[
       "Hehe... ketangkep juga! 💛",
-      "Aduh, Bapak hampir kabur! 💛",
-      "Kok Bapak selalu ketangkep sih? 😆",
+      "Aduh, hampir kabur! 💛",
+      "Kok bisa ketangkep terus sih? 😆",
       "Sini, jangan dilepas dulu. 💛",
       "Wah, Ibuk jago banget! 💛",
-      "Bapak menyerah... untuk sementara. 💛"
+      "Yang ketangkep kali ini siapa ya? 😆"
     ];
 
     let catchState={
@@ -1741,17 +1831,56 @@
       if(kind==="bapak"){
         return `
           <svg viewBox="0 0 80 80" aria-hidden="true">
-            <circle cx="40" cy="26" r="15" fill="#F2C49B" stroke="#7A5A3C" stroke-width="2"/>
-            <path d="M25 26 Q25 10 40 9 Q55 10 55 26 Q50 19 40 19 Q30 19 25 26Z" fill="#5C4536" stroke="#7A5A3C" stroke-width="2"/>
-            <circle cx="34" cy="28" r="2.1" fill="#5C4536"/><circle cx="46" cy="28" r="2.1" fill="#5C4536"/>
-            <path d="M36 35 Q40 38 44 35" fill="none" stroke="#6B4B37" stroke-width="1.7" stroke-linecap="round"/>
-            <path d="M29 44 Q40 39 51 44 L55 62 Q40 70 25 62Z" fill="#86B4D8" stroke="#6E5B49" stroke-width="2"/>
-            <path d="M25 52 L15 61" fill="none" stroke="#6E5B49" stroke-width="5" stroke-linecap="round"/>
-            <path d="M55 52 L65 61" fill="none" stroke="#6E5B49" stroke-width="5" stroke-linecap="round"/>
-            <path d="M32 64 L28 73 M48 64 L52 73" fill="none" stroke="#6E5B49" stroke-width="5" stroke-linecap="round"/>
-            <path d="M28 74 H20 M52 74 H60" fill="none" stroke="#5C4536" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="40" cy="28" r="16" fill="#F2C49B" stroke="#7A5A3C" stroke-width="2"/>
+            <path d="M24 27 Q25 8 40 9 Q55 8 56 27 Q50 18 40 18 Q30 18 24 27Z" fill="#5C4536" stroke="#7A5A3C" stroke-width="2"/>
+            <circle cx="34" cy="29" r="2.2" fill="#5C4536"/>
+            <circle cx="46" cy="29" r="2.2" fill="#5C4536"/>
+            <circle cx="29" cy="36" r="3.2" fill="#F2A0A0" opacity=".8"/>
+            <circle cx="51" cy="36" r="3.2" fill="#F2A0A0" opacity=".8"/>
+            <path d="M34 35 Q40 42 46 35" fill="none" stroke="#6B4B37" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M38 34 L40 37 L42 34" fill="#EF9E26" stroke="#7A5A3C" stroke-width="1"/>
+            <path d="M29 45 Q40 39 51 45 L55 63 Q40 70 25 63Z" fill="#86B4D8" stroke="#6E5B49" stroke-width="2"/>
+            <path d="M25 49 Q17 47 14 39" fill="none" stroke="#6E5B49" stroke-width="5" stroke-linecap="round"/>
+            <path d="M55 49 Q63 47 66 39" fill="none" stroke="#6E5B49" stroke-width="5" stroke-linecap="round"/>
+            <path d="M32 64 L29 72 M48 64 L51 72" fill="none" stroke="#6E5B49" stroke-width="5" stroke-linecap="round"/>
+            <path d="M29 73 H21 M51 73 H59" fill="none" stroke="#5C4536" stroke-width="3" stroke-linecap="round"/>
+            <path d="M64 17 Q69 12 67 8" fill="none" stroke="#FFD95A" stroke-width="2.5" stroke-linecap="round"/>
           </svg>`;
       }
+
+      if(kind==="dedek"){
+        return `
+          <svg viewBox="0 0 80 80" aria-hidden="true">
+            <circle cx="40" cy="34" r="18" fill="#F1C39E" stroke="#7A5A3C" stroke-width="2"/>
+            <path d="M24 29 Q28 13 40 14 Q52 13 56 29 Q49 22 40 23 Q31 22 24 29Z" fill="#4F4038" stroke="#7A5A3C" stroke-width="2"/>
+            <path d="M33 35 Q35 33 37 35 M43 35 Q45 33 47 35" fill="none" stroke="#5C4536" stroke-width="2" stroke-linecap="round"/>
+            <path d="M34 43 Q40 48 46 43" fill="none" stroke="#6B4B37" stroke-width="1.8" stroke-linecap="round"/>
+            <circle cx="27" cy="43" r="3" fill="#F2A0A0" opacity=".75"/>
+            <circle cx="53" cy="43" r="3" fill="#F2A0A0" opacity=".75"/>
+            <path d="M28 53 Q40 47 52 53 L56 68 Q40 75 24 68Z" fill="#A9C98A" stroke="#6E5B49" stroke-width="2"/>
+            <circle cx="20" cy="64" r="5" fill="#FFD95A" stroke="#D1AA39" stroke-width="1.5"/>
+            <circle cx="60" cy="64" r="5" fill="#FFD95A" stroke="#D1AA39" stroke-width="1.5"/>
+            <path d="M31 70 L28 76 M49 70 L52 76" fill="none" stroke="#6E5B49" stroke-width="4" stroke-linecap="round"/>
+          </svg>`;
+      }
+
+      if(kind==="kakak"){
+        return `
+          <svg viewBox="0 0 80 80" aria-hidden="true">
+            <circle cx="40" cy="31" r="17" fill="#F2C39F" stroke="#7A5A3C" stroke-width="2"/>
+            <path d="M22 31 Q21 12 40 9 Q59 12 58 31 Q54 24 49 20 Q40 26 31 20 Q26 25 22 31Z" fill="#5A4038" stroke="#7A5A3C" stroke-width="2"/>
+            <path d="M23 22 Q17 26 21 37 M57 22 Q63 26 59 37" fill="none" stroke="#5A4038" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="34" cy="32" r="2.1" fill="#5C4536"/><circle cx="46" cy="32" r="2.1" fill="#5C4536"/>
+            <circle cx="28" cy="40" r="3" fill="#F2A0A0" opacity=".75"/>
+            <circle cx="52" cy="40" r="3" fill="#F2A0A0" opacity=".75"/>
+            <path d="M35 42 Q40 47 45 42" fill="none" stroke="#6B4B37" stroke-width="1.7" stroke-linecap="round"/>
+            <path d="M29 50 Q40 46 51 50 L56 69 Q40 76 24 69Z" fill="#F0A7B5" stroke="#6E5B49" stroke-width="2"/>
+            <path d="M24 54 L17 61 M56 54 L63 61" fill="none" stroke="#6E5B49" stroke-width="4.5" stroke-linecap="round"/>
+            <path d="M33 70 L30 76 M47 70 L50 76" fill="none" stroke="#6E5B49" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="62" cy="15" r="4" fill="#FFD95A" stroke="#D1AA39" stroke-width="1"/>
+          </svg>`;
+      }
+
       if(kind==="piyo"){
         return `
           <svg viewBox="0 0 80 80" aria-hidden="true">
@@ -1763,6 +1892,7 @@
             <path d="M62 25 Q70 16 61 13" fill="none" stroke="#7A5A3C" stroke-width="3" stroke-linecap="round"/>
           </svg>`;
       }
+
       if(kind==="heart"){
         return `
           <svg viewBox="0 0 80 80" aria-hidden="true">
@@ -1771,6 +1901,7 @@
             <path d="M24 29 Q28 23 33 23" fill="none" stroke="#FFF3AE" stroke-width="3" stroke-linecap="round" opacity=".9"/>
           </svg>`;
       }
+
       return `
         <svg viewBox="0 0 80 80" aria-hidden="true">
           <path d="M19 45 Q19 25 40 22 Q61 25 61 45 Q61 58 40 59 Q19 58 19 45Z" fill="#FFFDF1" stroke="#7A5A3C" stroke-width="2"/>
@@ -1924,6 +2055,62 @@ function catchNextReward(){
       catchSaveDayState();
     }
 
+
+    const HOME_INTERACTIVE_VERSION="v1";
+    function homeInteractiveKey(){
+      return `makan_yuk_home_interactive_${HOME_INTERACTIVE_VERSION}_${new Date().toISOString().slice(0,10)}`;
+    }
+    function loadHomeInteractive(){
+      let saved={done:[],want:[],hug:"",bapak:""};
+      try{
+        const raw=localStorage.getItem(homeInteractiveKey());
+        if(raw) saved={...saved,...JSON.parse(raw)};
+      }catch{}
+
+      document.querySelectorAll("[data-home-check]").forEach(x=>x.checked=(saved.done||[]).includes(x.dataset.homeCheck));
+      document.querySelectorAll("[data-home-want]").forEach(x=>x.checked=(saved.want||[]).includes(x.dataset.homeWant));
+      document.querySelectorAll("[data-hug]").forEach(x=>x.classList.toggle("selected",x.dataset.hug===saved.hug));
+      document.querySelectorAll("[data-bapak]").forEach(x=>x.classList.toggle("selected",x.dataset.bapak===saved.bapak));
+
+      if(saved.hug){
+        $("hugResponse").textContent=`Oke, dicatat. Nanti Bapak kasih ${saved.hug.toLowerCase()} ya 💛`;
+      }
+      if(saved.bapak){
+        $("bapakResponse").textContent=homeBapakResponse(saved.bapak);
+      }
+      $("bapakTodayArt").innerHTML=homeBapakArt();
+    }
+    function saveHomeInteractive(){
+      const done=[...document.querySelectorAll("[data-home-check]:checked")].map(x=>x.dataset.homeCheck);
+      const want=[...document.querySelectorAll("[data-home-want]:checked")].map(x=>x.dataset.homeWant);
+      const hug=document.querySelector("[data-hug].selected")?.dataset.hug||"";
+      const bapak=document.querySelector("[data-bapak].selected")?.dataset.bapak||"";
+      localStorage.setItem(homeInteractiveKey(),JSON.stringify({done,want,hug,bapak}));
+    }
+    function homeBapakArt(){
+      return `<svg viewBox="0 0 120 120" aria-hidden="true">
+        <circle cx="60" cy="38" r="23" fill="#F2C49B" stroke="#7A5A3C" stroke-width="2"/>
+        <path d="M37 39 Q37 12 60 12 Q83 12 83 39 Q75 28 60 28 Q45 28 37 39Z" fill="#5C4536" stroke="#7A5A3C" stroke-width="2"/>
+        <circle cx="51" cy="40" r="2.6" fill="#5C4536"/><circle cx="69" cy="40" r="2.6" fill="#5C4536"/>
+        <path d="M52 52 Q60 57 68 52" fill="none" stroke="#6B4B37" stroke-width="2" stroke-linecap="round"/>
+        <path d="M43 65 Q60 58 77 65 L83 96 Q60 106 37 96Z" fill="#86B4D8" stroke="#6E5B49" stroke-width="2"/>
+        <path d="M39 74 L24 87 M81 74 L96 87" fill="none" stroke="#6E5B49" stroke-width="6" stroke-linecap="round"/>
+        <path d="M49 98 L44 110 M71 98 L76 110" fill="none" stroke="#6E5B49" stroke-width="6" stroke-linecap="round"/>
+        <path d="M42 111 H31 M78 111 H89" fill="none" stroke="#5C4536" stroke-width="3" stroke-linecap="round"/>
+        <path d="M89 24 C94 17 103 17 106 23 C103 21 98 21 94 27" fill="#FFD95A"/>
+      </svg>`;
+    }
+    function homeBapakResponse(v){
+      const map={
+        "Kangen":"Iya... Bapak lagi kangen Ibuk. 💛",
+        "Lapar":"Bapak kayaknya memang butuh makan dulu deh. 😆",
+        "Ngantuk":"Hehe... ketahuan, Bapak memang ngantuk.",
+        "Pengen dipeluk":"Nah, ini jawaban yang paling Bapak tunggu. 💛",
+        "Lagi jahil":"Waduh... jangan-jangan Bapak lagi jahil beneran. 😆"
+      };
+      return map[v]||"Coba tebak lagi ya... 💛";
+    }
+
 function goPage(page){
       document.querySelectorAll(".page").forEach(el=>el.classList.remove("active"));
       document.querySelectorAll(".nav-btn").forEach(el=>el.classList.remove("active"));
@@ -2073,7 +2260,8 @@ function goPage(page){
       }).join("");
     }
 
-async function loadProfileStats(){ await loadHome(); await loadMoodStats(); }
+async function loadProfileStats(){ await loadHome();
+      loadHomeInteractive(); await loadMoodStats(); }
 
     async function loadHistory(){
       $("historyList").innerHTML=`<div class="history-loading">Memuat catatan...</div>`;
@@ -2214,7 +2402,31 @@ async function loadProfileStats(){ await loadHome(); await loadMoodStats(); }
     }
 
 
-    startApp();
+
+    document.addEventListener("change",event=>{
+      if(event.target.matches("[data-home-check]") || event.target.matches("[data-home-want]")){
+        saveHomeInteractive();
+      }
+    });
+    document.addEventListener("click",event=>{
+      const hug=event.target.closest("[data-hug]");
+      if(hug){
+        document.querySelectorAll("[data-hug]").forEach(x=>x.classList.remove("selected"));
+        hug.classList.add("selected");
+        $("hugResponse").textContent=`Oke, dicatat. Nanti Bapak kasih ${hug.dataset.hug.toLowerCase()} ya 💛`;
+        saveHomeInteractive();
+        return;
+      }
+
+      const bapak=event.target.closest("[data-bapak]");
+      if(bapak){
+        document.querySelectorAll("[data-bapak]").forEach(x=>x.classList.remove("selected"));
+        bapak.classList.add("selected");
+        $("bapakResponse").textContent=homeBapakResponse(bapak.dataset.bapak);
+        saveHomeInteractive();
+      }
+    });
+        startApp();
   </script>
 
   <div id="rewardModal" class="reward-modal" aria-hidden="true">
