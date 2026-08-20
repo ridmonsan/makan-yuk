@@ -1,0 +1,9 @@
+{
+  "name": "Makan Yuk ❤️",
+  "short_name": "Makan Yuk",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fffaf7",
+  "theme_color": "#fffaf7",
+  "description": "Private food and mood tracker"
+}
