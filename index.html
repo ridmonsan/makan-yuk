@@ -7,14 +7,12 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Makan Yuk 💛">
-  <title>Makan Yuk 💛 — Piyo Theme</title>
-
-  <!-- Cute rounded font -->
+  <title>Makan Yuk 💛 — Untuk Istriku</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
-
   <style>
+
     :root{
       --bg:#FFF8D6;
       --bg-deep:#FFF1A8;
@@ -778,10 +776,59 @@
       cursor:pointer;
       text-decoration:underline;
     }
-</style>
-</head>
 
+
+    /* Multi-page navigation */
+    body{padding-bottom:86px}
+    .page{display:none}
+    .page.active{display:block}
+    .page-title{font-family:"Fredoka","Nunito",sans-serif;font-size:24px;color:#5A4433;margin:5px 0 0}
+    .page-subtitle{font-size:12px;color:#90775E;font-weight:700;margin-top:4px}
+    .hero-card{background:linear-gradient(145deg,#FFF6B9,#FFFDF1);border:1px solid #F0DFA3;border-radius:26px;padding:18px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+    .hero-card:after{content:"";position:absolute;right:-24px;bottom:-30px;width:120px;height:120px;border-radius:50%;background:rgba(255,224,100,.28)}
+    .home-row{display:flex;align-items:center;gap:13px;position:relative;z-index:1}
+    .hero-text{flex:1}
+    .hero-big{font-family:"Fredoka","Nunito",sans-serif;font-size:22px;font-weight:600;color:#5A4433;line-height:1.1}
+    .hero-small{font-size:11px;color:#90775E;font-weight:700;line-height:1.5;margin-top:6px}
+    .home-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:12px;position:relative;z-index:1}
+    .mini-card{background:rgba(255,255,255,.88);border:1px solid #F0DFA3;border-radius:18px;padding:12px}
+    .mini-number{font-family:"Fredoka","Nunito",sans-serif;font-size:22px;color:#76552F}
+    .mini-label{font-size:10px;color:#9A846A;font-weight:800;margin-top:2px}
+    .quick-btn{width:100%;border:1px solid #EED78C;background:#FFFDF2;border-radius:17px;padding:12px;text-align:left;cursor:pointer;color:#604A37;font-weight:800}
+    .quick-grid{display:grid;gap:9px}
+    .nav-bar{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:rgba(255,253,243,.94);backdrop-filter:blur(14px);border-top:1px solid #EFDFA9}
+    .nav-inner{width:min(100%,720px);margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+    .nav-btn{border:0;background:transparent;color:#9A846A;border-radius:16px;padding:7px 4px 6px;cursor:pointer}
+    .nav-btn.active{background:#FFF1A1;color:#6C512F;box-shadow:0 4px 12px rgba(215,168,29,.14)}
+    .nav-icon{display:block;font-size:20px;line-height:1}
+    .nav-label{display:block;font-size:9px;font-weight:800;margin-top:4px}
+    .history-section{margin-top:0}
+    .history-date-label{font-family:"Fredoka","Nunito",sans-serif;font-size:13px;font-weight:600;color:#765A3A}
+    .history-refresh{border:1px solid var(--line);background:#FFFDF1;color:#6B513A;border-radius:12px;padding:7px 10px;font-size:10px;font-weight:800;cursor:pointer}
+    .history-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+    .history-list{display:grid;gap:10px}
+    .history-entry{border:1px solid #F0DFA3;border-radius:18px;background:linear-gradient(180deg,#FFFDF4,#FFF9E5);padding:11px;box-shadow:0 4px 12px rgba(118,93,39,.05)}
+    .history-entry-top{display:flex;justify-content:space-between;gap:10px;align-items:center;font-size:10px;color:#9A846A;font-weight:800}
+    .history-main{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:7px}
+    .history-foods{font-size:12px;line-height:1.45;font-weight:800;color:#604A37}
+    .history-mood .piyo-art{width:44px;height:40px}
+    .history-comment{margin-top:8px;border-radius:13px;padding:8px 10px;background:#FFF3CC;border:1px solid #EED78C;color:#715738;font-size:10px;line-height:1.5;font-weight:700;white-space:pre-wrap;word-break:break-word}
+    .history-empty,.history-loading{padding:14px 4px;text-align:center;color:#A18C76;font-size:11px;font-weight:700}
+    .profile-card{text-align:center;padding:22px}
+    .profile-piyo{display:flex;justify-content:center;margin-bottom:12px}
+    .profile-name{font-family:"Fredoka","Nunito",sans-serif;font-size:22px;color:#5A4433}
+    .profile-note{font-size:11px;color:#90775E;font-weight:700;margin-top:5px}
+    .profile-actions{display:grid;gap:9px;margin-top:18px}
+    .danger-btn{width:100%;border:1px solid #E7B2AB;background:#FFF4F2;color:#B96358;border-radius:16px;padding:12px;font-size:11px;font-weight:800;cursor:pointer}
+    .back-top{margin-top:12px}
+    @media(max-width:520px){
+      .page-title{font-size:22px}
+    }
+  </style>
+</head>
 <body>
+
+  <!-- LOGIN -->
   <div id="loginScreen" class="login-screen">
     <div class="login-card">
       <div class="login-piyo">
@@ -799,219 +846,221 @@
     </div>
   </div>
 
-
-  <div class="deco egga"></div>
-  <div class="deco star1">•</div>
-  <div class="deco star2">•</div>
-  <div class="deco heart">♥</div>
-
   <main class="app" id="appContent" style="display:none;">
-    <header>
-      <div class="brand-row">
-        <div>
-          <div class="kicker"><span class="piyo-art" aria-hidden="true"><svg viewBox="0 0 56 48" aria-hidden="true"><path class="body outline" d="M10 23 Q10 10 28 8 Q46 10 46 23 Q46 39 28 40 Q10 39 10 23Z"/><circle class="eyeFill" cx="22" cy="22" r="1.6"/><circle class="eyeFill" cx="34" cy="22" r="1.6"/><path class="beakfill outline" d="M24 26 L28 30 L32 26 Q28 22 24 26Z"/></svg></span> Untuk istriku tercinta</div>
 
-          <div class="brand">
-            <div class="piyo-face" aria-label="Piyo inspired chick">
-              <div class="beak"></div>
-              <div class="blush left"></div>
-              <div class="blush right"></div>
-            </div>
-
-            <div class="title-wrap">
-              <h1 class="title">Hello Istriku Tersayang! 💛</h1>
-              <div class="subtitle">Ayo aku temenin kamu milih makanan.</div>
-            </div>
+    <!-- HOME -->
+    <section id="page-home" class="page active">
+      <header style="padding:10px 6px 14px;">
+        <div class="kicker">🐥 Untuk istriku tercinta</div>
+        <div class="brand">
+          <div class="piyo-face">
+            <div class="beak"></div>
+            <div class="blush left"></div>
+            <div class="blush right"></div>
           </div>
-
-          <div class="date" id="date"></div>
+          <div class="title-wrap">
+            <h1 class="title">Hello Istriku Tersayang! 💛</h1>
+            <div class="subtitle">Ayo aku temenin kamu hari ini.</div>
+          </div>
         </div>
+        <div class="date" id="homeDate"></div>
+      </header>
 
-        <div class="today-pill">
-          <span class="count" id="todayCount">0</span>
-          <span class="small">catatan hari ini</span>
-        </div>
-      </div>
-    </header>
-
-    <!-- WAKTU MAKAN -->
-    <section class="card">
-      <div class="section-head">
-        <div class="section-icon"><svg class="piyo-art" viewBox="0 0 56 48" aria-hidden="true"><ellipse class="white" cx="28" cy="42" rx="13" ry="3"/><path class="body outline" d="M10 23 Q10 10 28 8 Q46 10 46 23 Q46 39 28 40 Q10 39 10 23Z"/><path class="beakfill outline" d="M24 26 L28 30 L32 26 Q28 22 24 26Z"/><circle class="eyeFill" cx="22" cy="22" r="1.6"/><circle class="eyeFill" cx="34" cy="22" r="1.6"/></svg></div>
-        <div>
-          <h2 class="section-title">Mau makan kapan Istriku?</h2>
+      <div class="hero-card">
+        <div class="home-row">
+          <div id="homeMoodArt"></div>
+          <div class="hero-text">
+            <div class="hero-big">Hari ini kamu gimana?</div>
+            <div class="hero-small">Cerita sedikit juga boleh. Aku siap dengerin kamu. 💛</div>
+          </div>
         </div>
       </div>
-      <p class="section-sub">Pilih waktu makan kamu hari ini ya sayang.</p>
-      <div id="mealGrid" class="grid meal-grid"></div>
+
+      <div class="home-stats">
+        <div class="mini-card">
+          <div class="mini-number" id="homeTodayCount">0</div>
+          <div class="mini-label">catatan hari ini</div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-number" id="homeTotalCount">0</div>
+          <div class="mini-label">total catatan</div>
+        </div>
+      </div>
+
+      <section class="card" style="margin-top:12px;">
+        <div class="section-head">
+          <div class="section-icon"><span style="font-size:22px;">🍽️</span></div>
+          <div>
+            <h2 class="section-title">Mau makan?</h2>
+          </div>
+        </div>
+        <p class="section-sub">Yuk isi makanan kamu sekarang.</p>
+        <div class="quick-grid">
+          <button class="quick-btn" data-go="makan">🍚 Isi makanan & mood →</button>
+          <button class="quick-btn" data-go="riwayat">📖 Lihat catatan kamu →</button>
+        </div>
+      </section>
+
+      <section class="card" style="margin-top:12px;">
+        <div class="section-head">
+          <div class="section-icon">💛</div>
+          <div><h2 class="section-title">Mood terakhir</h2></div>
+        </div>
+        <p class="section-sub">Yang terakhir kamu pilih.</p>
+        <div id="lastMoodCard" class="empty">Belum ada catatan.</div>
+      </section>
     </section>
 
-    <!-- MAKANAN -->
-    <section class="card">
-      <div class="section-head">
-        <div class="section-icon"><svg class="piyo-art" viewBox="0 0 56 48" aria-hidden="true"><path class="white outline" d="M13 27 Q15 19 22 18 Q28 12 34 18 Q42 18 45 27 Q39 31 28 31 Q19 31 13 27Z"/><circle class="eyeFill" cx="24" cy="24" r="1.6"/><circle class="eyeFill" cx="32" cy="24" r="1.6"/><path class="beakfill outline" d="M25 27 L28 30 L31 27 Q28 24 25 27Z"/></svg></div>
-        <div>
-          <h2 class="section-title">Makan apa kamu hari ini istriku?</h2>
+    <!-- MAKAN -->
+    <section id="page-makan" class="page">
+      <header style="padding:10px 6px 14px;">
+        <div class="page-title">🍽️ Makan</div>
+        <div class="page-subtitle">Isi makanan, mood, dan cerita kamu.</div>
+      </header>
+
+      <section class="card">
+        <div class="section-head">
+          <div class="section-icon"><span style="font-size:22px;">🥚</span></div>
+          <div><h2 class="section-title">Mau makan kapan Istriku?</h2></div>
         </div>
-      </div>
-      <p class="section-sub">Boleh pilih lebih dari satu, kalau bingung, tulis aja di level mood dan nanti tulis di kolom komen ya sayang.</p>
+        <p class="section-sub">Pilih waktu makan kamu hari ini ya sayang.</p>
+        <div id="mealGrid" class="grid meal-grid"></div>
+      </section>
 
-      <div id="foodGrid" class="grid food-grid"></div>
-
-      <div id="selectedFoods" class="selected-foods">
-        <div class="empty">Belum ada makanan yang dipilih.</div>
-      </div>
-
-      <div class="custom-food-wrap">
-        <label class="custom-food-label" for="customFood">🐥 Makanan lainnya</label>
-        <input
-          id="customFood"
-          class="custom-food-input"
-          type="text"
-          maxlength="100"
-          placeholder="Ketik makanan lain yang kamu makan..."
-          autocomplete="off"
-        >
-      </div>
-    </section>
-
-    <!-- MOOD -->
-    <section class="card">
-      <div class="section-head">
-        <div class="section-icon"><svg class="piyo-art" viewBox="0 0 56 48" aria-hidden="true"><path class="body outline" d="M10 23 Q10 10 28 8 Q46 10 46 23 Q46 39 28 40 Q10 39 10 23Z"/><path d="M28 32 C24 27 20 31 28 37 C36 31 32 27 28 32Z" fill="#E97E8C"/><circle class="eyeFill" cx="22" cy="22" r="1.6"/><circle class="eyeFill" cx="34" cy="22" r="1.6"/></svg></div>
-        <div>
-          <h2 class="section-title">Mood kamu sekarang?</h2>
+      <section class="card">
+        <div class="section-head">
+          <div class="section-icon"><span style="font-size:21px;">🍚</span></div>
+          <div><h2 class="section-title">Makan apa kamu hari ini istriku?</h2></div>
         </div>
-      </div>
-      <p class="section-sub">Pilih yang paling menggambarkan perasaanmu.</p>
-      <div id="moodGrid" class="grid mood-grid"></div>
-    </section>
-
-    <!-- KOMENTAR -->
-    <section class="card">
-      <div class="section-head">
-        <div class="section-icon"><svg class="piyo-art" viewBox="0 0 56 48" aria-hidden="true"><path class="body outline" d="M10 23 Q10 10 28 8 Q46 10 46 23 Q46 39 28 40 Q10 39 10 23Z"/><path class="mouth" d="M23 30 Q28 35 33 30"/><circle class="eyeFill" cx="22" cy="22" r="1.6"/><circle class="eyeFill" cx="34" cy="22" r="1.6"/></svg></div>
-        <div>
-          <h2 class="section-title">Apa yg mau kamu ceritain nda sayang?</h2>
+        <p class="section-sub">Boleh pilih lebih dari satu, kalau bingung, tulis aja makanan lain di bawah.</p>
+        <div id="foodGrid" class="grid food-grid"></div>
+        <div id="selectedFoods" class="selected-foods">
+          <div class="empty">Belum ada makanan yang dipilih.</div>
         </div>
-      </div>
-      <p class="section-sub">Mau cerita apa sayang? sini aku dengerin. 💛</p>
 
-      <div class="comment-box">
-        <textarea
-          id="comment"
-          placeholder="Tulis ceritamu di sini...&#10;&#10;Misalnya: hari ini capek, tadi makan enak, atau ada sesuatu yang mau kamu ceritain 💛"
-        ></textarea>
-      </div>
+        <div class="custom-food-wrap">
+          <label class="custom-food-label" for="customFood">🐥 Makanan lainnya</label>
+          <input id="customFood" class="custom-food-input" type="text" maxlength="100" placeholder="Ketik makanan lain yang kamu makan..." autocomplete="off">
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-head">
+          <div class="section-icon">💛</div>
+          <div><h2 class="section-title">Mood kamu sekarang?</h2></div>
+        </div>
+        <p class="section-sub">Pilih yang paling menggambarkan perasaanmu.</p>
+        <div id="moodGrid" class="grid mood-grid"></div>
+      </section>
+
+      <section class="card">
+        <div class="section-head">
+          <div class="section-icon">💬</div>
+          <div><h2 class="section-title">Apa yg mau kamu ceritain nda sayang?</h2></div>
+        </div>
+        <p class="section-sub">Mau cerita apa sayang? sini aku dengerin. 💛</p>
+        <textarea id="comment" placeholder="Tulis ceritamu di sini..."></textarea>
+      </section>
+
+      <section class="card save-card">
+        <button id="save" class="save" disabled>
+          Simpan Ceritaku 💛
+        </button>
+        <div class="save-note">Catatanmu akan tersimpan online.</div>
+      </section>
     </section>
-
-    <!-- SIMPAN -->
-    <section class="card save-card">
-      <button id="save" class="save" disabled>
-        <svg class="piyo-art" viewBox="0 0 56 48" aria-hidden="true"><path class="body outline" d="M10 23 Q10 10 28 8 Q46 10 46 23 Q46 39 28 40 Q10 39 10 23Z"/><circle class="eyeFill" cx="22" cy="22" r="1.6"/><circle class="eyeFill" cx="34" cy="22" r="1.6"/><path class="beakfill outline" d="M24 26 L28 30 L32 26 Q28 22 24 26Z"/></svg> Simpan Ceritaku 💛
-      </button>
-      <div class="save-note">Catatanmu akan tersimpan online.</div>
-    </section>
-
 
     <!-- RIWAYAT -->
-    <section class="card history-section">
-      <div class="section-head">
-        <div class="section-icon">
-          <svg class="piyo-art" viewBox="0 0 56 48" aria-hidden="true">
-            <path class="body outline" d="M10 23 Q10 10 28 8 Q46 10 46 23 Q46 39 28 40 Q10 39 10 23Z"/>
-            <circle class="eyeFill" cx="22" cy="22" r="1.6"/>
-            <circle class="eyeFill" cx="34" cy="22" r="1.6"/>
-            <path class="beakfill outline" d="M24 26 L28 30 L32 26 Q28 22 24 26Z"/>
-          </svg>
+    <section id="page-riwayat" class="page">
+      <header style="padding:10px 6px 14px;">
+        <div class="page-title">📖 Riwayat Kamu</div>
+        <div class="page-subtitle">Lihat lagi semua yang sudah kamu ceritakan.</div>
+      </header>
+
+      <section class="card history-section">
+        <div class="history-toolbar">
+          <div class="history-date-label" id="historySummary">Memuat riwayat...</div>
+          <button type="button" class="history-refresh" id="historyRefresh">↻ Refresh</button>
         </div>
-        <div>
-          <h2 class="section-title">Riwayat Catatan Kamu</h2>
+        <div id="historyList" class="history-list">
+          <div class="history-loading">Memuat catatan...</div>
         </div>
-      </div>
-
-      <p class="section-sub">Biar kamu bisa lihat lagi apa yang sudah kamu ceritain sebelumnya.</p>
-
-      <div class="history-toolbar">
-        <div class="history-date-label" id="historySummary">Memuat riwayat...</div>
-        <button type="button" class="history-refresh" id="historyRefresh">↻ Refresh</button>
-      </div>
-
-      <div id="historyList" class="history-list">
-        <div class="history-loading">Memuat catatan...</div>
-      </div>
+      </section>
     </section>
 
-    <footer>
-      dibuat khusus untuk kamu
-      <br>
-      <button id="logoutButton" type="button" class="logout-button">Keluar dari akun</button>
+    <!-- AKU -->
+    <section id="page-aku" class="page">
+      <header style="padding:10px 6px 14px;">
+        <div class="page-title">💛 Aku</div>
+        <div class="page-subtitle">Sedikit tentang kamu.</div>
+      </header>
+
+      <section class="card profile-card">
+        <div class="profile-piyo">
+          <div class="piyo-face">
+            <div class="beak"></div>
+            <div class="blush left"></div>
+            <div class="blush right"></div>
+          </div>
+        </div>
+        <div class="profile-name">Istriku Tersayang 💛</div>
+        <div class="profile-note">Makan Yuk — ruang kecil untuk makanan, mood, dan cerita kamu.</div>
+
+        <div class="home-stats" style="margin-top:18px;">
+          <div class="mini-card">
+            <div class="mini-number" id="profileTotal">0</div>
+            <div class="mini-label">total catatan</div>
+          </div>
+          <div class="mini-card">
+            <div class="mini-number" id="profileToday">0</div>
+            <div class="mini-label">hari ini</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" style="margin-top:12px;">
+        <div class="section-head">
+          <div class="section-icon">💛</div>
+          <div><h2 class="section-title">Login</h2></div>
+        </div>
+        <p class="section-sub">Session tersimpan di perangkat ini sampai kamu keluar.</p>
+        <button id="logoutButton" class="danger-btn">Keluar dari akun</button>
+      </section>
+    </section>
+
+    <footer style="padding:14px 8px 6px;">
+      dibuat khusus untuk kamu 💛
     </footer>
   </main>
+
+  <!-- Bottom navigation -->
+  <nav id="navBar" class="nav-bar" style="display:none;">
+    <div class="nav-inner">
+      <button class="nav-btn active" data-page="home"><span class="nav-icon">🏠</span><span class="nav-label">Beranda</span></button>
+      <button class="nav-btn" data-page="makan"><span class="nav-icon">🍽️</span><span class="nav-label">Makan</span></button>
+      <button class="nav-btn" data-page="riwayat"><span class="nav-icon">📖</span><span class="nav-label">Riwayat</span></button>
+      <button class="nav-btn" data-page="aku"><span class="nav-icon">💛</span><span class="nav-label">Aku</span></button>
+    </div>
+  </nav>
 
   <div id="toast" class="toast">Tersimpan</div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
-
   <script>
     if (!window.APP_CONFIG || !APP_CONFIG.SUPABASE_URL || !APP_CONFIG.SUPABASE_ANON_KEY) {
-      document.body.innerHTML = `
-        <div style="padding:30px;font-family:system-ui;color:#5C4536">
-          <h2>Konfigurasi belum diisi</h2>
-          <p>Periksa file <b>config.js</b> dan isi Supabase URL serta Publishable Key.</p>
-        </div>
-      `;
+      document.body.innerHTML = '<div style="padding:30px;font-family:system-ui;color:#5C4536"><h2>Konfigurasi belum diisi</h2><p>Periksa config.js.</p></div>';
       throw new Error("Supabase configuration missing");
     }
 
-    const db = supabase.createClient(
-      APP_CONFIG.SUPABASE_URL,
-      APP_CONFIG.SUPABASE_ANON_KEY
-    );
-
+    const db = supabase.createClient(APP_CONFIG.SUPABASE_URL, APP_CONFIG.SUPABASE_ANON_KEY);
     const WIFE_EMAIL = APP_CONFIG.WIFE_EMAIL;
-
-    async function loginWife(){
-      const code = $("loginCode").value.trim();
-      const errorBox = $("loginError");
-
-      errorBox.textContent = "";
-
-      if(!code){
-        errorBox.textContent = "Masukkan kodenya dulu ya ❤️";
-        return;
-      }
-
-      const { error } = await db.auth.signInWithPassword({
-        email: WIFE_EMAIL,
-        password: code
-      });
-
-      if(error){
-        console.error(error);
-        errorBox.textContent = "Kodenya belum benar, coba lagi ya ❤️";
-        return;
-      }
-
-      $("loginScreen").style.display = "none";
-      $("appContent").style.display = "";
-      await startApp();
-    }
-
-    async function checkExistingSession(){
-      const { data: { session } } = await db.auth.getSession();
-      return !!session;
-    }
-
 
     const meals = [
       {id:"breakfast", icon:"🌤️", label:"Sarapan"},
       {id:"lunch", icon:"☀️", label:"Makan siang"},
       {id:"dinner", icon:"🌙", label:"Makan malam"},
-      {id:"snack", icon:"🍪", label:"Snack"}
-    ];
-
+      {id:"snack", icon:"🍪", label:"Snack"}];
     const foods = [
       {id:"rice", icon:"rice", label:"Nasi"},
       {id:"sate", icon:"sate", label:"Sate"},
@@ -1024,10 +1073,7 @@
       {id:"brokoli", icon:"brokoli", label:"Brokoli"},
       {id:"tahu", icon:"tahu", label:"Tahu"},
       {id:"tempe", icon:"tempe", label:"Tempe"},
-      {id:"mie_ayam", icon:"mie_ayam", label:"Mie Ayam"}
-    ];
-
-    // Mood icons are CSS-drawn Piyo-inspired chick faces; no external image assets are required.
+      {id:"mie_ayam", icon:"mie_ayam", label:"Mie Ayam"}];
     const moods = [
       {id:"happy", moodClass:"happy", label:"Aku lagi seneng, yeaayyy", face:"⌣"},
       {id:"love", moodClass:"love", label:"Aku lagi kangen", face:"♥"},
@@ -1039,28 +1085,12 @@
       {id:"angry", moodClass:"angry", label:"Lagi kesel", face:"︿"},
       {id:"stressed", moodClass:"stressed", label:"Pusing nih, stres", face:"~"},
       {id:"sick", moodClass:"sick", label:"Aku ga enak badan", face:"O"},
-      {id:"excited", moodClass:"excited", label:"Aku lagi semangat", face:"◡"}
-    ];
+      {id:"excited", moodClass:"excited", label:"Aku lagi semangat", face:"◡"}];
 
-    const state = {
-      meal:"",
-      foods:new Set(),
-      mood:""
-    };
-
+    const state = { meal:"", foods:new Set(), mood:"" };
     const $ = id => document.getElementById(id);
 
-    function formatDate(date){
-      return new Intl.DateTimeFormat("id-ID",{
-        weekday:"long",
-        day:"numeric",
-        month:"long",
-        year:"numeric"
-      }).format(date);
-    }
-
-
-    function foodArt(kind){
+        function foodArt(kind){
       const S = (inner) => `<svg class="food-art" viewBox="0 0 64 52" aria-hidden="true" focusable="false">${inner}</svg>`;
       const eye = (x,y) => `<circle class="face-eye" cx="${x}" cy="${y}" r="1.45"/>`;
       const mouth = (d) => `<path class="face-mouth" d="${d}"/>`;
@@ -1174,8 +1204,7 @@
       }
     }
 
-
-    function piyoArt(kind="happy"){
+        function piyoArt(kind="happy"){
       const S = inner => `<svg class="piyo-art" viewBox="0 0 56 48" aria-hidden="true" focusable="false">${inner}</svg>`;
       const eye = (x,y) => `<circle class="eyeFill" cx="${x}" cy="${y}" r="1.6"/>`;
       const cheek = (x,y) => `<ellipse class="cheekfill" cx="${x}" cy="${y}" rx="3.2" ry="1.7"/>`;
@@ -1225,307 +1254,190 @@
       }
     }
 
+    function escapeHtml(value){
+      return String(value ?? "")
+        .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+    }
+
+    function formatDate(date){
+      return new Intl.DateTimeFormat("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"}).format(date);
+    }
+
+    function goPage(page){
+      document.querySelectorAll(".page").forEach(el=>el.classList.remove("active"));
+      document.querySelectorAll(".nav-btn").forEach(el=>el.classList.remove("active"));
+      const target = $("page-" + page);
+      const nav = document.querySelector('.nav-btn[data-page="'+page+'"]');
+      if(target) target.classList.add("active");
+      if(nav) nav.classList.add("active");
+      if(page === "riwayat") loadHistory();
+      if(page === "home") loadHome();
+      if(page === "aku") loadProfileStats();
+      window.scrollTo({top:0,behavior:"smooth"});
+    }
+
+    async function loginWife(){
+      const code = $("loginCode").value.trim();
+      $("loginError").textContent="";
+      if(!code){ $("loginError").textContent="Masukkan kodenya dulu ya ❤️"; return; }
+
+      const {error} = await db.auth.signInWithPassword({email:WIFE_EMAIL,password:code});
+      if(error){ console.error(error); $("loginError").textContent="Kodenya belum benar, coba lagi ya ❤️"; return; }
+
+      $("loginScreen").style.display="none";
+      $("appContent").style.display="";
+      $("navBar").style.display="";
+      await startApp();
+    }
+
+    async function checkExistingSession(){
+      const {data:{session}} = await db.auth.getSession();
+      return !!session;
+    }
+
     function render(){
-      $("mealGrid").innerHTML = meals.map(m => `
-        <button class="pick meal-btn ${state.meal===m.id ? "sel" : ""}" data-meal="${m.id}">
+      $("mealGrid").innerHTML = meals.map(m=>`
+        <button class="pick meal-btn ${state.meal===m.id?"sel":""}" data-meal="${m.id}">
           <span class="icon">${piyoArt(m.id==="breakfast"?"morning":m.id==="lunch"?"noon":m.id==="dinner"?"night":"snack")}</span>
           <span class="label">${m.label}</span>
-        </button>
-      `).join("");
+        </button>`).join("");
 
-      $("foodGrid").innerHTML = foods.map(f => `
-        <button class="pick food-btn ${state.foods.has(f.id) ? "sel" : ""}" data-food="${f.id}">
+      $("foodGrid").innerHTML = foods.map(f=>`
+        <button class="pick food-btn ${state.foods.has(f.id)?"sel":""}" data-food="${f.id}">
           <span class="icon">${foodArt(f.icon)}</span>
           <span class="label">${f.label}</span>
-        </button>
-      `).join("");
+        </button>`).join("");
 
-      const selected = foods.filter(f => state.foods.has(f.id));
-      const customFood = $("customFood") ? $("customFood").value.trim() : "";
-
+      const selected = foods.filter(f=>state.foods.has(f.id));
+      const customFood = $("customFood").value.trim();
       const chips = [
-        ...selected.map(f => `<span class="chip">• ${f.label}</span>`),
-        ...(customFood ? [`<span class="chip">• ${escapeHtml(customFood)}</span>`] : [])
+        ...selected.map(f=>`<span class="chip">• ${f.label}</span>`),
+        ...(customFood?[`<span class="chip">• ${escapeHtml(customFood)}</span>`]:[])
       ];
+      $("selectedFoods").innerHTML = chips.length ? chips.join("") : `<div class="empty">Belum ada makanan yang dipilih.</div>`;
 
-      $("selectedFoods").innerHTML = chips.length
-        ? chips.join("")
-        : `<div class="empty">Belum ada makanan yang dipilih.</div>`;
-
-      $("moodGrid").innerHTML = moods.map(m => `
-        <button class="pick mood-btn ${state.mood===m.id ? "sel" : ""}" data-mood="${m.id}">
+      $("moodGrid").innerHTML = moods.map(m=>`
+        <button class="pick mood-btn ${state.mood===m.id?"sel":""}" data-mood="${m.id}">
           <span class="icon">${piyoArt(m.moodClass)}</span>
           <span class="label">${m.label}</span>
-        </button>
-      `).join("");
+        </button>`).join("");
 
-      const hasCustomFood = $("customFood") ? $("customFood").value.trim().length > 0 : false;
-      $("save").disabled = !(state.meal && (state.foods.size || hasCustomFood) && state.mood);
+      const hasCustom = customFood.length>0;
+      $("save").disabled = !(state.meal && (state.foods.size||hasCustom) && state.mood);
     }
 
     async function loadTodayCount(){
       const today = new Date().toISOString().slice(0,10);
-
-      const {data,error} = await db
-        .from("food_logs")
-        .select("id,eaten_at")
-        .gte("eaten_at", today + "T00:00:00.000Z")
-        .lt("eaten_at", today + "T23:59:59.999Z");
-
-      if(error){
-        console.error(error);
-        $("todayCount").textContent = "—";
-        return;
-      }
-
-      $("todayCount").textContent = data.length;
+      const {data,error} = await db.from("food_logs").select("id,eaten_at").gte("eaten_at",today+"T00:00:00.000Z").lt("eaten_at",today+"T23:59:59.999Z");
+      $("homeTodayCount").textContent = error ? "—" : data.length;
     }
 
+    async function loadHome(){
+      const {data,error} = await db.from("food_logs").select("id,eaten_at,mood_id").order("eaten_at",{ascending:false}).limit(100);
+      if(error) return;
+      const todayKey=new Date().toISOString().slice(0,10);
+      const today=data.filter(x=>x.eaten_at.slice(0,10)===todayKey).length;
+      $("homeTodayCount").textContent=today;
+      $("homeTotalCount").textContent=data.length;
+      $("profileToday").textContent=today;
+      $("profileTotal").textContent=data.length;
 
-    function escapeHtml(value){
-      return String(value ?? "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
+      const last=data[0];
+      if(last){
+        const mood=moods.find(m=>m.id===last.mood_id);
+        $("lastMoodCard").innerHTML = mood
+          ? `<div style="display:flex;align-items:center;gap:10px">${piyoArt(mood.moodClass)}<div><b>${escapeHtml(mood.label)}</b><div style="font-size:10px;color:#9A846A;margin-top:3px">Pilihan mood terakhir</div></div></div>`
+          : "Belum ada catatan.";
+      } else $("lastMoodCard").textContent="Belum ada catatan.";
     }
 
-    function formatHistoryTime(timestamp){
-      return new Intl.DateTimeFormat("id-ID",{
-        day:"2-digit",
-        month:"short",
-        hour:"2-digit",
-        minute:"2-digit"
-      }).format(new Date(timestamp));
-    }
-
-    function getMealInfo(mealId){
-      return meals.find(m => m.id === mealId) || {id:mealId, label:mealId};
-    }
-
-    function getMoodInfo(moodId){
-      return moods.find(m => m.id === moodId) || {
-        id:moodId,
-        moodClass:"neutral",
-        label:"Aku biasa aja"
-      };
+    async function loadProfileStats(){
+      await loadHome();
     }
 
     async function loadHistory(){
-      const list = $("historyList");
-      const summary = $("historySummary");
+      $("historyList").innerHTML=`<div class="history-loading">Memuat catatan...</div>`;
+      const {data,error}=await db.from("food_logs").select("id,eaten_at,meal_type,food_ids,mood_id,comment").order("eaten_at",{ascending:false}).limit(100);
+      if(error){ $("historySummary").textContent="Riwayat belum bisa dimuat"; $("historyList").innerHTML=`<div class="history-empty">Maaf sayang, riwayatnya belum bisa dibuka sekarang.</div>`; return; }
+      if(!data.length){ $("historySummary").textContent="Belum ada catatan"; $("historyList").innerHTML=`<div class="history-empty">Belum ada cerita di sini. Yuk mulai isi hari ini 💛</div>`; return; }
+      const todayKey=new Date().toISOString().slice(0,10);
+      const todayCount=data.filter(x=>x.eaten_at.slice(0,10)===todayKey).length;
+      $("historySummary").textContent=todayCount?`${todayCount} catatan hari ini • ${data.length} total tersimpan`:`${data.length} catatan tersimpan`;
 
-      list.innerHTML = `<div class="history-loading">Memuat catatan...</div>`;
-
-      const {data,error} = await db
-        .from("food_logs")
-        .select("id,eaten_at,meal_type,food_ids,mood_id,comment")
-        .order("eaten_at",{ascending:false})
-        .limit(100);
-
-      if(error){
-        console.error(error);
-        summary.textContent = "Riwayat belum bisa dimuat";
-        list.innerHTML = `
-          <div class="history-empty">
-            Maaf sayang, riwayatnya belum bisa dibuka sekarang.
-          </div>
-        `;
-        return;
-      }
-
-      if(!data || !data.length){
-        summary.textContent = "Belum ada catatan";
-        list.innerHTML = `
-          <div class="history-empty">
-            Belum ada cerita di sini. Yuk mulai isi hari ini 💛
-          </div>
-        `;
-        return;
-      }
-
-      const todayKey = new Date().toISOString().slice(0,10);
-      const todayCount = data.filter(item => item.eaten_at.slice(0,10) === todayKey).length;
-      summary.textContent = todayCount
-        ? `${todayCount} catatan hari ini • ${data.length} total tersimpan`
-        : `${data.length} catatan tersimpan`;
-
-      list.innerHTML = data.map(item => {
-        const meal = getMealInfo(item.meal_type);
-        const mood = getMoodInfo(item.mood_id);
-
-        const foodNames = (item.food_ids || [])
-          .map(id => {
-            if(String(id).startsWith("custom::")){
-              return String(id).slice("custom::".length);
-            }
-            const food = foods.find(food => food.id === id);
-            return food ? food.label : null;
-          })
-          .filter(Boolean)
-          .join(" • ");
-
-        const moodArt = piyoArt(mood.moodClass);
-
-        return `
-          <article class="history-entry">
-            <div class="history-entry-top">
-              <span>${escapeHtml(meal.label)}</span>
-              <span>${formatHistoryTime(item.eaten_at)}</span>
-            </div>
-
-            <div class="history-main">
-              <div class="history-foods">
-                ${escapeHtml(foodNames || "Tidak ada makanan")}
-              </div>
-
-              <div class="history-mood">
-                ${moodArt}
-              </div>
-            </div>
-
-            ${item.comment ? `
-              <div class="history-comment">
-                💬 ${escapeHtml(item.comment)}
-              </div>
-            ` : ""}
-          </article>
-        `;
+      $("historyList").innerHTML=data.map(item=>{
+        const meal=meals.find(m=>m.id===item.meal_type)||{label:item.meal_type};
+        const mood=moods.find(m=>m.id===item.mood_id)||{moodClass:"neutral",label:"Aku biasa aja"};
+        const foodNames=(item.food_ids||[]).map(id=>{
+          if(String(id).startsWith("custom::")) return String(id).slice(8);
+          const f=foods.find(food=>food.id===id);
+          return f?f.label:null;
+        }).filter(Boolean).join(" • ");
+        const time=new Intl.DateTimeFormat("id-ID",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}).format(new Date(item.eaten_at));
+        return `<article class="history-entry">
+          <div class="history-entry-top"><span>${escapeHtml(meal.label)}</span><span>${time}</span></div>
+          <div class="history-main"><div class="history-foods">${escapeHtml(foodNames||"Tidak ada makanan")}</div><div class="history-mood">${piyoArt(mood.moodClass)}</div></div>
+          ${item.comment?`<div class="history-comment">💬 ${escapeHtml(item.comment)}</div>`:""}
+        </article>`;
       }).join("");
     }
 
     function showToast(message){
-      const toast = $("toast");
-      toast.textContent = message;
-      toast.classList.add("show");
-      clearTimeout(window.__toastTimer);
-      window.__toastTimer = setTimeout(() => {
-        toast.classList.remove("show");
-      }, 1800);
+      const toast=$("toast"); toast.textContent=message; toast.classList.add("show");
+      clearTimeout(window.__toastTimer); window.__toastTimer=setTimeout(()=>toast.classList.remove("show"),1800);
     }
 
-    document.addEventListener("click", async (event) => {
-      const mealBtn = event.target.closest("[data-meal]");
-      if(mealBtn){
-        state.meal = mealBtn.dataset.meal;
-        render();
-        return;
-      }
+    document.addEventListener("click", async event=>{
+      const nav=event.target.closest("[data-page]");
+      if(nav){ goPage(nav.dataset.page); return; }
 
-      const foodBtn = event.target.closest("[data-food]");
-      if(foodBtn){
-        const id = foodBtn.dataset.food;
+      const go=event.target.closest("[data-go]");
+      if(go){ goPage(go.dataset.go); return; }
 
-        if(state.foods.has(id)){
-          state.foods.delete(id);
-        }else{
-          state.foods.add(id);
-        }
+      const mb=event.target.closest("[data-meal]");
+      if(mb){ state.meal=mb.dataset.meal; render(); return; }
 
-        render();
-        return;
-      }
+      const fb=event.target.closest("[data-food]");
+      if(fb){ const id=fb.dataset.food; state.foods.has(id)?state.foods.delete(id):state.foods.add(id); render(); return; }
 
-      const moodBtn = event.target.closest("[data-mood]");
-      if(moodBtn){
-        state.mood = moodBtn.dataset.mood;
-        render();
-        return;
-      }
+      const moodBtn=event.target.closest("[data-mood]");
+      if(moodBtn){ state.mood=moodBtn.dataset.mood; render(); return; }
 
       if(event.target.closest("#save")){
-        const comment = $("comment").value.trim();
+        const comment=$("comment").value.trim();
+        const customFood=$("customFood").value.trim();
+        const foodIds=Array.from(state.foods);
+        if(customFood) foodIds.push("custom::"+customFood);
 
-        const customFood = $("customFood").value.trim();
-        const foodIds = Array.from(state.foods);
-        if(customFood){
-          foodIds.push("custom::" + customFood);
-        }
+        const {data:{user},error:userError}=await db.auth.getUser();
+        if(userError||!user){ showToast("Sesi login sudah tidak aktif"); return; }
 
-        const { data: { user }, error: userError } = await db.auth.getUser();
+        const payload={user_id:user.id,meal_type:state.meal,food_ids:foodIds,mood_id:state.mood,comment,eaten_at:new Date().toISOString()};
+        const {error}=await db.from("food_logs").insert(payload);
+        if(error){ console.error(error); showToast("Belum tersimpan"); return; }
 
-        if(userError || !user){
-          showToast("Sesi login sudah tidak aktif");
-          return;
-        }
-
-        const payload = {
-          user_id:user.id,
-          meal_type:state.meal,
-          food_ids:foodIds,
-          mood_id:state.mood,
-          comment:comment,
-          eaten_at:new Date().toISOString()
-        };
-
-        const {error} = await db
-          .from("food_logs")
-          .insert(payload);
-
-        if(error){
-          console.error(error);
-          showToast("Belum tersimpan 😢");
-          return;
-        }
-
-        state.meal = "";
-        state.foods = new Set();
-        state.mood = "";
-        $("comment").value = "";
-        $("customFood").value = "";
-
-        render();
-        await loadTodayCount();
-        await loadHistory();
-        showToast("Tersimpan 💛");
+        state.meal=""; state.foods=new Set(); state.mood=""; $("comment").value=""; $("customFood").value="";
+        render(); await loadHome(); await loadHistory(); goPage("riwayat"); showToast("Tersimpan 💛");
       }
     });
 
-
     async function startApp(){
-      const loggedIn = await checkExistingSession();
+      const loggedIn=await checkExistingSession();
+      if(!loggedIn){ $("loginScreen").style.display="flex"; $("appContent").style.display="none"; $("navBar").style.display="none"; return; }
 
-      if(!loggedIn){
-        $("loginScreen").style.display = "flex";
-        $("appContent").style.display = "none";
-        return;
-      }
-
-      $("loginScreen").style.display = "none";
-      $("appContent").style.display = "";
-
-      $("date").textContent = formatDate(new Date());
+      $("loginScreen").style.display="none";
+      $("appContent").style.display="";
+      $("navBar").style.display="";
+      $("homeDate").textContent=formatDate(new Date());
       render();
-      loadTodayCount();
-      loadHistory();
-
-      if($("customFood")){
-        $("customFood").addEventListener("input", render);
-      }
-      if($("historyRefresh")){
-        $("historyRefresh").addEventListener("click", loadHistory);
-      }
+      await loadHome();
+      if($("customFood")) $("customFood").addEventListener("input",render);
+      if($("historyRefresh")) $("historyRefresh").addEventListener("click",loadHistory);
     }
 
-    if($("loginButton")){
-      $("loginButton").addEventListener("click", loginWife);
-    }
-
-    if($("loginCode")){
-      $("loginCode").addEventListener("keydown", event => {
-        if(event.key === "Enter"){
-          loginWife();
-        }
-      });
-    }
-
-    if($("logoutButton")){
-      $("logoutButton").addEventListener("click", async () => {
-        await db.auth.signOut();
-        window.location.reload();
-      });
-    }
+    $("loginButton").addEventListener("click",loginWife);
+    $("loginCode").addEventListener("keydown",e=>{if(e.key==="Enter")loginWife();});
+    $("logoutButton").addEventListener("click",async()=>{await db.auth.signOut();window.location.reload();});
 
     startApp();
   </script>
