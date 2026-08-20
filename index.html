@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#FFF4B8">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Makan Yuk ❤️">
-  <title>Makan Yuk ❤️ — Piyo Theme</title>
+  <meta name="apple-mobile-web-app-title" content="Makan Yuk 💛">
+  <title>Makan Yuk 💛 — Piyo Theme</title>
 
   <!-- Cute rounded font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -357,6 +357,161 @@
       color:#917963;
       margin-top:4px;
     }
+    .piyo-mood{
+      position:relative;
+      width:48px;
+      height:40px;
+      margin:0 auto;
+    }
+
+    .piyo-mood .head{
+      position:absolute;
+      left:3px;
+      top:1px;
+      width:42px;
+      height:36px;
+      border-radius:48% 48% 45% 45% / 52% 52% 48% 48%;
+      background:linear-gradient(180deg,#FFE97D,#FFD857);
+      border:1.5px solid #E5C94C;
+      box-shadow:0 3px 7px rgba(118,93,39,.10);
+    }
+
+    .piyo-mood .eye{
+      position:absolute;
+      top:14px;
+      width:5px;
+      height:6px;
+      border-radius:50%;
+      background:#5C4536;
+    }
+    .piyo-mood .eye.left{left:12px}
+    .piyo-mood .eye.right{right:12px}
+
+    .piyo-mood .beak{
+      position:absolute;
+      left:50%;
+      top:19px;
+      width:0;
+      height:0;
+      transform:translateX(-50%);
+      border-left:5px solid transparent;
+      border-right:5px solid transparent;
+      border-top:6px solid #EF9E26;
+    }
+
+    .piyo-mood .cheek{
+      position:absolute;
+      top:22px;
+      width:6px;
+      height:3px;
+      border-radius:50%;
+      background:#F2A0A0;
+      opacity:.7;
+    }
+    .piyo-mood .cheek.left{left:7px}
+    .piyo-mood .cheek.right{right:7px}
+
+    .piyo-mood .mouth{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      color:#6B4B37;
+      font-size:10px;
+      line-height:1;
+      font-weight:900;
+    }
+
+    .piyo-mood.happy .mouth{top:23px}
+    .piyo-mood.love .mouth{top:23px}
+    .piyo-mood.good .mouth{top:23px}
+    .piyo-mood.neutral .mouth{top:23px}
+    .piyo-mood.tired .mouth{top:24px}
+    .piyo-mood.sleepy .mouth{top:24px}
+    .piyo-mood.sad .mouth{top:24px}
+    .piyo-mood.angry .mouth{top:24px}
+    .piyo-mood.stressed .mouth{top:23px}
+    .piyo-mood.sick .mouth{top:23px}
+    .piyo-mood.excited .mouth{top:23px}
+
+    .piyo-mood.happy .mouth:before{content:"⌣"}
+    .piyo-mood.love .mouth:before{content:"♥";color:#E37B7B;font-size:12px}
+    .piyo-mood.good .mouth:before{content:"ᴗ"}
+    .piyo-mood.neutral .mouth:before{content:"—"}
+    .piyo-mood.tired .mouth:before{content:"﹀"}
+    .piyo-mood.sleepy .mouth:before{content:"o";font-size:11px}
+    .piyo-mood.sad .mouth:before{content:"⌢"}
+    .piyo-mood.angry .mouth:before{content:"︿"}
+    .piyo-mood.stressed .mouth:before{content:"~"}
+    .piyo-mood.sick .mouth:before{content:"O";font-size:10px}
+    .piyo-mood.excited .mouth:before{content:"◡"}
+
+    .piyo-mood .zzz{
+      position:absolute;
+      right:-2px;
+      top:-7px;
+      font-family:"Fredoka","Nunito",sans-serif;
+      font-weight:700;
+      font-size:11px;
+      color:#8B7BAA;
+      transform:rotate(12deg);
+    }
+
+    .piyo-mood .tear{
+      position:absolute;
+      right:9px;
+      top:20px;
+      width:4px;
+      height:7px;
+      background:#79B8E8;
+      border-radius:70% 30% 60% 40%;
+      transform:rotate(18deg);
+    }
+
+    .piyo-mood .steam{
+      position:absolute;
+      right:5px;
+      top:-9px;
+      font-size:9px;
+      color:#A1A1A1;
+      letter-spacing:-2px;
+    }
+
+    .piyo-mood .spark{
+      position:absolute;
+      right:-2px;
+      top:1px;
+      color:#F1B93A;
+      font-size:10px;
+    }
+
+    .piyo-mood.sleepy .eye{
+      height:2px;
+      top:16px;
+      border-radius:999px;
+      transform:rotate(-8deg);
+    }
+
+    .piyo-mood.tired .eye.left,
+    .piyo-mood.tired .eye.right{
+      height:2px;
+      top:16px;
+      border-radius:999px;
+    }
+
+    .piyo-mood.angry .eye.left{transform:rotate(18deg)}
+    .piyo-mood.angry .eye.right{transform:rotate(-18deg)}
+
+    .piyo-mood.excited .eye{
+      width:6px;
+      height:8px;
+      top:12px;
+    }
+
+    .piyo-mood.sick .eye{
+      height:4px;
+      top:15px;
+    }
+
 
     .selected-foods{
       display:flex;
@@ -520,7 +675,7 @@
             </div>
 
             <div class="title-wrap">
-              <h1 class="title">Makan Yuk ❤️</h1>
+              <h1 class="title">Makan Yuk 💛</h1>
               <div class="subtitle">Teman kecil buat nemenin kamu makan.</div>
             </div>
           </div>
@@ -552,7 +707,7 @@
       <div class="section-head">
         <div class="section-icon">🍚</div>
         <div>
-          <h2 class="section-title">Makan apa hari ini istriku?</h2>
+          <h2 class="section-title">Makan apa kamu hari ini istriku?</h2>
         </div>
       </div>
       <p class="section-sub">Boleh pilih lebih dari satu, kalau bingung, tulis aja di level mood dan nanti tulis di kolom komen ya sayang.</p>
@@ -584,12 +739,12 @@
           <h2 class="section-title">Apa yg mau kamu ceritain nda sayang?</h2>
         </div>
       </div>
-      <p class="section-sub">Cerita apa saja. Aku mau dengar. ❤️</p>
+      <p class="section-sub">Cerita apa saja. Aku mau dengar. 💛</p>
 
       <div class="comment-box">
         <textarea
           id="comment"
-          placeholder="Tulis ceritamu di sini...&#10;&#10;Misalnya: hari ini capek, tadi makan enak, atau ada sesuatu yang mau kamu ceritain ❤️"
+          placeholder="Tulis ceritamu di sini...&#10;&#10;Misalnya: hari ini capek, tadi makan enak, atau ada sesuatu yang mau kamu ceritain 💛"
         ></textarea>
       </div>
     </section>
@@ -597,17 +752,17 @@
     <!-- SIMPAN -->
     <section class="card save-card">
       <button id="save" class="save" disabled>
-        🐥 Simpan Ceritaku ❤️
+        🐥 Simpan Ceritaku 💛
       </button>
       <div class="save-note">Catatanmu akan tersimpan online.</div>
     </section>
 
     <footer>
-      dibuat khusus untuk kamu ❤️
+      dibuat khusus untuk kamu 💛
     </footer>
   </main>
 
-  <div id="toast" class="toast">Tersimpan ❤️</div>
+  <div id="toast" class="toast">Tersimpan 💛</div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
@@ -650,17 +805,19 @@
       {id:"mie_ayam", icon:"🍜", label:"Mie Ayam"}
     ];
 
+    // Mood icons are CSS-drawn Piyo-inspired chick faces; no external image assets are required.
     const moods = [
-      {id:"happy", emoji:"😊", label:"Senang"},
-      {id:"love", emoji:"🥰", label:"Bahagia"},
-      {id:"good", emoji:"🙂", label:"Biasa"},
-      {id:"neutral", emoji:"😐", label:"Netral"},
-      {id:"tired", emoji:"😴", label:"Capek"},
-      {id:"sad", emoji:"😞", label:"Sedih"},
-      {id:"angry", emoji:"😡", label:"Kesal"},
-      {id:"stressed", emoji:"😩", label:"Stres"},
-      {id:"sick", emoji:"🤢", label:"Tidak enak"},
-      {id:"excited", emoji:"🤩", label:"Semangat"}
+      {id:"happy", moodClass:"happy", label:"Aku lagi seneng, yeaayyy", face:"⌣"},
+      {id:"love", moodClass:"love", label:"Aku lagi kangen", face:"♥"},
+      {id:"good", moodClass:"good", label:"Im good", face:"ᴗ"},
+      {id:"neutral", moodClass:"neutral", label:"Aku biasa aja", face:"—"},
+      {id:"tired", moodClass:"tired", label:"Aku lagi capek", face:"﹀"},
+      {id:"sleepy", moodClass:"sleepy", label:"Aku ngantuk banget", face:"o"},
+      {id:"sad", moodClass:"sad", label:"Aku sedih", face:"⌢"},
+      {id:"angry", moodClass:"angry", label:"Lagi kesel", face:"︿"},
+      {id:"stressed", moodClass:"stressed", label:"Pusing nih, stres", face:"~"},
+      {id:"sick", moodClass:"sick", label:"Aku ga enak badan", face:"O"},
+      {id:"excited", moodClass:"excited", label:"Aku lagi semangat", face:"◡"}
     ];
 
     const state = {
@@ -703,7 +860,21 @@
 
       $("moodGrid").innerHTML = moods.map(m => `
         <button class="pick mood-btn ${state.mood===m.id ? "sel" : ""}" data-mood="${m.id}">
-          <span class="icon">${m.emoji}</span>
+          <span class="icon">
+            <span class="piyo-mood ${m.moodClass}">
+              <span class="head"></span>
+              <span class="eye left"></span>
+              <span class="eye right"></span>
+              <span class="beak"></span>
+              <span class="cheek left"></span>
+              <span class="cheek right"></span>
+              <span class="mouth"></span>
+              ${m.id==="sleepy" ? '<span class="zzz">z</span>' : ""}
+              ${m.id==="stressed" ? '<span class="steam">〰</span>' : ""}
+              ${m.id==="sick" ? '<span class="tear"></span>' : ""}
+              ${m.id==="excited" ? '<span class="spark">✦</span>' : ""}
+            </span>
+          </span>
           <span class="label">${m.label}</span>
         </button>
       `).join("");
@@ -796,7 +967,7 @@
 
         render();
         await loadTodayCount();
-        showToast("Tersimpan ❤️");
+        showToast("Tersimpan 💛");
       }
     });
 
