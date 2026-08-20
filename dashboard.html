@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f7f8fb"><title>Makan Yuk — Dashboard</title>
+<style>
+:root{--bg:#f7f8fb;--card:#fff;--text:#26272a;--muted:#74777d;--line:#e8e9ee;--accent:#d9786b;--soft:#fff1ed}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text)}.wrap{max-width:1100px;margin:auto;padding:24px 16px 40px}.top{display:flex;justify-content:space-between;gap:15px;align-items:end}.kicker{font-size:11px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);font-weight:800}.title{font-size:32px;font-weight:900;letter-spacing:-.04em}.sub{font-size:13px;color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}.stat{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px}.stat .n{font-size:26px;font-weight:900}.stat .l{font-size:12px;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:12px;margin-top:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px}h2{font-size:15px;margin:0}.mini{font-size:11px;color:var(--muted);margin:4px 0 12px}.bars{display:grid;gap:8px}.barrow{display:grid;grid-template-columns:100px 1fr 28px;align-items:center;gap:8px;font-size:11px}.bar{height:8px;background:#f0f1f4;border-radius:999px;overflow:hidden}.fill{height:100%;background:var(--accent);border-radius:999px}
+.list{display:grid;gap:8px;max-height:520px;overflow:auto}.entry{border:1px solid var(--line);border-radius:15px;padding:10px}.row{display:flex;justify-content:space-between;gap:8px;font-size:11px;color:var(--muted)}.main{display:flex;justify-content:space-between;gap:10px;margin-top:4px}.foods{font-size:12px;font-weight:800;line-height:1.4}.mood{font-size:23px}.comment{margin-top:7px;padding:8px 9px;border-radius:11px;background:var(--soft);font-size:11px;line-height:1.45}.refresh{border:1px solid var(--line);background:#fff;border-radius:12px;padding:9px 11px;cursor:pointer}.empty{font-size:12px;color:var(--muted)}
+@media(max-width:850px){.cards{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}@media(max-width:430px){.wrap{padding:16px 11px 30px}.title{font-size:27px}}
+</style></head>
+<body><main class="wrap"><header class="top"><div><div class="kicker">Untuk kamu</div><div class="title">Makan Yuk — Dashboard</div><div class="sub" id="range"></div></div><button id="refresh" class="refresh">↻ Refresh</button></header>
+<section class="cards"><div class="stat"><div class="n" id="total">0</div><div class="l">Total catatan</div></div><div class="stat"><div class="n" id="today">0</div><div class="l">Hari ini</div></div><div class="stat"><div class="n" id="positive">0%</div><div class="l">Mood positif</div></div><div class="stat"><div class="n" id="comments">0</div><div class="l">Cerita / komentar</div></div></section>
+<section class="grid2"><div class="card"><h2>🍽️ Makanan paling sering</h2><div class="mini">Berdasarkan catatan yang tersedia.</div><div id="foodBars" class="bars"></div></div><div class="card"><h2>😊 Mood</h2><div class="mini">Distribusi mood.</div><div id="moodBars" class="bars"></div></div></section>
+<section class="card" style="margin-top:12px"><h2>📝 Riwayat terbaru</h2><div class="mini">Data dari Supabase.</div><div id="list" class="list"></div></section></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script>
+<script>
+const db=supabase.createClient(APP_CONFIG.SUPABASE_URL,APP_CONFIG.SUPABASE_ANON_KEY);
+const foods=[["rice","🍚","Nasi"],["sate","🍢","Sate"],["soto_mie","🍜","Soto Mie"],["pempek","🥟","Pempek"],["telur_dadar","🍳","Telur Dadar"],["indomie","🍜","Indomie"],["mie_sedap_laksa","🍜","Mie Sedap Laksa"],["ayam_penyet","🍗","Ayam Penyet"],["brokoli","🥦","Brokoli"],["tahu","🟫","Tahu"],["tempe","🟫","Tempe"],["mie_ayam","🍜","Mie Ayam"]];
+const meals=[["breakfast","🌤️","Sarapan"],["lunch","☀️","Makan siang"],["dinner","🌙","Makan malam"],["snack","🍪","Snack"]];
+const moods=[["happy","😊","Senang"],["love","🥰","Bahagia"],["good","🙂","Biasa"],["neutral","😐","Netral"],["tired","😴","Capek"],["sad","😞","Sedih"],["angry","😡","Kesal"],["stressed","😩","Stres"],["sick","🤢","Tidak enak"],["excited","🤩","Semangat"]];
+const $=id=>document.getElementById(id);
+async function load(){
+ $("list").innerHTML='<div class="empty">Memuat...</div>';
+ const {data,error}=await db.from("food_logs").select("*").order("eaten_at",{ascending:false}).limit(500);
+ if(error){console.error(error);$("list").innerHTML='<div class="empty">Gagal memuat data.</div>';return}
+ const total=data.length,todayKey=new Date().toISOString().slice(0,10),today=data.filter(x=>x.eaten_at.slice(0,10)===todayKey).length;
+ $("total").textContent=total;$("today").textContent=today;$("comments").textContent=data.filter(x=>x.comment&&x.comment.trim()).length;
+ const posIds=new Set(["happy","love","good","excited"]);$("positive").textContent=(total?Math.round(data.filter(x=>posIds.has(x.mood_id)).length/total*100):0)+"%";$("range").textContent="Diperbarui "+new Date().toLocaleString("id-ID");
+ const fc={};data.forEach(x=>(x.food_ids||[]).forEach(id=>fc[id]=(fc[id]||0)+1));const topF=Object.entries(fc).sort((a,b)=>b[1]-a[1]).slice(0,8),maxF=topF[0]?.[1]||1;
+ $("foodBars").innerHTML=topF.length?topF.map(([id,n])=>{const f=foods.find(x=>x[0]===id)||["","🍽️",id];return `<div class="barrow"><div>${f[1]} ${f[2]}</div><div class="bar"><div class="fill" style="width:${n/maxF*100}%"></div></div><div>${n}</div></div>`}).join(""):'<div class="empty">Belum ada data.</div>';
+ const mc={};data.forEach(x=>mc[x.mood_id]=(mc[x.mood_id]||0)+1);const topM=Object.entries(mc).sort((a,b)=>b[1]-a[1]),maxM=topM[0]?.[1]||1;
+ $("moodBars").innerHTML=topM.map(([id,n])=>{const m=moods.find(x=>x[0]===id)||["","🙂",id];return `<div class="barrow"><div>${m[1]} ${m[2]}</div><div class="bar"><div class="fill" style="width:${n/maxM*100}%"></div></div><div>${n}</div></div>`}).join("");
+ $("list").innerHTML=data.length?data.map(x=>{const meal=meals.find(m=>m[0]===x.meal_type),mood=moods.find(m=>m[0]===x.mood_id),names=(x.food_ids||[]).map(id=>foods.find(f=>f[0]===id)).filter(Boolean).map(f=>f[1]+" "+f[2]).join(" · "),t=new Date(x.eaten_at).toLocaleString("id-ID",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});return `<div class="entry"><div class="row"><span>${meal?meal[1]+" "+meal[2]:x.meal_type}</span><span>${t}</span></div><div class="main"><div class="foods">${names}</div><div class="mood">${mood?mood[1]:"🙂"}</div></div>${x.comment?`<div class="comment">💬 ${String(x.comment).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}</div>`}).join(""):'<div class="empty">Belum ada catatan.</div>';
+}
+$("refresh").onclick=load;load();
+</script></body></html>
