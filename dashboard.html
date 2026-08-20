@@ -2,17 +2,213 @@
 <html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#f7f8fb"><title>Makan Yuk — Dashboard</title>
 <style>
-:root{--bg:#f7f8fb;--card:#fff;--text:#26272a;--muted:#74777d;--line:#e8e9ee;--accent:#d9786b;--soft:#fff1ed}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text)}.wrap{max-width:1100px;margin:auto;padding:24px 16px 40px}.top{display:flex;justify-content:space-between;gap:15px;align-items:end}.kicker{font-size:11px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);font-weight:800}.title{font-size:32px;font-weight:900;letter-spacing:-.04em}.sub{font-size:13px;color:var(--muted)}
-.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}.stat{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px}.stat .n{font-size:26px;font-weight:900}.stat .l{font-size:12px;color:var(--muted)}
-.grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:12px;margin-top:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px}h2{font-size:15px;margin:0}.mini{font-size:11px;color:var(--muted);margin:4px 0 12px}.bars{display:grid;gap:8px}.barrow{display:grid;grid-template-columns:100px 1fr 28px;align-items:center;gap:8px;font-size:11px}.bar{height:8px;background:#f0f1f4;border-radius:999px;overflow:hidden}.fill{height:100%;background:var(--accent);border-radius:999px}
-.list{display:grid;gap:8px;max-height:520px;overflow:auto}.entry{border:1px solid var(--line);border-radius:15px;padding:10px}.row{display:flex;justify-content:space-between;gap:8px;font-size:11px;color:var(--muted)}.main{display:flex;justify-content:space-between;gap:10px;margin-top:4px}.foods{font-size:12px;font-weight:800;line-height:1.4}.mood{font-size:23px}.comment{margin-top:7px;padding:8px 9px;border-radius:11px;background:var(--soft);font-size:11px;line-height:1.45}.refresh{border:1px solid var(--line);background:#fff;border-radius:12px;padding:9px 11px;cursor:pointer}.empty{font-size:12px;color:var(--muted)}
-@media(max-width:850px){.cards{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}@media(max-width:430px){.wrap{padding:16px 11px 30px}.title{font-size:27px}}
+:root{
+  --bg:#FFF8D6;
+  --bg-deep:#FFF1A8;
+  --card:#FFFEF4;
+  --yellow:#FFD95A;
+  --yellow-soft:#FFF3A8;
+  --line:#F0DFA3;
+  --brown:#5C4536;
+  --brown-soft:#806A59;
+  --orange:#F4A62A;
+  --pink:#F5A8A8;
+  --shadow:0 10px 24px rgba(118,93,39,.10);
+  --shadow-soft:0 5px 14px rgba(118,93,39,.08);
+  --radius:24px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  color:var(--brown);
+  background:
+    radial-gradient(circle at 8% 4%, rgba(255,255,255,.95) 0 5%, transparent 16%),
+    radial-gradient(circle at 93% 8%, rgba(255,224,100,.38) 0 5%, transparent 17%),
+    linear-gradient(180deg,var(--bg) 0%,#FFF9E3 45%,#FFFDF3 100%);
+  font-family:"Nunito",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  min-height:100vh;
+}
+button{font:inherit}
+.wrap{width:min(100%,1080px);margin:0 auto;padding:18px 14px 40px}
+.deco{position:fixed;pointer-events:none;z-index:0;user-select:none;opacity:.7}
+.deco.egga{
+  width:66px;height:80px;border-radius:48% 52% 50% 50% / 56% 52% 48% 44%;
+  background:linear-gradient(180deg,#fffdf1,#ffeaa0);border:2px solid #efd77c;
+  transform:rotate(-12deg);top:80px;left:-20px;box-shadow:0 8px 18px rgba(118,93,39,.08)
+}
+.deco.star{right:5px;top:170px;color:#E4B93B;font-size:24px}
+.deco.heart{left:6px;bottom:130px;color:#F1A3A3;font-size:18px}
+
+.header{
+  position:relative;z-index:1;display:flex;align-items:flex-start;justify-content:space-between;
+  gap:16px;padding:6px 5px 10px
+}
+.brand{display:flex;align-items:center;gap:12px}
+.piyo-face{
+  flex:0 0 auto;position:relative;width:62px;height:62px;border-radius:54% 54% 48% 48% / 60% 60% 44% 44%;
+  background:#FFE36B;border:2px solid #E7C950;box-shadow:var(--shadow-soft)
+}
+.piyo-face:before,.piyo-face:after{
+  content:"";position:absolute;width:6px;height:7px;border-radius:50%;background:#5B4738;top:23px
+}
+.piyo-face:before{left:18px}.piyo-face:after{right:18px}
+.piyo-beak{position:absolute;left:50%;top:29px;transform:translateX(-50%);width:0;height:0;
+  border-left:8px solid transparent;border-right:8px solid transparent;border-top:10px solid #EF9E26}
+.piyo-blush{position:absolute;width:9px;height:5px;border-radius:50%;background:#F5A8A8;top:33px;opacity:.75}
+.piyo-blush.left{left:8px}.piyo-blush.right{right:8px}
+.kicker{
+  display:inline-flex;align-items:center;gap:6px;color:#9B7A2D;background:rgba(255,255,255,.68);
+  border:1px solid rgba(239,215,124,.8);border-radius:999px;padding:7px 10px;font-size:11px;font-weight:800;letter-spacing:.04em
+}
+.title{
+  margin:7px 0 0;font-family:"Fredoka","Nunito",sans-serif;font-size:31px;line-height:1;letter-spacing:-.03em;color:#5A4433
+}
+.subtitle{margin-top:5px;font-size:13px;color:#90775E;font-weight:700}
+.updated{
+  margin-top:10px;color:#907A63;font-size:11px;font-weight:700
+}
+.refresh{
+  border:1px solid var(--line);background:rgba(255,255,255,.8);color:#6B513A;border-radius:14px;
+  padding:9px 11px;font-size:11px;font-weight:800;cursor:pointer;box-shadow:var(--shadow-soft)
+}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px;position:relative;z-index:1}
+.stat{
+  background:rgba(255,255,255,.9);border:1px solid rgba(239,215,124,.86);border-radius:20px;padding:15px;
+  box-shadow:var(--shadow)
+}
+.stat .n{font-family:"Fredoka","Nunito",sans-serif;font-size:27px;color:#76552F;font-weight:600}
+.stat .l{font-size:11px;color:#9A846A;font-weight:800;margin-top:3px}
+.grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:12px;margin-top:12px;position:relative;z-index:1}
+.card{
+  position:relative;background:rgba(255,255,255,.88);border:1px solid rgba(239,215,124,.86);
+  border-radius:var(--radius);box-shadow:var(--shadow);padding:17px;overflow:hidden
+}
+.card:before{
+  content:"";position:absolute;right:-26px;top:-24px;width:80px;height:80px;border-radius:50%;
+  background:rgba(255,234,143,.35)
+}
+.card-head{position:relative;z-index:1;display:flex;align-items:flex-start;gap:10px}
+.card-icon{
+  width:36px;height:36px;border-radius:13px;display:grid;place-items:center;
+  background:var(--yellow-soft);border:1px solid #F0D977;font-size:20px;flex:0 0 auto
+}
+.card h2{
+  font-family:"Fredoka","Nunito",sans-serif;font-size:17px;line-height:1.1;color:#5C4434;margin:1px 0 0
+}
+.mini{position:relative;z-index:1;font-size:11px;color:#9A846A;margin:7px 0 13px 46px;line-height:1.45;font-weight:700}
+.bars{display:grid;gap:9px;position:relative;z-index:1}
+.barrow{display:grid;grid-template-columns:112px 1fr 28px;align-items:center;gap:8px;font-size:11px;color:#6F5946;font-weight:800}
+.bar{height:9px;background:#F6EED1;border-radius:999px;overflow:hidden}
+.fill{height:100%;background:linear-gradient(90deg,#FFD95A,#F4BB35);border-radius:999px}
+.list{display:grid;gap:9px;max-height:560px;overflow:auto;position:relative;z-index:1}
+.entry{
+  border:1px solid #F0DFA3;border-radius:18px;padding:11px;
+  background:linear-gradient(180deg,#FFFDF4,#FFF9E5);box-shadow:0 4px 12px rgba(118,93,39,.05)
+}
+.row{display:flex;justify-content:space-between;gap:8px;font-size:10px;color:#9A846A;font-weight:800}
+.main{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:7px}
+.foods{font-size:12px;font-weight:800;color:#604A37;line-height:1.45}
+.mood{font-size:29px}
+.comment{margin-top:8px;padding:9px 10px;border-radius:13px;background:#FFF3CC;border:1px solid #EED78C;font-size:10px;color:#715738;line-height:1.5;font-weight:700}
+.empty{font-size:11px;color:#A18C76;font-weight:700}
+.illustration{
+  width:46px;height:42px;display:block;flex:0 0 auto
+}
+.footer{text-align:center;color:#A28D75;font-size:10px;font-weight:700;padding:14px 8px 0;position:relative;z-index:1}
+@media(max-width:850px){.cards{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}}
+@media(max-width:500px){
+  .wrap{padding:14px 11px 30px}.title{font-size:27px}.header{gap:10px}.refresh{padding:8px 9px}
+  .cards{gap:9px}.barrow{grid-template-columns:95px 1fr 24px}
+}
 </style></head>
-<body><main class="wrap"><header class="top"><div><div class="kicker">Untuk kamu</div><div class="title">Makan Yuk — Dashboard</div><div class="sub" id="range"></div></div><button id="refresh" class="refresh">↻ Refresh</button></header>
-<section class="cards"><div class="stat"><div class="n" id="total">0</div><div class="l">Total catatan</div></div><div class="stat"><div class="n" id="today">0</div><div class="l">Hari ini</div></div><div class="stat"><div class="n" id="positive">0%</div><div class="l">Mood positif</div></div><div class="stat"><div class="n" id="comments">0</div><div class="l">Cerita / komentar</div></div></section>
-<section class="grid2"><div class="card"><h2>🍽️ Makanan paling sering</h2><div class="mini">Berdasarkan catatan yang tersedia.</div><div id="foodBars" class="bars"></div></div><div class="card"><h2>😊 Mood</h2><div class="mini">Distribusi mood.</div><div id="moodBars" class="bars"></div></div></section>
-<section class="card" style="margin-top:12px"><h2>📝 Riwayat terbaru</h2><div class="mini">Data dari Supabase.</div><div id="list" class="list"></div></section></main>
+<body>
+  <div class="deco egga"></div>
+  <div class="deco star">✦</div>
+  <div class="deco heart">♡</div>
+
+  <main class="wrap">
+    <header class="header">
+      <div>
+        <div class="kicker">
+          <span class="illustration" style="width:18px;height:18px">
+            <svg viewBox="0 0 56 48" aria-hidden="true">
+              <path fill="#FFE26A" stroke="#7A5A3C" stroke-width="1.7" d="M10 23 Q10 10 28 8 Q46 10 46 23 Q46 39 28 40 Q10 39 10 23Z"/>
+              <circle fill="#5C4536" cx="22" cy="22" r="1.6"/><circle fill="#5C4536" cx="34" cy="22" r="1.6"/>
+              <path fill="#EF9E26" stroke="#7A5A3C" stroke-width="1.7" d="M24 26 L28 30 L32 26 Q28 22 24 26Z"/>
+            </svg>
+          </span>
+          Untuk kamu
+        </div>
+
+        <div class="brand">
+          <div class="piyo-face">
+            <div class="piyo-beak"></div>
+            <div class="piyo-blush left"></div>
+            <div class="piyo-blush right"></div>
+          </div>
+          <div>
+            <div class="title">Makan Yuk — Dashboard</div>
+            <div class="subtitle">Lihat cerita dan catatan istriku 💛</div>
+            <div class="updated" id="range"></div>
+          </div>
+        </div>
+      </div>
+
+      <button id="refresh" class="refresh">↻ Refresh</button>
+    </header>
+
+    <section class="cards">
+      <div class="stat">
+        <div class="n" id="total">0</div>
+        <div class="l">Total catatan</div>
+      </div>
+      <div class="stat">
+        <div class="n" id="today">0</div>
+        <div class="l">Hari ini</div>
+      </div>
+      <div class="stat">
+        <div class="n" id="positive">0%</div>
+        <div class="l">Mood positif</div>
+      </div>
+      <div class="stat">
+        <div class="n" id="comments">0</div>
+        <div class="l">Cerita / komentar</div>
+      </div>
+    </section>
+
+    <section class="grid2">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon">🐥</div>
+          <div><h2>Makanan paling sering</h2></div>
+        </div>
+        <div class="mini">Menu yang paling sering dipilih.</div>
+        <div id="foodBars" class="bars"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-icon">💛</div>
+          <div><h2>Mood</h2></div>
+        </div>
+        <div class="mini">Perasaan yang paling sering muncul.</div>
+        <div id="moodBars" class="bars"></div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:12px">
+      <div class="card-head">
+        <div class="card-icon">💬</div>
+        <div><h2>Catatan istriku</h2></div>
+      </div>
+      <div class="mini">Semua catatan yang tersimpan dari web istri.</div>
+      <div id="list" class="list"></div>
+    </section>
+
+    <div class="footer">dibuat khusus untuk kalian 💛</div>
+  </main>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script>
 <script>
 const db=supabase.createClient(APP_CONFIG.SUPABASE_URL,APP_CONFIG.SUPABASE_ANON_KEY);
@@ -20,18 +216,44 @@ const foods=[["rice","🍚","Nasi"],["sate","🍢","Sate"],["soto_mie","🍜","S
 const meals=[["breakfast","🌤️","Sarapan"],["lunch","☀️","Makan siang"],["dinner","🌙","Makan malam"],["snack","🍪","Snack"]];
 const moods=[["happy","😊","Senang"],["love","🥰","Bahagia"],["good","🙂","Biasa"],["neutral","😐","Netral"],["tired","😴","Capek"],["sad","😞","Sedih"],["angry","😡","Kesal"],["stressed","😩","Stres"],["sick","🤢","Tidak enak"],["excited","🤩","Semangat"]];
 const $=id=>document.getElementById(id);
+function piyoDashArt(kind="happy"){
+  const S=inner=>`<svg class="illustration" viewBox="0 0 56 48" aria-hidden="true">${inner}</svg>`;
+  const eye=(x,y)=>`<circle fill="#5C4536" cx="${x}" cy="${y}" r="1.6"/>`;
+  const base=(extras="")=>S(`
+    <path fill="#FFE26A" stroke="#7A5A3C" stroke-width="1.7" d="M10 23 Q10 10 28 8 Q46 10 46 23 Q46 39 28 40 Q10 39 10 23Z"/>
+    <circle fill="#F2A0A0" cx="16" cy="27" r="2.7"/><circle fill="#F2A0A0" cx="40" cy="27" r="2.7"/>
+    ${eye(22,22)}${eye(34,22)}
+    <path fill="#EF9E26" stroke="#7A5A3C" stroke-width="1.6" d="M24 26 L28 30 L32 26 Q28 22 24 26Z"/>
+    ${extras}
+  `);
+  const mouth=d=>`<path d="${d}" fill="none" stroke="#6B4B37" stroke-width="1.35" stroke-linecap="round"/>`;
+  switch(kind){
+    case "love": return base(`<path d="M28 30 C23 24 18 31 28 37 C38 31 33 24 28 30Z" fill="#E97E8C"/>`);
+    case "neutral": return base(mouth("M24 30 H32"));
+    case "tired": return base(`<path fill="#5C4536" d="M20 21 h5 l-2 2 h-3z"/><path fill="#5C4536" d="M31 21 h5 l-2 2 h-3z"/>`);
+    case "sleepy": return base(`<path d="M20 22 Q23 20 26 22 M30 22 Q33 20 36 22" fill="none" stroke="#5C4536" stroke-width="1.5"/><text x="42" y="11" font-size="9" font-family="Fredoka,Arial" font-weight="700" fill="#8B7BAA">z</text>`);
+    case "sad": return base(`${mouth("M24 33 Q28 29 32 33")}<path fill="#8FC9EA" stroke="#7A5A3C" stroke-width="1" d="M38 25 Q41 30 38 33 Q35 30 38 25Z"/>`);
+    case "angry": return base(`${mouth("M24 31 Q28 28 32 31")}<path fill="#5C4536" d="M19 20 L26 22 L25 24 L18 22Z"/><path fill="#5C4536" d="M30 22 L37 20 L38 22 L31 24Z"/>`);
+    case "stressed": return base(`${mouth("M24 31 Q28 28 32 31")}<text x="41" y="10" font-size="10" fill="#A1A1A1">〰</text>`);
+    case "sick": return base(`${mouth("M24 31 Q28 29 32 31")}<path fill="#8FC9EA" stroke="#7A5A3C" stroke-width="1" d="M39 26 Q42 30 39 33 Q36 30 39 26Z"/>`);
+    case "excited": return base(`${mouth("M23 29 Q28 36 33 29")}<text x="42" y="12" font-size="9" fill="#F1B93A">✦</text>`);
+    case "happy": default: return base(mouth("M24 29 Q28 34 32 29"));
+  }
+}
 async function load(){
  $("list").innerHTML='<div class="empty">Memuat...</div>';
  const {data,error}=await db.from("food_logs").select("*").order("eaten_at",{ascending:false}).limit(500);
  if(error){console.error(error);$("list").innerHTML='<div class="empty">Gagal memuat data.</div>';return}
  const total=data.length,todayKey=new Date().toISOString().slice(0,10),today=data.filter(x=>x.eaten_at.slice(0,10)===todayKey).length;
  $("total").textContent=total;$("today").textContent=today;$("comments").textContent=data.filter(x=>x.comment&&x.comment.trim()).length;
- const posIds=new Set(["happy","love","good","excited"]);$("positive").textContent=(total?Math.round(data.filter(x=>posIds.has(x.mood_id)).length/total*100):0)+"%";$("range").textContent="Diperbarui "+new Date().toLocaleString("id-ID");
+ const posIds=new Set(["happy","love","good","excited"]);$("positive").textContent=(total?Math.round(data.filter(x=>posIds.has(x.mood_id)).length/total*100):0)+"%";$("range").textContent="Terakhir diperbarui "+new Date().toLocaleString("id-ID");
  const fc={};data.forEach(x=>(x.food_ids||[]).forEach(id=>fc[id]=(fc[id]||0)+1));const topF=Object.entries(fc).sort((a,b)=>b[1]-a[1]).slice(0,8),maxF=topF[0]?.[1]||1;
  $("foodBars").innerHTML=topF.length?topF.map(([id,n])=>{const f=foods.find(x=>x[0]===id)||["","🍽️",id];return `<div class="barrow"><div>${f[1]} ${f[2]}</div><div class="bar"><div class="fill" style="width:${n/maxF*100}%"></div></div><div>${n}</div></div>`}).join(""):'<div class="empty">Belum ada data.</div>';
  const mc={};data.forEach(x=>mc[x.mood_id]=(mc[x.mood_id]||0)+1);const topM=Object.entries(mc).sort((a,b)=>b[1]-a[1]),maxM=topM[0]?.[1]||1;
  $("moodBars").innerHTML=topM.map(([id,n])=>{const m=moods.find(x=>x[0]===id)||["","🙂",id];return `<div class="barrow"><div>${m[1]} ${m[2]}</div><div class="bar"><div class="fill" style="width:${n/maxM*100}%"></div></div><div>${n}</div></div>`}).join("");
- $("list").innerHTML=data.length?data.map(x=>{const meal=meals.find(m=>m[0]===x.meal_type),mood=moods.find(m=>m[0]===x.mood_id),names=(x.food_ids||[]).map(id=>foods.find(f=>f[0]===id)).filter(Boolean).map(f=>f[1]+" "+f[2]).join(" · "),t=new Date(x.eaten_at).toLocaleString("id-ID",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});return `<div class="entry"><div class="row"><span>${meal?meal[1]+" "+meal[2]:x.meal_type}</span><span>${t}</span></div><div class="main"><div class="foods">${names}</div><div class="mood">${mood?mood[1]:"🙂"}</div></div>${x.comment?`<div class="comment">💬 ${String(x.comment).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}</div>`}).join(""):'<div class="empty">Belum ada catatan.</div>';
+ $("list").innerHTML=data.length?data.map(x=>{const meal=meals.find(m=>m[0]===x.meal_type),mood=moods.find(m=>m[0]===x.mood_id),names=(x.food_ids||[]).map(id=>foods.find(f=>f[0]===id)).filter(Boolean).map(f=>f[1]+" "+f[2]).join(" · "),t=new Date(x.eaten_at).toLocaleString("id-ID",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});return `<div class="entry"><div class="row"><span>${meal?meal[1]+" "+meal[2]:x.meal_type}</span><span>${t}</span></div><div class="main"><div class="foods">${names}</div><div class="mood">${piyoDashArt(mood?mood[0]:"neutral")}</div></div>${x.comment?`<div class="comment">💬 ${String(x.comment).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}</div>`}).join(""):'<div class="empty">Belum ada catatan.</div>';
 }
 $("refresh").onclick=load;load();
-</script></body></html>
+</script>
+</body>
+</html>

@@ -526,6 +526,102 @@
       margin-top:8px;
     }
 
+
+    /* Riwayat catatan istri */
+    .history-section{
+      position:relative;
+      z-index:1;
+    }
+    .history-toolbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:12px;
+    }
+    .history-date-label{
+      font-family:"Fredoka","Nunito",sans-serif;
+      font-size:13px;
+      font-weight:600;
+      color:#765A3A;
+    }
+    .history-refresh{
+      border:1px solid var(--line);
+      background:#FFFDF1;
+      color:#6B513A;
+      border-radius:12px;
+      padding:7px 10px;
+      font-size:10px;
+      font-weight:800;
+      cursor:pointer;
+    }
+    .history-list{
+      display:grid;
+      gap:10px;
+    }
+    .history-entry{
+      border:1px solid #F0DFA3;
+      border-radius:18px;
+      background:linear-gradient(180deg,#FFFDF4,#FFF9E5);
+      padding:11px;
+      box-shadow:0 4px 12px rgba(118,93,39,.05);
+    }
+    .history-entry-top{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      font-size:10px;
+      color:#9A846A;
+      font-weight:800;
+    }
+    .history-main{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:7px;
+    }
+    .history-foods{
+      font-size:12px;
+      line-height:1.45;
+      font-weight:800;
+      color:#604A37;
+    }
+    .history-mood{
+      flex:0 0 auto;
+    }
+    .history-mood .piyo-art{
+      width:44px;
+      height:40px;
+    }
+    .history-comment{
+      margin-top:8px;
+      border-radius:13px;
+      padding:8px 10px;
+      background:#FFF3CC;
+      border:1px solid #EED78C;
+      color:#715738;
+      font-size:10px;
+      line-height:1.5;
+      font-weight:700;
+      white-space:pre-wrap;
+      word-break:break-word;
+    }
+    .history-empty{
+      padding:14px 4px;
+      text-align:center;
+      color:#A18C76;
+      font-size:11px;
+      font-weight:700;
+    }
+    .history-loading{
+      padding:12px 4px;
+      color:#A18C76;
+      font-size:11px;
+      font-weight:700;
+    }
+
     .toast{
       position:fixed;
       left:50%;
@@ -657,7 +753,7 @@
           <h2 class="section-title">Apa yg mau kamu ceritain nda sayang?</h2>
         </div>
       </div>
-      <p class="section-sub">Cerita apa saja. Aku mau dengar. 💛</p>
+      <p class="section-sub">Mau cerita apa sayang? sini aku dengerin. 💛</p>
 
       <div class="comment-box">
         <textarea
@@ -673,6 +769,35 @@
         <svg class="piyo-art" viewBox="0 0 56 48" aria-hidden="true"><path class="body outline" d="M10 23 Q10 10 28 8 Q46 10 46 23 Q46 39 28 40 Q10 39 10 23Z"/><circle class="eyeFill" cx="22" cy="22" r="1.6"/><circle class="eyeFill" cx="34" cy="22" r="1.6"/><path class="beakfill outline" d="M24 26 L28 30 L32 26 Q28 22 24 26Z"/></svg> Simpan Ceritaku 💛
       </button>
       <div class="save-note">Catatanmu akan tersimpan online.</div>
+    </section>
+
+
+    <!-- RIWAYAT -->
+    <section class="card history-section">
+      <div class="section-head">
+        <div class="section-icon">
+          <svg class="piyo-art" viewBox="0 0 56 48" aria-hidden="true">
+            <path class="body outline" d="M10 23 Q10 10 28 8 Q46 10 46 23 Q46 39 28 40 Q10 39 10 23Z"/>
+            <circle class="eyeFill" cx="22" cy="22" r="1.6"/>
+            <circle class="eyeFill" cx="34" cy="22" r="1.6"/>
+            <path class="beakfill outline" d="M24 26 L28 30 L32 26 Q28 22 24 26Z"/>
+          </svg>
+        </div>
+        <div>
+          <h2 class="section-title">Riwayat Catatan Kamu</h2>
+        </div>
+      </div>
+
+      <p class="section-sub">Biar kamu bisa lihat lagi apa yang sudah kamu ceritain sebelumnya.</p>
+
+      <div class="history-toolbar">
+        <div class="history-date-label" id="historySummary">Memuat riwayat...</div>
+        <button type="button" class="history-refresh" id="historyRefresh">↻ Refresh</button>
+      </div>
+
+      <div id="historyList" class="history-list">
+        <div class="history-loading">Memuat catatan...</div>
+      </div>
     </section>
 
     <footer>
@@ -970,6 +1095,115 @@
       $("todayCount").textContent = data.length;
     }
 
+
+    function escapeHtml(value){
+      return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+    }
+
+    function formatHistoryTime(timestamp){
+      return new Intl.DateTimeFormat("id-ID",{
+        day:"2-digit",
+        month:"short",
+        hour:"2-digit",
+        minute:"2-digit"
+      }).format(new Date(timestamp));
+    }
+
+    function getMealInfo(mealId){
+      return meals.find(m => m.id === mealId) || {id:mealId, label:mealId};
+    }
+
+    function getMoodInfo(moodId){
+      return moods.find(m => m.id === moodId) || {
+        id:moodId,
+        moodClass:"neutral",
+        label:"Aku biasa aja"
+      };
+    }
+
+    async function loadHistory(){
+      const list = $("historyList");
+      const summary = $("historySummary");
+
+      list.innerHTML = `<div class="history-loading">Memuat catatan...</div>`;
+
+      const {data,error} = await db
+        .from("food_logs")
+        .select("id,eaten_at,meal_type,food_ids,mood_id,comment")
+        .order("eaten_at",{ascending:false})
+        .limit(100);
+
+      if(error){
+        console.error(error);
+        summary.textContent = "Riwayat belum bisa dimuat";
+        list.innerHTML = `
+          <div class="history-empty">
+            Maaf sayang, riwayatnya belum bisa dibuka sekarang.
+          </div>
+        `;
+        return;
+      }
+
+      if(!data || !data.length){
+        summary.textContent = "Belum ada catatan";
+        list.innerHTML = `
+          <div class="history-empty">
+            Belum ada cerita di sini. Yuk mulai isi hari ini 💛
+          </div>
+        `;
+        return;
+      }
+
+      const todayKey = new Date().toISOString().slice(0,10);
+      const todayCount = data.filter(item => item.eaten_at.slice(0,10) === todayKey).length;
+      summary.textContent = todayCount
+        ? `${todayCount} catatan hari ini • ${data.length} total tersimpan`
+        : `${data.length} catatan tersimpan`;
+
+      list.innerHTML = data.map(item => {
+        const meal = getMealInfo(item.meal_type);
+        const mood = getMoodInfo(item.mood_id);
+
+        const foodNames = (item.food_ids || [])
+          .map(id => foods.find(food => food.id === id))
+          .filter(Boolean)
+          .map(food => food.label)
+          .join(" • ");
+
+        const moodArt = piyoArt(mood.moodClass);
+
+        return `
+          <article class="history-entry">
+            <div class="history-entry-top">
+              <span>${escapeHtml(meal.label)}</span>
+              <span>${formatHistoryTime(item.eaten_at)}</span>
+            </div>
+
+            <div class="history-main">
+              <div class="history-foods">
+                ${escapeHtml(foodNames || "Tidak ada makanan")}
+              </div>
+
+              <div class="history-mood">
+                ${moodArt}
+              </div>
+            </div>
+
+            ${item.comment ? `
+              <div class="history-comment">
+                💬 ${escapeHtml(item.comment)}
+              </div>
+            ` : ""}
+          </article>
+        `;
+      }).join("");
+    }
+
     function showToast(message){
       const toast = $("toast");
       toast.textContent = message;
@@ -1037,6 +1271,7 @@
 
         render();
         await loadTodayCount();
+        await loadHistory();
         showToast("Tersimpan 💛");
       }
     });
@@ -1044,6 +1279,9 @@
     $("date").textContent = formatDate(new Date());
     render();
     loadTodayCount();
+    loadHistory();
+
+    $("historyRefresh").addEventListener("click", loadHistory);
   </script>
 </body>
 </html>
