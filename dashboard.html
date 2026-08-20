@@ -110,6 +110,7 @@ button{font:inherit}
 .main{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:7px}
 .foods{font-size:12px;font-weight:800;color:#604A37;line-height:1.45}
 .mood{font-size:29px}
+.extra-info{margin-top:8px;padding:8px 10px;border-radius:13px;background:#FFF8DE;border:1px solid #EED78C;color:#715738;font-size:10px;line-height:1.5;font-weight:700}
 .comment{margin-top:8px;padding:9px 10px;border-radius:13px;background:#FFF3CC;border:1px solid #EED78C;font-size:10px;color:#715738;line-height:1.5;font-weight:700}
 .empty{font-size:11px;color:#A18C76;font-weight:700}
 .illustration{
@@ -308,12 +309,26 @@ async function load(){
  if(error){console.error(error);$("list").innerHTML='<div class="empty">Gagal memuat data.</div>';return}
  const total=data.length,todayKey=new Date().toISOString().slice(0,10),today=data.filter(x=>x.eaten_at.slice(0,10)===todayKey).length;
  $("total").textContent=total;$("today").textContent=today;$("comments").textContent=data.filter(x=>x.comment&&x.comment.trim()).length;
- const posIds=new Set(["happy","love","good","excited"]);$("positive").textContent=(total?Math.round(data.filter(x=>posIds.has(x.mood_id)).length/total*100):0)+"%";$("range").textContent="Terakhir diperbarui "+new Date().toLocaleString("id-ID");
+ const posIds=new Set(["happy","love","good","excited"]);
+  const positiveRows=data.filter(x=>{
+    const ids=Array.isArray(x.mood_id)?x.mood_id:[x.mood_id];
+    return ids.some(id=>posIds.has(id));
+  });
+  $("positive").textContent=(total?Math.round(positiveRows.length/total*100):0)+"%";
  const fc={};data.forEach(x=>(x.food_ids||[]).forEach(id=>fc[id]=(fc[id]||0)+1));const topF=Object.entries(fc).sort((a,b)=>b[1]-a[1]).slice(0,8),maxF=topF[0]?.[1]||1;
  $("foodBars").innerHTML=topF.length?topF.map(([id,n])=>{const f=foods.find(x=>x[0]===id);const label=String(id).startsWith("custom::")?String(id).slice("custom::".length):(f?f[2]:id);const icon=String(id).startsWith("custom::")?"🐥":(f?f[1]:"🍽️");return `<div class="barrow"><div>${icon} ${label}</div><div class="bar"><div class="fill" style="width:${n/maxF*100}%"></div></div><div>${n}</div></div>`}).join(""):'<div class="empty">Belum ada data.</div>';
- const mc={};data.forEach(x=>mc[x.mood_id]=(mc[x.mood_id]||0)+1);const topM=Object.entries(mc).sort((a,b)=>b[1]-a[1]),maxM=topM[0]?.[1]||1;
- $("moodBars").innerHTML=topM.map(([id,n])=>{const m=moods.find(x=>x[0]===id)||["","🙂",id];return `<div class="barrow"><div>${m[1]} ${m[2]}</div><div class="bar"><div class="fill" style="width:${n/maxM*100}%"></div></div><div>${n}</div></div>`}).join("");
- $("list").innerHTML=data.length?data.map(x=>{const meal=meals.find(m=>m[0]===x.meal_type),mood=moods.find(m=>m[0]===x.mood_id),names=(x.food_ids||[]).map(id=>{if(String(id).startsWith("custom::"))return "🐥 "+String(id).slice("custom::".length);const f=foods.find(f=>f[0]===id);return f?f[1]+" "+f[2]:null;}).filter(Boolean).join(" · "),t=new Date(x.eaten_at).toLocaleString("id-ID",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});return `<div class="entry"><div class="row"><span>${meal?meal[1]+" "+meal[2]:x.meal_type}</span><span>${t}</span></div><div class="main"><div class="foods">${names}</div><div class="mood">${piyoDashArt(mood?mood[0]:"neutral")}</div></div>${x.comment?`<div class="comment">💬 ${String(x.comment).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}</div>`}).join(""):'<div class="empty">Belum ada catatan.</div>';
+ const mc={};data.forEach(x=>{
+    const ids=Array.isArray(x.mood_id)?x.mood_id:[x.mood_id];
+    ids.forEach(id=>mc[id]=(mc[id]||0)+1);
+  });const topM=Object.entries(mc).sort((a,b)=>b[1]-a[1]),maxM=topM[0]?.[1]||1;
+ $("moodBars").innerHTML=topM.map(([id,n])=>{
+  const m=moods.find(x=>x[0]===id)||["neutral","",id];
+  return `<div class="barrow"><div><span style="display:inline-flex;vertical-align:middle">${piyoDashArt(m[0]||"neutral")}</span> ${m[2]}</div><div class="bar"><div class="fill" style="width:${n/maxM*100}%"></div></div><div>${n}</div></div>`;
+}).join("");
+ $("list").innerHTML=data.length?data.map(x=>{const meal=meals.find(m=>m[0]===x.meal_type),mood=moods.find(m=>m[0]===((Array.isArray(x.mood_id)?x.mood_id[0]:x.mood_id))),names=(x.food_ids||[]).map(id=>{if(String(id).startsWith("custom::"))return "🐥 "+String(id).slice("custom::".length);const f=foods.find(f=>f[0]===id);return f?f[1]+" "+f[2]:null;}).filter(Boolean).join(" · "),t=new Date(x.eaten_at).toLocaleString("id-ID",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});return `<div class="entry"><div class="row"><span>${meal?meal[1]+" "+meal[2]:x.meal_type}</span><span>${t}</span></div><div class="main"><div class="foods">${names}</div><div class="mood">${piyoDashArt(mood?mood[0]:"neutral")}</div></div>${x.soundtrack?`<div class="extra-info">🎵 ${String(x.soundtrack).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}
+${x.love_answer?`<div class="extra-info">💛 ${String(x.love_answer).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}
+${x.one_word?`<div class="extra-info">✏️ ${String(x.one_word).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}
+${x.comment?`<div class="comment">💬 ${String(x.comment).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}</div>`}).join(""):'<div class="empty">Belum ada catatan.</div>';
 }
 $("refresh").onclick=load;$("loginButton").addEventListener("click",loginHusband);
 $("loginCode").addEventListener("keydown",e=>{if(e.key==="Enter")loginHusband();});

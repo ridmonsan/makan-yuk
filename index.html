@@ -857,7 +857,25 @@
     @media(max-width:520px){
       .page-title{font-size:22px}
     }
-  </style>
+      .extra-input{
+      width:100%;
+      border:2px dashed #EFD995;
+      border-radius:17px;
+      padding:11px 12px;
+      background:#FFFDF2;
+      color:#5C4536;
+      outline:none;
+      font-size:12px;
+      line-height:1.4;
+    }
+    .extra-input:focus{
+      border-style:solid;
+      border-color:#E5C95E;
+      box-shadow:0 0 0 4px rgba(255,230,105,.24);
+    }
+    .answer-grid{grid-template-columns:repeat(2,1fr)}
+    .mood-selection-note{margin-top:8px;font-size:10px;color:#9A846A;font-weight:700}
+</style>
 </head>
 <body>
 
@@ -954,7 +972,7 @@
       <section class="card">
         <div class="section-head">
           <div class="section-icon"><span class="piyo-ui" data-piyo-ui="egg"></span></div>
-          <div><h2 class="section-title">Mau makan kapan Istriku?</h2></div>
+          <div><h2 class="section-title">Mau mam kapan Istriku?</h2></div>
         </div>
         <p class="section-sub">Pilih waktu makan kamu hari ini ya sayang.</p>
         <div id="mealGrid" class="grid meal-grid"></div>
@@ -963,7 +981,7 @@
       <section class="card">
         <div class="section-head">
           <div class="section-icon"><span class="piyo-ui" data-piyo-ui="food"></span></div>
-          <div><h2 class="section-title">Makan apa kamu hari ini istriku?</h2></div>
+          <div><h2 class="section-title">Mau mam apa kamu hari ini istriku?</h2></div>
         </div>
         <p class="section-sub">Boleh pilih lebih dari satu, kalau bingung, tulis aja makanan lain di bawah.</p>
         <div id="foodGrid" class="grid food-grid"></div>
@@ -983,10 +1001,42 @@
           <div><h2 class="section-title">Mood kamu sekarang?</h2></div>
         </div>
         <p class="section-sub">Pilih yang paling menggambarkan perasaanmu.</p>
-        <div id="moodGrid" class="grid mood-grid"></div>
+        <div id="moodGrid" class="grid mood-grid"></div><div id="selectedMoods" class="selected-foods"></div><div class="mood-selection-note">Boleh pilih lebih dari satu mood.</div>
+      </section>
+
+            <section class="card">
+        <div class="section-head">
+          <div class="section-icon"><span style="font-size:20px;">🎵</span></div>
+          <div><h2 class="section-title">Soundtrack apa hari ini?</h2></div>
+        </div>
+        <p class="section-sub">Lagu apa yang nemenin kamu hari ini?</p>
+        <input id="soundtrack" class="extra-input" type="text" maxlength="160" placeholder="Judul lagu / penyanyi..." autocomplete="off">
       </section>
 
       <section class="card">
+        <div class="section-head">
+          <div class="section-icon"><span style="font-size:20px;">💛</span></div>
+          <div><h2 class="section-title">Ibuk sayang Bapak nda?</h2></div>
+        </div>
+        <p class="section-sub">Pilih satu ya sayang.</p>
+        <div id="loveAnswerGrid" class="grid answer-grid">
+          <button class="pick meal-btn" data-love-answer="A. Sayang"><span class="icon">A</span><span class="label">A. Sayang</span></button>
+          <button class="pick meal-btn" data-love-answer="B. Sayang Banger"><span class="icon">B</span><span class="label">B. Sayang Banger</span></button>
+          <button class="pick meal-btn" data-love-answer="C. Sayang Selalu"><span class="icon">C</span><span class="label">C. Sayang Selalu</span></button>
+          <button class="pick meal-btn" data-love-answer="D. Semua Benar"><span class="icon">D</span><span class="label">D. Semua Benar</span></button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-head">
+          <div class="section-icon"><span style="font-size:20px;">✏️</span></div>
+          <div><h2 class="section-title">Satu kata buat hari ini</h2></div>
+        </div>
+        <p class="section-sub">Cuma satu kata aja, boleh apa saja.</p>
+        <input id="oneWord" class="extra-input" type="text" maxlength="60" placeholder="Contoh: tenang" autocomplete="off">
+      </section>
+
+<section class="card">
         <div class="section-head">
           <div class="section-icon"><span class="piyo-ui" data-piyo-ui="chat"></span></div>
           <div><h2 class="section-title">Apa yg mau kamu ceritain nda sayang?</h2></div>
@@ -1120,7 +1170,7 @@
       {id:"sick", moodClass:"sick", label:"Aku ga enak badan", face:"O"},
       {id:"excited", moodClass:"excited", label:"Aku lagi semangat", face:"◡"}];
 
-    const state = { meal:"", foods:new Set(), mood:"" };
+    const state = { meal:"", foods:new Set(), moods:new Set(), loveAnswer:"" };
     const $ = id => document.getElementById(id);
 
         function foodArt(kind){
@@ -1377,13 +1427,19 @@
       $("selectedFoods").innerHTML = chips.length ? chips.join("") : `<div class="empty">Belum ada makanan yang dipilih.</div>`;
 
       $("moodGrid").innerHTML = moods.map(m=>`
-        <button class="pick mood-btn ${state.mood===m.id?"sel":""}" data-mood="${m.id}">
+        <button class="pick mood-btn ${state.moods.has(m.id)?"sel":""}" data-mood="${m.id}">
           <span class="icon">${piyoArt(m.moodClass)}</span>
           <span class="label">${m.label}</span>
         </button>`).join("");
 
+      const selectedMoods = moods.filter(m=>state.moods.has(m.id));
+      if($("selectedMoods")){
+        $("selectedMoods").innerHTML = selectedMoods.length
+          ? selectedMoods.map(m=>`<span class="chip">• ${escapeHtml(m.label)}</span>`).join("")
+          : `<div class="empty">Belum ada mood yang dipilih.</div>`;
+      }
       const hasCustom = customFood.length>0;
-      $("save").disabled = !(state.meal && (state.foods.size||hasCustom) && state.mood);
+      $("save").disabled = !(state.meal && (state.foods.size||hasCustom) && state.moods.size);
     }
 
     async function loadTodayCount(){
@@ -1404,7 +1460,8 @@
 
       const last=data[0];
       if(last){
-        const mood=moods.find(m=>m.id===last.mood_id);
+        const lastMoodId=Array.isArray(last.mood_id)?last.mood_id[0]:last.mood_id;
+      const mood=moods.find(m=>m.id===lastMoodId);
         $("lastMoodCard").innerHTML = mood
           ? `<div style="display:flex;align-items:center;gap:10px">${piyoArt(mood.moodClass)}<div><b>${escapeHtml(mood.label)}</b><div style="font-size:10px;color:#9A846A;margin-top:3px">Pilihan mood terakhir</div></div></div>`
           : "Belum ada catatan.";
@@ -1417,7 +1474,7 @@
 
     async function loadHistory(){
       $("historyList").innerHTML=`<div class="history-loading">Memuat catatan...</div>`;
-      const {data,error}=await db.from("food_logs").select("id,eaten_at,meal_type,food_ids,mood_id,comment").order("eaten_at",{ascending:false}).limit(100);
+      const {data,error}=await db.from("food_logs").select("id,eaten_at,meal_type,food_ids,mood_id,comment,soundtrack,love_answer,one_word").order("eaten_at",{ascending:false}).limit(100);
       if(error){ $("historySummary").textContent="Riwayat belum bisa dimuat"; $("historyList").innerHTML=`<div class="history-empty">Maaf sayang, riwayatnya belum bisa dibuka sekarang.</div>`; return; }
       if(!data.length){ $("historySummary").textContent="Belum ada catatan"; $("historyList").innerHTML=`<div class="history-empty">Belum ada cerita di sini. Yuk mulai isi hari ini.</div>`; return; }
       const todayKey=new Date().toISOString().slice(0,10);
@@ -1460,7 +1517,20 @@
       if(fb){ const id=fb.dataset.food; state.foods.has(id)?state.foods.delete(id):state.foods.add(id); render(); return; }
 
       const moodBtn=event.target.closest("[data-mood]");
-      if(moodBtn){ state.mood=moodBtn.dataset.mood; render(); return; }
+      if(moodBtn){
+        const id=moodBtn.dataset.mood;
+        if(state.moods.has(id)) state.moods.delete(id);
+        else state.moods.add(id);
+        render();
+        return;
+      }
+
+      const loveAnswerBtn=event.target.closest("[data-love-answer]");
+      if(loveAnswerBtn){
+        state.loveAnswer=loveAnswerBtn.dataset.loveAnswer;
+        document.querySelectorAll("[data-love-answer]").forEach(btn=>btn.classList.toggle("sel",btn===loveAnswerBtn));
+        return;
+      }
 
       if(event.target.closest("#save")){
         const comment=$("comment").value.trim();
@@ -1471,11 +1541,21 @@
         const {data:{user},error:userError}=await db.auth.getUser();
         if(userError||!user){ showToast("Sesi login sudah tidak aktif"); return; }
 
-        const payload={user_id:user.id,meal_type:state.meal,food_ids:foodIds,mood_id:state.mood,comment,eaten_at:new Date().toISOString()};
+        const payload={
+          user_id:user.id,
+          meal_type:state.meal,
+          food_ids:foodIds,
+          mood_id:Array.from(state.moods),
+          soundtrack:$("soundtrack").value.trim(),
+          love_answer:state.loveAnswer,
+          one_word:$("oneWord").value.trim(),
+          comment,
+          eaten_at:new Date().toISOString()
+        };
         const {error}=await db.from("food_logs").insert(payload);
         if(error){ console.error(error); showToast("Belum tersimpan"); return; }
 
-        state.meal=""; state.foods=new Set(); state.mood=""; $("comment").value=""; $("customFood").value="";
+        state.meal=""; state.foods=new Set(); state.moods=new Set(); state.loveAnswer=""; $("comment").value=""; $("customFood").value=""; $("soundtrack").value=""; $("oneWord").value=""; document.querySelectorAll("[data-love-answer]").forEach(btn=>btn.classList.remove("sel"));
         render(); await loadHome(); await loadHistory(); goPage("riwayat"); showToast("Tersimpan");
       }
     });
