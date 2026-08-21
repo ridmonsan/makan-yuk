@@ -1182,15 +1182,32 @@ html[data-istriku-theme="horror"] .deco{opacity:.35}
 
 
 
-/* CERITAKU DETAIL POPUP */
-.history-entry{cursor:pointer}
-.history-detail-modal{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(20,16,12,.52);backdrop-filter:blur(4px)}
-.history-detail-modal.is-open{display:flex}
-.history-detail-card{position:relative;width:min(560px,100%);max-height:88vh;overflow:auto;border:1px solid var(--skin-line,#F0DFA3);border-radius:24px;background:var(--skin-card,#FFFEF4);color:var(--skin-text,#5C4536);padding:20px;box-shadow:0 24px 70px rgba(0,0,0,.28)}
-.history-detail-close{position:absolute;right:12px;top:12px;width:38px;height:38px;border:0;border-radius:50%;cursor:pointer;background:var(--skin-soft,#FFF1A8);color:var(--skin-text,#5C4536);font-size:22px;font-weight:900}
-.history-detail-title{font-size:20px;font-weight:900;padding-right:45px}.history-detail-time{font-size:11px;color:var(--skin-muted,#806A59);margin:5px 0 16px}
-.history-detail-grid{display:grid;gap:9px}.history-detail-row{padding:11px 12px;border-radius:15px;background:var(--skin-soft,#FFF1A8);background:color-mix(in srgb,var(--skin-soft,#FFF1A8) 32%,transparent);border:1px solid var(--skin-line,#F0DFA3)}
-.history-detail-label{font-size:10px;font-weight:900;color:var(--skin-muted,#806A59);margin-bottom:3px}.history-detail-value{font-size:13px;line-height:1.5;white-space:pre-wrap}
+
+
+
+/* ===== ISOLATED CERITAKU POPUP ===== */
+#istrikuHistoryPopupHost{
+  position:fixed!important;
+  inset:0!important;
+  z-index:2147483647!important;
+  display:none!important;
+  pointer-events:none!important;
+}
+#istrikuHistoryPopupHost.is-open{
+  display:block!important;
+  pointer-events:auto!important;
+}
+#istrikuHistoryPopupHost .ihp-backdrop{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  box-sizing:border-box;
+  background:rgba(20,16,12,.52);
+  backdrop-filter:blur(4px);
+}
 
 </style>
 </head>
@@ -2627,71 +2644,242 @@ document.addEventListener("click",e=>{
 
 </div>
 
-<script>loadIstrikuTheme();</script><div id="historyDetailModal" class="history-detail-modal" aria-hidden="true">
-<div class="history-detail-card" role="dialog" aria-modal="true">
-<button id="historyDetailClose" class="history-detail-close" type="button" aria-label="Tutup">×</button>
-<div id="historyDetailTitle" class="history-detail-title">Ceritamu</div>
-<div id="historyDetailTime" class="history-detail-time"></div>
-<div id="historyDetailBody" class="history-detail-grid"></div>
-</div></div>
+<script>loadIstrikuTheme();</script></div>
+
+
 <script>
+/* ===== ISTRIKU CERITAKU POPUP — ISOLATED SHADOW ROOT ===== */
 (function(){
- const modal=document.getElementById("historyDetailModal");
- const body=document.getElementById("historyDetailBody");
- const title=document.getElementById("historyDetailTitle");
- const time=document.getElementById("historyDetailTime");
- function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
- function text(v){
-   if(Array.isArray(v)) return v.map(x=>typeof x==="object"?JSON.stringify(x):x).join(" · ");
-   if(v&&typeof v==="object") return Object.entries(v).map(([k,x])=>k+": "+x).join("\n");
-   return String(v??"");
- }
- function pick(d,keys){for(const k of keys)if(d&&d[k]!==undefined&&d[k]!==null&&d[k]!=="")return d[k];return ""}
- function openDetail(d){
-   if(!modal)return;
-   const rows=[
-    ["Makanan",pick(d,["food_name","food","meal","makanan","name"])],
-    ["Mood",pick(d,["mood_id","moods","mood"])],
-    ["Soundtrack apa hari ini?",pick(d,["soundtrack","daily_soundtrack"])],
-    ["Ibuk sayang Bapak nda?",pick(d,["ibuk_sayang_bapak","love_answer","love_response"])],
-    ["Satu kata buat hari ini",pick(d,["one_word","satu_kata","daily_word"])],
-    ["Cerita",pick(d,["story","note","catatan","cerita"])],
-    ["Checklist hari ini",pick(d,["checklist","checks","home_checks"])],
-    ["Yang aku pengen",pick(d,["wants","today_wants","hari_ini_aku_pengen"])]
-   ].filter(x=>x[1]!==""&&x[1]!==null&&x[1]!==undefined);
-   const t=pick(d,["created_at","date","timestamp","logged_at"]);
-   title.textContent=d.title||"Ceritamu";
-   time.textContent=t?(isNaN(new Date(t))?text(t):new Date(t).toLocaleString("id-ID",{dateStyle:"full",timeStyle:"short"})):"";
-   body.innerHTML=rows.length?rows.map(([k,v])=>'<div class="history-detail-row"><div class="history-detail-label">'+esc(k)+'</div><div class="history-detail-value">'+esc(text(v))+'</div></div>').join(""):'<div class="history-detail-value">Belum ada detail yang tersimpan.</div>';
-   modal.classList.add("is-open");modal.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";
- }
- function close(){if(!modal)return;modal.classList.remove("is-open");modal.setAttribute("aria-hidden","true");document.body.style.overflow=""}
- window.openHistoryDetail=openDetail;window.closeHistoryDetail=close;
- document.addEventListener("click",e=>{
-   if(e.target.closest("#historyDetailClose")||e.target===modal){close();return}
-   const row=e.target.closest("[data-history-detail],.history-entry,.history-item,.history-card,.history-row,.history-record,.food-history-item");
-   if(!row)return;
-   let d={};
-   const raw=row.getAttribute("data-history-detail");
-   if(raw){try{d=JSON.parse(raw)}catch(_){}}
-   if(!Object.keys(d).length&&row.__historyData)d=row.__historyData;
-   if(!Object.keys(d).length){
-     d={
-       created_at:row.dataset.createdAt||row.dataset.date||"",
-       food_name:row.dataset.food||row.dataset.foodName||row.textContent.trim(),
-       mood_id:row.dataset.mood||"",
-       soundtrack:row.dataset.soundtrack||"",
-       ibuk_sayang_bapak:row.dataset.loveAnswer||"",
-       one_word:row.dataset.oneWord||"",
-       story:row.dataset.story||row.dataset.note||""
-     };
-   }
-   openDetail(d);
- });
- document.addEventListener("keydown",e=>{if(e.key==="Escape")close()});
+  "use strict";
+
+  const HOST_ID = "istrikuHistoryPopupHost";
+  let host = null, shadow = null, previousOverflow = "";
+
+  function esc(v){
+    return String(v ?? "").replace(/[&<>"']/g, m => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    }[m]));
+  }
+
+  function val(obj, keys){
+    for(const k of keys){
+      if(obj && obj[k] !== undefined && obj[k] !== null && obj[k] !== "")
+        return obj[k];
+    }
+    return "";
+  }
+
+  function stringify(v){
+    if(Array.isArray(v))
+      return v.map(x => typeof x === "object" ? JSON.stringify(x) : x).join(" · ");
+    if(v && typeof v === "object")
+      return Object.entries(v).map(([k,x]) => k + ": " + x).join("\n");
+    return String(v ?? "");
+  }
+
+  function ensure(){
+    if(host) return;
+
+    host = document.createElement("div");
+    host.id = HOST_ID;
+    host.setAttribute("aria-hidden","true");
+
+    shadow = host.attachShadow({mode:"closed"});
+
+    const style = document.createElement("style");
+    style.textContent = `
+      :host{all:initial}
+      .backdrop{
+        position:fixed;inset:0;z-index:2147483647;
+        display:flex;align-items:center;justify-content:center;
+        padding:16px;box-sizing:border-box;
+        background:rgba(20,16,12,.52);
+        backdrop-filter:blur(4px);
+        font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      }
+      .card{
+        position:relative;
+        width:min(560px,100%);
+        max-height:88vh;
+        overflow:auto;
+        box-sizing:border-box;
+        border:1px solid #F0DFA3;
+        border-radius:24px;
+        background:#FFFEF4;
+        color:#5C4536;
+        padding:20px;
+        box-shadow:0 24px 70px rgba(0,0,0,.28);
+      }
+      .close{
+        position:absolute;right:12px;top:12px;
+        width:38px;height:38px;border:0;border-radius:50%;
+        cursor:pointer;background:#FFF1A8;color:#5C4536;
+        font-size:22px;font-weight:900;line-height:38px;
+      }
+      .close:hover{filter:brightness(.96)}
+      .title{font-size:20px;font-weight:900;padding-right:45px}
+      .time{font-size:11px;color:#806A59;margin:5px 0 16px}
+      .grid{display:grid;gap:9px}
+      .row{padding:11px 12px;border-radius:15px;background:#FFF8D6;border:1px solid #F0DFA3}
+      .label{font-size:10px;font-weight:900;color:#806A59;margin-bottom:3px}
+      .value{font-size:13px;line-height:1.5;white-space:pre-wrap}
+      .empty{font-size:13px;color:#806A59}
+    `;
+
+    const backdrop = document.createElement("div");
+    backdrop.className = "backdrop";
+    backdrop.setAttribute("role","presentation");
+
+    const card = document.createElement("div");
+    card.className = "card";
+    card.setAttribute("role","dialog");
+    card.setAttribute("aria-modal","true");
+    card.setAttribute("aria-labelledby","ihp-title");
+
+    const close = document.createElement("button");
+    close.className = "close";
+    close.type = "button";
+    close.textContent = "×";
+    close.setAttribute("aria-label","Tutup");
+
+    const title = document.createElement("div");
+    title.className = "title";
+    title.id = "ihp-title";
+    title.textContent = "Ceritamu";
+
+    const time = document.createElement("div");
+    time.className = "time";
+
+    const grid = document.createElement("div");
+    grid.className = "grid";
+
+    card.append(close,title,time,grid);
+    backdrop.appendChild(card);
+    shadow.append(style,backdrop);
+    document.body.appendChild(host);
+
+    close.addEventListener("click", closePopup);
+    backdrop.addEventListener("click", e => {
+      if(e.target === backdrop) closePopup();
+    });
+  }
+
+  function closePopup(){
+    if(!host) return;
+    host.classList.remove("is-open");
+    host.setAttribute("aria-hidden","true");
+    host.style.setProperty("display","none","important");
+    host.style.setProperty("pointer-events","none","important");
+    document.body.style.overflow = previousOverflow;
+    document.removeEventListener("keydown", keyHandler, true);
+  }
+
+  function keyHandler(e){
+    if(e.key === "Escape"){
+      e.preventDefault();
+      e.stopPropagation();
+      closePopup();
+    }
+  }
+
+  function openPopup(data){
+    ensure();
+
+    const title = shadow.querySelector(".title");
+    const time = shadow.querySelector(".time");
+    const grid = shadow.querySelector(".grid");
+
+    const rows = [
+      ["Makanan", val(data,["food_name","food","meal","makanan","name"])],
+      ["Mood", val(data,["mood_id","moods","mood"])],
+      ["Soundtrack apa hari ini?", val(data,["soundtrack","daily_soundtrack"])],
+      ["Ibuk sayang Bapak nda?", val(data,["ibuk_sayang_bapak","love_answer","love_response"])],
+      ["Satu kata buat hari ini", val(data,["one_word","satu_kata","daily_word"])],
+      ["Cerita", val(data,["story","note","catatan","cerita"])],
+      ["Checklist hari ini", val(data,["checklist","checks","home_checks"])],
+      ["Hari ini aku pengen", val(data,["wants","today_wants","hari_ini_aku_pengen"])]
+    ].filter(x => x[1] !== "" && x[1] !== null && x[1] !== undefined);
+
+    const t = val(data,["created_at","date","timestamp","logged_at"]);
+
+    title.textContent = data.title || "Ceritamu";
+    time.textContent = t
+      ? (isNaN(new Date(t)) ? stringify(t) :
+         new Date(t).toLocaleString("id-ID",{dateStyle:"full",timeStyle:"short"}))
+      : "";
+
+    grid.innerHTML = rows.length
+      ? rows.map(([k,v]) =>
+          '<div class="row"><div class="label">'+esc(k)+
+          '</div><div class="value">'+esc(stringify(v))+
+          '</div></div>').join("")
+      : '<div class="empty">Belum ada detail yang tersimpan.</div>';
+
+    previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    host.style.setProperty("display","block","important");
+    host.style.setProperty("pointer-events","auto","important");
+    host.classList.add("is-open");
+    host.setAttribute("aria-hidden","false");
+    document.addEventListener("keydown", keyHandler, true);
+  }
+
+  function extract(row){
+    let data = {};
+    const raw = row.getAttribute("data-history-detail");
+
+    if(raw){
+      try{ data = JSON.parse(raw); }catch(_){}
+    }
+
+    if(!Object.keys(data).length && row.__historyData)
+      data = row.__historyData;
+
+    if(!Object.keys(data).length){
+      data = {
+        created_at: row.dataset.createdAt || row.dataset.date || "",
+        food_name: row.dataset.food || row.dataset.foodName || row.textContent.trim(),
+        mood_id: row.dataset.mood || "",
+        soundtrack: row.dataset.soundtrack || "",
+        ibuk_sayang_bapak: row.dataset.loveAnswer || "",
+        one_word: row.dataset.oneWord || "",
+        story: row.dataset.story || row.dataset.note || ""
+      };
+    }
+    return data;
+  }
+
+  /*
+   * One isolated delegated handler.
+   * We intentionally don't use or overwrite any existing history functions.
+   */
+  document.addEventListener("click", function(e){
+    const row = e.target.closest(
+      "[data-history-detail],.history-entry,.history-item,.history-card,.history-row,.history-record,.food-history-item"
+    );
+    if(!row) return;
+    if(row.closest("#"+HOST_ID)) return;
+
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    openPopup(extract(row));
+  }, true);
+
+  window.istrikuOpenHistoryPopup = openPopup;
+  window.istrikuCloseHistoryPopup = closePopup;
 })();
 </script>
+
+
 <script>
-new MutationObserver(()=>document.querySelectorAll(".history-item,.history-card,.history-row,.history-record,.food-history-item").forEach(x=>x.classList.add("history-entry"))).observe(document.body,{subtree:true,childList:true});
-</script></body>
+(function(){
+  const mark = () => document.querySelectorAll(
+    ".history-item,.history-card,.history-row,.history-record,.food-history-item"
+  ).forEach(x => x.classList.add("history-entry"));
+  mark();
+  new MutationObserver(mark).observe(document.body,{subtree:true,childList:true});
+})();
+</script>
+
+</body>
 </html>
