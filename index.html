@@ -1153,15 +1153,26 @@
 
     .section-title .piyo-ui{width:22px;height:22px;vertical-align:-6px;margin-right:4px}
     .home-response .piyo-ui,.catch-reward .piyo-ui,.reward-kicker .piyo-ui{width:18px;height:18px;vertical-align:-5px;margin-right:3px}
-
-.history-clickable{cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}.history-clickable:hover{transform:translateY(-1px);box-shadow:0 7px 18px rgba(118,93,39,.10)}
-.history-detail-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(60,45,30,.45)}.history-detail-modal.open{display:flex}
-.history-detail-card{width:min(650px,94vw);max-height:88vh;overflow:auto;background:#FFFDF4;border:1px solid #F0DFA3;border-radius:24px;box-shadow:0 24px 70px rgba(0,0,0,.25);padding:18px}
-.history-detail-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.history-detail-title{margin:3px 0 0;font:700 20px "Fredoka","Nunito",sans-serif;color:#5C4536}
-.history-detail-close{border:0;background:#FFF0A5;color:#5C4536;width:36px;height:36px;border-radius:50%;font-size:21px;cursor:pointer}
-.history-detail-grid{display:grid;gap:9px;margin-top:14px}.history-detail-row{background:#FFF9DF;border:1px solid #F0DFA3;border-radius:15px;padding:10px 12px}
-.history-detail-key{font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#9A846A;font-weight:900}.history-detail-value{margin-top:4px;font-size:12px;line-height:1.5;color:#5C4536;white-space:pre-wrap;overflow-wrap:anywhere}
-</style>
+/* ISTRIKU THEME ENGINE */
+html[data-theme="piyo"]{--theme-bg:#FFF8D6;--theme-bg2:#FFFDF3;--theme-card:#FFFEF4;--theme-primary:#FFD95A;--theme-secondary:#FFF1A8;--theme-text:#5C4536;--theme-muted:#806A59;--theme-line:#F0DFA3;--theme-accent:#F4A62A;--theme-shadow:rgba(118,93,39,.10);--theme-font:"Nunito",system-ui,sans-serif}
+html[data-theme="spongebob"]{--theme-bg:#BFEFFF;--theme-bg2:#F5FFFF;--theme-card:#FFFDF1;--theme-primary:#FFD92F;--theme-secondary:#7EDBFF;--theme-text:#29435C;--theme-muted:#54718A;--theme-line:#70C7E8;--theme-accent:#E88A2E;--theme-shadow:rgba(38,113,150,.16);--theme-font:"Fredoka","Nunito",system-ui,sans-serif}
+html[data-theme="horror"]{--theme-bg:#17131B;--theme-bg2:#0C0A0F;--theme-card:#211B25;--theme-primary:#D7B84C;--theme-secondary:#3A293D;--theme-text:#F2E8D5;--theme-muted:#B8A99A;--theme-line:#57444D;--theme-accent:#9C3038;--theme-shadow:rgba(0,0,0,.34);--theme-font:"Nunito",system-ui,sans-serif}
+html[data-theme="ghibli"]{--theme-bg:#EAF3DF;--theme-bg2:#FBF8EA;--theme-card:#FFFDF4;--theme-primary:#A8C98C;--theme-secondary:#DDECCB;--theme-text:#4E5A45;--theme-muted:#78806C;--theme-line:#C8D8B7;--theme-accent:#D58A65;--theme-shadow:rgba(78,90,69,.12);--theme-font:"Nunito",system-ui,sans-serif}
+html[data-theme] body{background:linear-gradient(180deg,var(--theme-bg),var(--theme-bg2));color:var(--theme-text);font-family:var(--theme-font)}
+html[data-theme] .card,html[data-theme] .pick,html[data-theme] .history-entry,html[data-theme] .history-detail-card,html[data-theme] .login-card{background:var(--theme-card);border-color:var(--theme-line)}
+html[data-theme] h1,html[data-theme] h2,html[data-theme] h3,html[data-theme] .section-title,html[data-theme] .history-detail-title{color:var(--theme-text)}
+html[data-theme] .mini,html[data-theme] .section-sub,html[data-theme] .activity-meta{color:var(--theme-muted)}
+html[data-theme] .nav-btn.active,html[data-theme] button.sel,html[data-theme] .theme-option.selected{background:var(--theme-primary);border-color:var(--theme-primary);color:var(--theme-text)}
+html[data-theme="horror"] .deco{opacity:.35;filter:saturate(.65)}
+.theme-engine-card{margin-top:12px}.theme-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}
+.theme-option{border:1px solid var(--theme-line,#F0DFA3);background:var(--theme-card,#FFFEF4);border-radius:18px;padding:11px;text-align:left;cursor:pointer;color:var(--theme-text,#5C4536);transition:.15s transform,.15s box-shadow}
+.theme-option:hover{transform:translateY(-1px)}.theme-option.selected{box-shadow:0 8px 18px var(--theme-shadow)}
+.theme-swatch{height:62px;border-radius:14px;margin-bottom:8px;border:1px solid rgba(0,0,0,.08)}
+.theme-option[data-theme-option="piyo"] .theme-swatch{background:linear-gradient(135deg,#FFF8D6 0 50%,#FFD95A 50%)}
+.theme-option[data-theme-option="spongebob"] .theme-swatch{background:linear-gradient(135deg,#BFEFFF 0 50%,#FFD92F 50%)}
+.theme-option[data-theme-option="horror"] .theme-swatch{background:linear-gradient(135deg,#17131B 0 50%,#9C3038 50%)}
+.theme-option[data-theme-option="ghibli"] .theme-swatch{background:linear-gradient(135deg,#EAF3DF 0 50%,#A8C98C 50%)}
+.theme-option-title{font-weight:900;font-size:13px}.theme-option-desc{font-size:10px;margin-top:3px;color:var(--theme-muted,#806A59);line-height:1.35}.theme-status{font-size:10px;color:var(--theme-muted);margin-top:10px}</style>
 </head>
 <body>
 
@@ -1469,7 +1480,7 @@
     </section>
 
     <!-- AKU -->
-    <section id="page-aku" class="page">
+    <section id="page-aku" class="page"><section class="card theme-engine-card"><div class="card-head"><div class="card-icon">🎨</div><div><h2>Pilih Tema</h2><div class="mini">Pilih suasana yang paling kamu suka.</div></div></div><div class="theme-options"><button type="button" class="theme-option" data-theme-option="piyo"><div class="theme-swatch"></div><div class="theme-option-title">Piyo</div><div class="theme-option-desc">Hangat, kuning, lucu dan manis.</div></button><button type="button" class="theme-option" data-theme-option="spongebob"><div class="theme-swatch"></div><div class="theme-option-title">SpongeBob</div><div class="theme-option-desc">Ceria, playful dan penuh warna laut.</div></button><button type="button" class="theme-option" data-theme-option="horror"><div class="theme-swatch"></div><div class="theme-option-title">Horror</div><div class="theme-option-desc">Gelap, misterius, tapi tetap milik kita.</div></button><button type="button" class="theme-option" data-theme-option="ghibli"><div class="theme-swatch"></div><div class="theme-option-title">Ghibli</div><div class="theme-option-desc">Lembut, natural, hangat dan tenang.</div></button></div><div id="themeStatus" class="theme-status"></div></section>
       <header style="padding:10px 6px 14px;">
         <div class="page-title"><span class="piyo-ui inline-piyo" data-piyo-ui="love"></span>Ruang Kecilmu</div>
         <div class="page-subtitle">Di sini, cerita kecil tentang harimu punya tempat untuk disimpan.</div>
@@ -1549,7 +1560,13 @@
 
   <div id="toast" class="toast">Tersimpan</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">const THEME_KEY="istriku_theme";
+const THEMES={piyo:{name:"Piyo",desc:"Hangat, kuning, lucu dan manis."},spongebob:{name:"SpongeBob",desc:"Ceria, playful dan penuh warna laut."},horror:{name:"Horror",desc:"Gelap, misterius, tapi tetap milik kita."},ghibli:{name:"Ghibli",desc:"Lembut, natural, hangat dan tenang."}};
+function applyTheme(theme){if(!THEMES[theme])theme="piyo";document.documentElement.dataset.theme=theme;localStorage.setItem(THEME_KEY,theme);document.querySelectorAll("[data-theme-option]").forEach(x=>x.classList.toggle("selected",x.dataset.themeOption===theme));const s=document.getElementById("themeStatus");if(s)s.textContent="Tema sekarang: "+THEMES[theme].name;return theme}
+async function loadTheme(){return applyTheme(localStorage.getItem(THEME_KEY)||"piyo")}
+async function setTheme(theme){applyTheme(theme);try{const {data:{user}}=await db.auth.getUser();if(user)await db.from("activity_logs").insert({user_id:user.id,activity_type:"theme_change",activity_label:"Mengganti tema ke "+THEMES[theme].name,meta:{theme}})}catch(e){console.debug("theme log skipped",e)}}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-theme-option]");if(b)void setTheme(b.dataset.themeOption)});
+</script>
   <script src="config.js"></script>
   <script>
     if (!window.APP_CONFIG || !APP_CONFIG.SUPABASE_URL || !APP_CONFIG.SUPABASE_ANON_KEY) {
@@ -2105,9 +2122,38 @@ function catchNextReward(){
       const hug=document.querySelector("[data-hug].selected")?.dataset.hug||"";
       const bapak=document.querySelector("[data-bapak].selected")?.dataset.bapak||"";
       const day=new Date().toISOString().slice(0,10);
-      const payload={day,done,want,hug,bapak};
-      localStorage.setItem(homeInteractiveKey(),JSON.stringify(payload));
-      await logActivity("home_interaction","Memperbarui pilihan Beranda",payload);
+      const statePayload={done,want,hug,bapak};
+
+      // Keep the UI working locally as a fallback.
+      localStorage.setItem(homeInteractiveKey(),JSON.stringify(statePayload));
+
+      try{
+        const {data:{user}}=await db.auth.getUser();
+        if(!user) return;
+
+        const {error}=await db.from("wife_daily_interactions").upsert({
+          user_id:user.id,
+          day,
+          done,
+          want,
+          hug_choice:hug,
+          bapak_choice:bapak,
+          updated_at:new Date().toISOString()
+        },{onConflict:"user_id,day"});
+
+        if(error){
+          console.error("wife_daily_interactions:",error);
+          return;
+        }
+
+        await logActivity(
+          "home_interaction",
+          "Memperbarui pilihan Beranda",
+          {day,done,want,hug,bapak}
+        );
+      }catch(err){
+        console.error("saveHomeInteractive:",err);
+      }
     }
     function homeBapakArt(){
       return `<svg viewBox="0 0 120 120" aria-hidden="true">
@@ -2315,16 +2361,14 @@ async function loadProfileStats(){ await loadHome();
 
       $("historyList").innerHTML=data.map(item=>{
         const meal=meals.find(m=>m.id===item.meal_type)||{label:item.meal_type};
-        const moodIds=Array.isArray(item.mood_id)?item.mood_id:(item.mood_id?[item.mood_id]:[]);
-        const moodList=moodIds.map(id=>moods.find(m=>m.id===id)).filter(Boolean);
-        const mood=moodList[0]||{moodClass:"neutral",label:"Aku biasa aja"};
+        const mood=moods.find(m=>m.id===item.mood_id)||{moodClass:"neutral",label:"Aku biasa aja"};
         const foodNames=(item.food_ids||[]).map(id=>{
           if(String(id).startsWith("custom::")) return String(id).slice(8);
           const f=foods.find(food=>food.id===id);
           return f?f.label:null;
         }).filter(Boolean).join(" • ");
         const time=new Intl.DateTimeFormat("id-ID",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}).format(new Date(item.eaten_at));
-        return `<article class="history-entry history-clickable" data-history-id="${item.id}" tabindex="0" role="button">
+        return `<article class="history-entry">
           <div class="history-entry-top"><span>${escapeHtml(meal.label)}</span><span>${time}</span></div>
           <div class="history-main"><div class="history-foods">${escapeHtml(foodNames||"Tidak ada makanan")}</div><div class="history-mood">${piyoArt(mood.moodClass)}</div></div>
           ${item.comment?`<div class="history-comment"><span class="piyo-ui inline-piyo" data-piyo-ui="chat"></span> ${escapeHtml(item.comment)}</div>`:""}
@@ -2332,10 +2376,7 @@ async function loadProfileStats(){ await loadHome();
       }).join("");
     }
 
-    function closeHistoryDetail(){const m=$("historyDetailModal");if(m){m.classList.remove("open");m.setAttribute("aria-hidden","true");}}
-async function openHistoryDetail(id){const {data,error}=await db.from("food_logs").select("id,eaten_at,meal_type,food_ids,mood_id,comment,soundtrack,love_answer,one_word").eq("id",id).maybeSingle();if(error||!data){showToast("Cerita belum bisa dibuka");return;}const meal=meals.find(m=>m.id===data.meal_type)||{label:data.meal_type};const moodIds=Array.isArray(data.mood_id)?data.mood_id:(data.mood_id?[data.mood_id]:[]);const moodNames=moodIds.map(id=>moods.find(m=>m.id===id)?.label||id).join(" • ");const foodNames=(data.food_ids||[]).map(id=>String(id).startsWith("custom::")?String(id).slice(8):(foods.find(f=>f.id===id)?.label||id)).join(" • ");const rows=[["Waktu",new Intl.DateTimeFormat("id-ID",{dateStyle:"full",timeStyle:"medium"}).format(new Date(data.eaten_at))],["Waktu makan",meal.label],["Makanan",foodNames||"Belum ada"],["Mood",moodNames||"Belum ada"],["Soundtrack apa hari ini?",data.soundtrack||"Belum diisi"],["Ibuk sayang Bapak nda?",data.love_answer||"Belum dipilih"],["Satu kata buat hari ini",data.one_word||"Belum diisi"],["Cerita",data.comment||"Belum ada cerita"]];$("historyDetailGrid").innerHTML=rows.map(([k,v])=>`<div class="history-detail-row"><div class="history-detail-key">${escapeHtml(k)}</div><div class="history-detail-value">${escapeHtml(v)}</div></div>`).join("");$("historyDetailModal").classList.add("open");$("historyDetailModal").setAttribute("aria-hidden","false");}
-document.addEventListener("click",event=>{if(event.target.id==="historyDetailClose"||event.target.id==="historyDetailModal"){closeHistoryDetail();return;}const h=event.target.closest(".history-clickable[data-history-id]");if(h)void openHistoryDetail(h.dataset.historyId);});document.addEventListener("keydown",event=>{if(event.key==="Escape")closeHistoryDetail();});
-function showToast(message){
+    function showToast(message){
       const toast=$("toast"); toast.textContent=message; toast.classList.add("show");
       clearTimeout(window.__toastTimer); window.__toastTimer=setTimeout(()=>toast.classList.remove("show"),1800);
     }
@@ -2394,7 +2435,6 @@ function showToast(message){
         const {error}=await db.from("food_logs").insert(payload);
         if(error){ console.error(error); showToast("Belum tersimpan"); return; }
         void logActivity("food_log_saved","Menyimpan cerita lengkap",{meal_type:payload.meal_type,food_ids:payload.food_ids,mood_id:payload.mood_id,soundtrack:payload.soundtrack,love_answer:payload.love_answer,one_word:payload.one_word,comment:payload.comment||""});
-        void logActivity("food_log_saved","Menyimpan cerita lengkap",{meal_type:payload.meal_type,food_ids:payload.food_ids,mood_id:payload.mood_id,soundtrack:payload.soundtrack,love_answer:payload.love_answer,one_word:payload.one_word,comment:payload.comment||""});
 
         state.meal=""; state.foods=new Set(); state.moods=new Set(); state.loveAnswer=""; $("comment").value=""; $("customFood").value=""; $("soundtrack").value=""; $("oneWord").value=""; document.querySelectorAll("[data-love-answer]").forEach(btn=>btn.classList.remove("sel"));
         render(); await loadHome(); await loadHistory(); goPage("riwayat"); showToast("Tersimpan");
@@ -2408,7 +2448,7 @@ function showToast(message){
       });
     }
 
-    async function startApp(){
+    async function startApp(){await loadTheme();
       const loggedIn=await checkExistingSession();
       if(!loggedIn){ $("loginScreen").style.display="flex"; $("appContent").style.display="none"; $("navBar").style.display="none"; return; }
 
@@ -2454,31 +2494,30 @@ function showToast(message){
 
 
     document.addEventListener("change",event=>{
-      const el=event.target;
-      if(el.matches("[data-home-check]") || el.matches("[data-home-want]")){
-        const section=el.matches("[data-home-check]")?"Hari ini aku sudah":"Hari ini aku pengen";
-        const item=el.dataset.homeCheck||el.dataset.homeWant||"";
-        void logActivity("checklist",`${el.checked?"Mencentang":"Membatalkan"}: ${item}`,{section,item,checked:el.checked});
+      if(event.target.matches("[data-home-check]") || event.target.matches("[data-home-want]")){
+        const kind=event.target.matches("[data-home-check]")?"check":"want";
+        const value=event.target.dataset.homeCheck||event.target.dataset.homeWant;
+        void logActivity(kind==="check"?"checklist_done":"daily_want",kind==="check"?`${event.target.checked?"Mencentang":"Membatalkan"}: ${value}`:`Memilih keinginan: ${value}`,{item:value,checked:event.target.checked});
         void saveHomeInteractive();
       }
     });
-
     document.addEventListener("click",event=>{
       const hug=event.target.closest("[data-hug]");
       if(hug){
         document.querySelectorAll("[data-hug]").forEach(x=>x.classList.remove("selected"));
         hug.classList.add("selected");
-        $("hugResponse").textContent=`Oke, dicatat. Nanti Bapak kasih ${hug.dataset.hug.toLowerCase()} ya`;
         void logActivity("hug_choice",`Memilih pelukan: ${hug.dataset.hug}`,{choice:hug.dataset.hug});
+        $("hugResponse").textContent=`Oke, dicatat. Nanti Bapak kasih ${hug.dataset.hug.toLowerCase()} ya`;
         void saveHomeInteractive();
         return;
       }
+
       const bapak=event.target.closest("[data-bapak]");
       if(bapak){
         document.querySelectorAll("[data-bapak]").forEach(x=>x.classList.remove("selected"));
         bapak.classList.add("selected");
+        void logActivity("bapak_guess",`Menebak Bapak: ${bapak.dataset.bapak}`,{choice:bapak.dataset.bapak});
         $("bapakResponse").textContent=homeBapakResponse(bapak.dataset.bapak);
-        void logActivity("bapak_today",`Bapak Hari Ini: ${bapak.dataset.bapak}`,{choice:bapak.dataset.bapak});
         void saveHomeInteractive();
       }
     });
@@ -2532,5 +2571,5 @@ function showToast(message){
       }
     })();
   </script>
-<div id="historyDetailModal" class="history-detail-modal" aria-hidden="true"><div class="history-detail-card" role="dialog" aria-modal="true" aria-labelledby="historyDetailTitle"><div class="history-detail-head"><div><div class="section-sub">Cerita lengkap</div><h3 id="historyDetailTitle" class="history-detail-title">Cerita Istriku</h3></div><button id="historyDetailClose" class="history-detail-close" type="button" aria-label="Tutup">×</button></div><div id="historyDetailGrid" class="history-detail-grid"></div></div></div></body>
+</body>
 </html>
