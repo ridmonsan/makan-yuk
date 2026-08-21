@@ -1179,21 +1179,18 @@ html[data-istriku-theme="horror"] .deco{opacity:.35}
 .theme-option-title{font-weight:900;font-size:13px}.theme-option-desc{font-size:10px;margin-top:3px;color:var(--skin-muted);line-height:1.35}.theme-status{font-size:10px;color:var(--skin-muted);margin-top:10px}
 
 
-/* ===== CERITAKU HISTORY DETAIL POPUP ===== */
-.history-entry{cursor:pointer;transition:transform .15s,box-shadow .15s}
-.history-entry:hover{transform:translateY(-1px);box-shadow:0 8px 18px var(--skin-shadow,rgba(118,93,39,.10))}
-.history-detail-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(20,16,12,.48);backdrop-filter:blur(4px)}
-.history-detail-modal.show{display:flex}
-.history-detail-card{width:min(560px,100%);max-height:86vh;overflow:auto;border:1px solid var(--skin-line,#F0DFA3);border-radius:24px;background:var(--skin-card,#FFFEF4);color:var(--skin-text,#5C4536);box-shadow:0 22px 60px rgba(0,0,0,.25);padding:20px;position:relative}
-.history-detail-close{position:absolute;right:14px;top:14px;width:36px;height:36px;border:0;border-radius:50%;background:var(--skin-soft,#FFF1A8);color:var(--skin-text,#5C4536);font-size:20px;font-weight:900;cursor:pointer}
-.history-detail-title{font-size:20px;font-weight:1000;padding-right:44px;margin-bottom:4px}
-.history-detail-time{font-size:11px;color:var(--skin-muted,#806A59);margin-bottom:16px}
-.history-detail-grid{display:grid;gap:10px}
-.history-detail-row{padding:11px 12px;border-radius:15px;background:color-mix(in srgb,var(--skin-soft,#FFF1A8) 35%,transparent);border:1px solid var(--skin-line,#F0DFA3)}
-.history-detail-label{font-size:10px;font-weight:900;color:var(--skin-muted,#806A59);margin-bottom:4px}
-.history-detail-value{font-size:13px;line-height:1.5;white-space:pre-wrap}
-.history-detail-empty{color:var(--skin-muted,#806A59)}
-@media(max-width:520px){.history-detail-modal{padding:10px}.history-detail-card{max-height:90vh;border-radius:20px;padding:16px}}
+
+
+
+/* CERITAKU DETAIL POPUP */
+.history-entry{cursor:pointer}
+.history-detail-modal{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(20,16,12,.52);backdrop-filter:blur(4px)}
+.history-detail-modal.is-open{display:flex}
+.history-detail-card{position:relative;width:min(560px,100%);max-height:88vh;overflow:auto;border:1px solid var(--skin-line,#F0DFA3);border-radius:24px;background:var(--skin-card,#FFFEF4);color:var(--skin-text,#5C4536);padding:20px;box-shadow:0 24px 70px rgba(0,0,0,.28)}
+.history-detail-close{position:absolute;right:12px;top:12px;width:38px;height:38px;border:0;border-radius:50%;cursor:pointer;background:var(--skin-soft,#FFF1A8);color:var(--skin-text,#5C4536);font-size:22px;font-weight:900}
+.history-detail-title{font-size:20px;font-weight:900;padding-right:45px}.history-detail-time{font-size:11px;color:var(--skin-muted,#806A59);margin:5px 0 16px}
+.history-detail-grid{display:grid;gap:9px}.history-detail-row{padding:11px 12px;border-radius:15px;background:var(--skin-soft,#FFF1A8);background:color-mix(in srgb,var(--skin-soft,#FFF1A8) 32%,transparent);border:1px solid var(--skin-line,#F0DFA3)}
+.history-detail-label{font-size:10px;font-weight:900;color:var(--skin-muted,#806A59);margin-bottom:3px}.history-detail-value{font-size:13px;line-height:1.5;white-space:pre-wrap}
 
 </style>
 </head>
@@ -1503,15 +1500,7 @@ html[data-istriku-theme="horror"] .deco{opacity:.35}
     </section>
 
     <!-- AKU -->
-    <section id="page-aku" class="page"><section class="card theme-engine-card">
-<div class="card-head"><div class="card-icon">🎨</div><div><h2>Pilih Tema</h2><div class="mini">Pilih suasana yang paling kamu suka.</div></div></div>
-<div class="theme-options">
-<button type="button" class="theme-option" data-theme-option="piyo"><div class="theme-swatch"></div><div class="theme-option-title">Piyo</div><div class="theme-option-desc">Hangat, kuning, lucu dan manis.</div></button>
-<button type="button" class="theme-option" data-theme-option="spongebob"><div class="theme-swatch"></div><div class="theme-option-title">SpongeBob</div><div class="theme-option-desc">Ceria, playful dan penuh warna laut.</div></button>
-<button type="button" class="theme-option" data-theme-option="horror"><div class="theme-swatch"></div><div class="theme-option-title">Horror</div><div class="theme-option-desc">Gelap, misterius, tapi tetap milik kita.</div></button>
-<button type="button" class="theme-option" data-theme-option="ghibli"><div class="theme-swatch"></div><div class="theme-option-title">Ghibli</div><div class="theme-option-desc">Lembut, natural, hangat dan tenang.</div></button>
-</div><div id="themeStatus" class="theme-status"></div>
-</section>
+    <section id="page-aku" class="page">
       <header style="padding:10px 6px 14px;">
         <div class="page-title"><span class="piyo-ui inline-piyo" data-piyo-ui="love"></span>Ruang Kecilmu</div>
         <div class="page-subtitle">Di sini, cerita kecil tentang harimu punya tempat untuk disimpan.</div>
@@ -1570,7 +1559,15 @@ html[data-istriku-theme="horror"] .deco{opacity:.35}
           <div><h2 class="section-title">Akses Ruang Kecilku</h2></div>
         </div>
         <p class="section-sub">Selama kamu tetap di sini, ruang kecil ini akan selalu siap menemani ceritamu.</p>
-        <button id="logoutButton" class="danger-btn">Atur Akses Ruangku</button>
+        <button id="logoutButton" class="danger-btn">Atur Akses Ruangku</button><section class="card theme-engine-card">
+<div class="card-head"><div class="card-icon">🎨</div><div><h2>Pilih Tema</h2><div class="mini">Pilih suasana yang paling kamu suka.</div></div></div>
+<div class="theme-options">
+<button type="button" class="theme-option" data-theme-option="piyo"><div class="theme-swatch"></div><div class="theme-option-title">Piyo</div><div class="theme-option-desc">Hangat, kuning, lucu dan manis.</div></button>
+<button type="button" class="theme-option" data-theme-option="spongebob"><div class="theme-swatch"></div><div class="theme-option-title">SpongeBob</div><div class="theme-option-desc">Ceria, playful dan penuh warna laut.</div></button>
+<button type="button" class="theme-option" data-theme-option="horror"><div class="theme-swatch"></div><div class="theme-option-title">Horror</div><div class="theme-option-desc">Gelap, misterius, tapi tetap milik kita.</div></button>
+<button type="button" class="theme-option" data-theme-option="ghibli"><div class="theme-swatch"></div><div class="theme-option-title">Ghibli</div><div class="theme-option-desc">Lembut, natural, hangat dan tenang.</div></button>
+</div><div id="themeStatus" class="theme-status"></div>
+</section>
       </section>
     </section>
 
@@ -2627,25 +2624,74 @@ document.addEventListener("click",e=>{
 });
 </script>
 
-<div id="historyDetailModal" class="history-detail-modal" aria-hidden="true">
-  <div class="history-detail-card" role="dialog" aria-modal="true" aria-labelledby="historyDetailTitle">
-    <button class="history-detail-close" id="historyDetailClose" type="button" aria-label="Tutup">×</button>
-    <div id="historyDetailTitle" class="history-detail-title">Ceritamu</div>
-    <div id="historyDetailTime" class="history-detail-time"></div>
-    <div id="historyDetailBody" class="history-detail-grid"></div>
-  </div>
+
 </div>
+
+<script>loadIstrikuTheme();</script><div id="historyDetailModal" class="history-detail-modal" aria-hidden="true">
+<div class="history-detail-card" role="dialog" aria-modal="true">
+<button id="historyDetailClose" class="history-detail-close" type="button" aria-label="Tutup">×</button>
+<div id="historyDetailTitle" class="history-detail-title">Ceritamu</div>
+<div id="historyDetailTime" class="history-detail-time"></div>
+<div id="historyDetailBody" class="history-detail-grid"></div>
+</div></div>
 <script>
 (function(){
-  const selectors=[".history-item",".history-card",".history-row",".history-record",".food-history-item"];
-  const mark=()=>{
-    selectors.forEach(s=>document.querySelectorAll(s).forEach(x=>{
-      if(!x.classList.contains("history-entry"))x.classList.add("history-entry");
-    }));
-  };
-  mark();
-  new MutationObserver(mark).observe(document.body,{subtree:true,childList:true});
+ const modal=document.getElementById("historyDetailModal");
+ const body=document.getElementById("historyDetailBody");
+ const title=document.getElementById("historyDetailTitle");
+ const time=document.getElementById("historyDetailTime");
+ function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+ function text(v){
+   if(Array.isArray(v)) return v.map(x=>typeof x==="object"?JSON.stringify(x):x).join(" · ");
+   if(v&&typeof v==="object") return Object.entries(v).map(([k,x])=>k+": "+x).join("\n");
+   return String(v??"");
+ }
+ function pick(d,keys){for(const k of keys)if(d&&d[k]!==undefined&&d[k]!==null&&d[k]!=="")return d[k];return ""}
+ function openDetail(d){
+   if(!modal)return;
+   const rows=[
+    ["Makanan",pick(d,["food_name","food","meal","makanan","name"])],
+    ["Mood",pick(d,["mood_id","moods","mood"])],
+    ["Soundtrack apa hari ini?",pick(d,["soundtrack","daily_soundtrack"])],
+    ["Ibuk sayang Bapak nda?",pick(d,["ibuk_sayang_bapak","love_answer","love_response"])],
+    ["Satu kata buat hari ini",pick(d,["one_word","satu_kata","daily_word"])],
+    ["Cerita",pick(d,["story","note","catatan","cerita"])],
+    ["Checklist hari ini",pick(d,["checklist","checks","home_checks"])],
+    ["Yang aku pengen",pick(d,["wants","today_wants","hari_ini_aku_pengen"])]
+   ].filter(x=>x[1]!==""&&x[1]!==null&&x[1]!==undefined);
+   const t=pick(d,["created_at","date","timestamp","logged_at"]);
+   title.textContent=d.title||"Ceritamu";
+   time.textContent=t?(isNaN(new Date(t))?text(t):new Date(t).toLocaleString("id-ID",{dateStyle:"full",timeStyle:"short"})):"";
+   body.innerHTML=rows.length?rows.map(([k,v])=>'<div class="history-detail-row"><div class="history-detail-label">'+esc(k)+'</div><div class="history-detail-value">'+esc(text(v))+'</div></div>').join(""):'<div class="history-detail-value">Belum ada detail yang tersimpan.</div>';
+   modal.classList.add("is-open");modal.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";
+ }
+ function close(){if(!modal)return;modal.classList.remove("is-open");modal.setAttribute("aria-hidden","true");document.body.style.overflow=""}
+ window.openHistoryDetail=openDetail;window.closeHistoryDetail=close;
+ document.addEventListener("click",e=>{
+   if(e.target.closest("#historyDetailClose")||e.target===modal){close();return}
+   const row=e.target.closest("[data-history-detail],.history-entry,.history-item,.history-card,.history-row,.history-record,.food-history-item");
+   if(!row)return;
+   let d={};
+   const raw=row.getAttribute("data-history-detail");
+   if(raw){try{d=JSON.parse(raw)}catch(_){}}
+   if(!Object.keys(d).length&&row.__historyData)d=row.__historyData;
+   if(!Object.keys(d).length){
+     d={
+       created_at:row.dataset.createdAt||row.dataset.date||"",
+       food_name:row.dataset.food||row.dataset.foodName||row.textContent.trim(),
+       mood_id:row.dataset.mood||"",
+       soundtrack:row.dataset.soundtrack||"",
+       ibuk_sayang_bapak:row.dataset.loveAnswer||"",
+       one_word:row.dataset.oneWord||"",
+       story:row.dataset.story||row.dataset.note||""
+     };
+   }
+   openDetail(d);
+ });
+ document.addEventListener("keydown",e=>{if(e.key==="Escape")close()});
 })();
 </script>
-<script>loadIstrikuTheme();</script></body>
+<script>
+new MutationObserver(()=>document.querySelectorAll(".history-item,.history-card,.history-row,.history-record,.food-history-item").forEach(x=>x.classList.add("history-entry"))).observe(document.body,{subtree:true,childList:true});
+</script></body>
 </html>
