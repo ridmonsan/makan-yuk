@@ -1399,7 +1399,7 @@
           <div><h2 class="section-title">Soundtrack apa hari ini?</h2></div>
         </div>
         <p class="section-sub">Lagu apa yang nemenin kamu hari ini atau yang sesusai dengan mood kamu sekarang?</p>
-        <input id="soundtrack" class="extra-input" type="text" maxlength="160" placeholder="Judul lagu / penyanyi..." autocomplete="off">
+        <input id="soundtrack" data-activity-field="soundtrack" class="extra-input" type="text" maxlength="160" placeholder="Judul lagu / penyanyi..." autocomplete="off">
       </section>
 
       <section class="card">
@@ -1422,7 +1422,7 @@
           <div><h2 class="section-title">Satu kata buat hari ini</h2></div>
         </div>
         <p class="section-sub">Satu kata aja, boleh apa aja.</p>
-        <input id="oneWord" class="extra-input" type="text" maxlength="60" placeholder="Contoh: tenang" autocomplete="off">
+        <input id="oneWord" data-activity-field="one_word" class="extra-input" type="text" maxlength="60" placeholder="Contoh: tenang" autocomplete="off">
       </section>
 
 <section class="card">
@@ -1431,7 +1431,7 @@
           <div><h2 class="section-title">Apa yg mau kamu ceritain sayang?</h2></div>
         </div>
         <p class="section-sub">Tulis disini ya, aku pasti dengerin.</p>
-        <textarea id="comment" placeholder="Tulis ceritamu di sini..."></textarea>
+        <textarea id="comment" data-activity-field="comment" placeholder="Tulis ceritamu di sini..."></textarea>
       </section>
 
       <section class="card save-card">
@@ -2436,7 +2436,19 @@ async function loadProfileStats(){ await loadHome();
 
 
 
-    document.addEventListener("change",event=>{
+    
+    document.addEventListener("change",async(event)=>{
+      const el=event.target;
+      if(el.matches("[data-home-check],[data-home-want]")){
+        const label=el.dataset.homeCheck||el.dataset.homeWant||el.value||el.id;
+        void logActivity("checklist",`${el.checked?"Mencentang":"Membatalkan"}: ${label}`,{item:label,checked:el.checked});
+      }
+      if(el.matches("[data-activity-field]")){
+        const key=el.dataset.activityField;
+        void logActivity("daily_answer",`Mengisi ${key}`,{field:key,value:el.value||""});
+      }
+    });
+document.addEventListener("change",event=>{
       if(event.target.matches("[data-home-check]") || event.target.matches("[data-home-want]")){
         const kind=event.target.matches("[data-home-check]")?"check":"want";
         const value=event.target.dataset.homeCheck||event.target.dataset.homeWant;
@@ -2513,6 +2525,18 @@ async function loadProfileStats(){ await loadHome();
         bindRewardPopup();
       }
     })();
-  </script>
+  
+    const activityFieldTimers={};
+    function logTextFieldActivity(el){
+      const key=el.dataset.activityField;
+      clearTimeout(activityFieldTimers[key]);
+      activityFieldTimers[key]=setTimeout(()=>{
+        if((el.value||"").trim()) void logActivity("daily_answer",`Mengisi ${key}`,{field:key,value:el.value.trim()});
+      },700);
+    }
+    document.addEventListener("input",e=>{
+      if(e.target.matches("[data-activity-field]")) logTextFieldActivity(e.target);
+    });
+</script>
 </body>
 </html>

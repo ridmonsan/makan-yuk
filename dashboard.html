@@ -152,6 +152,19 @@ button{font:inherit}
     .activity-meta{font-size:9px;color:#9A846A;margin-top:2px;line-height:1.3}
     .activity-time{font-size:9px;color:#9A846A;white-space:nowrap}
     .dashboard-piyo-icon{width:28px;height:28px;display:block}
+
+    .activity-item{cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}
+    .activity-item:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,.08)}
+    .activity-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(40,30,20,.42)}
+    .activity-modal.open{display:flex}
+    .activity-modal-card{width:min(620px,96vw);max-height:86vh;overflow:auto;background:var(--theme-card,#fffdf4);border:1px solid var(--theme-line,#eadfb4);border-radius:24px;box-shadow:0 20px 60px rgba(0,0,0,.22);padding:18px}
+    .activity-modal-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+    .activity-modal-title{font:700 18px var(--theme-display,system-ui);margin:0;color:var(--theme-text,#5a4433)}
+    .activity-modal-close{border:0;background:var(--theme-accent-soft,#fff0a5);color:var(--theme-text,#5a4433);width:34px;height:34px;border-radius:50%;font-size:20px;cursor:pointer}
+    .activity-detail-grid{display:grid;gap:8px;margin-top:14px}
+    .activity-detail-row{background:var(--theme-bg2,#fffdf3);border:1px solid var(--theme-line,#eadfb4);border-radius:14px;padding:10px}
+    .activity-detail-key{font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--theme-muted,#9a846a);font-weight:800}
+    .activity-detail-value{margin-top:3px;font-size:12px;color:var(--theme-text,#5a4433);white-space:pre-wrap;overflow-wrap:anywhere}
 </style></head>
 <body>
   <div id="loginScreen" class="login-screen">
@@ -384,6 +397,7 @@ function piyoDashArt(kind="happy"){
         return;
       }
       const rows=data||[];
+      window.__activityRows=rows;
       const todayKey=new Date().toISOString().slice(0,10);
       const todayRows=rows.filter(x=>x.created_at.slice(0,10)===todayKey);
       $("activityTotal").textContent=rows.length;
@@ -399,7 +413,7 @@ function piyoDashArt(kind="happy"){
         const t=new Date(row.created_at);
         const time=new Intl.DateTimeFormat("id-ID",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}).format(t);
         const typeLabel=row.activity_type.replaceAll("_"," ");
-        return `<div class="activity-item">
+        return `<div class="activity-item" data-activity-index="${rows.indexOf(row)}" tabindex="0" role="button">
           <div class="activity-icon">${activityIcon(row.activity_type)}</div>
           <div class="activity-main">
             <div class="activity-label">${String(row.activity_label||typeLabel).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>
@@ -451,6 +465,63 @@ $("refresh").onclick=load;$("loginButton").addEventListener("click",loginHusband
 $("loginCode").addEventListener("keydown",e=>{if(e.key==="Enter")loginHusband();});
 $("logoutButton").addEventListener("click",async()=>{await db.auth.signOut();window.location.reload();});
 startDashboard();
+
+    function escActivity(v){
+      return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+    }
+    function openActivityDetail(row){
+      const modal=$("activityDetailModal"), grid=$("activityDetailGrid");
+      if(!modal||!grid) return;
+      const created=new Date(row.created_at);
+      const details=[
+        ["O que aconteceu",row.activity_label||row.activity_type],
+        ["Tipo",row.activity_type],
+        ["Waktu",new Intl.DateTimeFormat("id-ID",{dateStyle:"full",timeStyle:"medium"}).format(created)],
+      ];
+      const meta=row.meta&&typeof row.meta==="object"?row.meta:{};
+      Object.entries(meta).forEach(([k,v])=>{
+        const label=k.replaceAll("_"," ");
+        const value=typeof v==="object"?JSON.stringify(v,null,2):String(v);
+        details.push([label,value]);
+      });
+      grid.innerHTML=details.map(([k,v])=>`<div class="activity-detail-row"><div class="activity-detail-key">${escActivity(k)}</div><div class="activity-detail-value">${escActivity(v)}</div></div>`).join("");
+      modal.classList.add("open"); modal.setAttribute("aria-hidden","false");
+    }
+    function closeActivityDetail(){
+      const modal=$("activityDetailModal");
+      if(!modal) return;
+      modal.classList.remove("open"); modal.setAttribute("aria-hidden","true");
+    }
+    document.addEventListener("click",e=>{
+      const item=e.target.closest(".activity-item[data-activity-index]");
+      if(item){
+        const row=window.__activityRows?.[Number(item.dataset.activityIndex)];
+        if(row) openActivityDetail(row);
+      }
+      if(e.target.id==="activityDetailClose" || e.target.id==="activityDetailModal") closeActivityDetail();
+    });
+    document.addEventListener("keydown",e=>{
+      if(e.key==="Escape") closeActivityDetail();
+      const item=e.target.closest?.(".activity-item[data-activity-index]");
+      if(item && (e.key==="Enter"||e.key===" ")){
+        e.preventDefault();
+        const row=window.__activityRows?.[Number(item.dataset.activityIndex)];
+        if(row) openActivityDetail(row);
+      }
+    });
 </script>
+
+    <div id="activityDetailModal" class="activity-modal" aria-hidden="true">
+      <div class="activity-modal-card" role="dialog" aria-modal="true" aria-labelledby="activityDetailTitle">
+        <div class="activity-modal-head">
+          <div>
+            <div class="mini">Detail aktivitas</div>
+            <h3 id="activityDetailTitle" class="activity-modal-title">Aktivitas Istriku</h3>
+          </div>
+          <button id="activityDetailClose" class="activity-modal-close" type="button" aria-label="Tutup">×</button>
+        </div>
+        <div id="activityDetailGrid" class="activity-detail-grid"></div>
+      </div>
+    </div>
 </body>
 </html>
