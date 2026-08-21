@@ -1399,7 +1399,7 @@
           <div><h2 class="section-title">Soundtrack apa hari ini?</h2></div>
         </div>
         <p class="section-sub">Lagu apa yang nemenin kamu hari ini atau yang sesusai dengan mood kamu sekarang?</p>
-        <input id="soundtrack" data-activity-field="soundtrack" class="extra-input" type="text" maxlength="160" placeholder="Judul lagu / penyanyi..." autocomplete="off">
+        <input id="soundtrack" class="extra-input" type="text" maxlength="160" placeholder="Judul lagu / penyanyi..." autocomplete="off">
       </section>
 
       <section class="card">
@@ -1422,7 +1422,7 @@
           <div><h2 class="section-title">Satu kata buat hari ini</h2></div>
         </div>
         <p class="section-sub">Satu kata aja, boleh apa aja.</p>
-        <input id="oneWord" data-activity-field="one_word" class="extra-input" type="text" maxlength="60" placeholder="Contoh: tenang" autocomplete="off">
+        <input id="oneWord" class="extra-input" type="text" maxlength="60" placeholder="Contoh: tenang" autocomplete="off">
       </section>
 
 <section class="card">
@@ -1431,7 +1431,7 @@
           <div><h2 class="section-title">Apa yg mau kamu ceritain sayang?</h2></div>
         </div>
         <p class="section-sub">Tulis disini ya, aku pasti dengerin.</p>
-        <textarea id="comment" data-activity-field="comment" placeholder="Tulis ceritamu di sini..."></textarea>
+        <textarea id="comment" placeholder="Tulis ceritamu di sini..."></textarea>
       </section>
 
       <section class="card save-card">
@@ -2091,12 +2091,44 @@ function catchNextReward(){
       }
       $("bapakTodayArt").innerHTML=homeBapakArt();
     }
-    function saveHomeInteractive(){
+    async function saveHomeInteractive(){
       const done=[...document.querySelectorAll("[data-home-check]:checked")].map(x=>x.dataset.homeCheck);
       const want=[...document.querySelectorAll("[data-home-want]:checked")].map(x=>x.dataset.homeWant);
       const hug=document.querySelector("[data-hug].selected")?.dataset.hug||"";
       const bapak=document.querySelector("[data-bapak].selected")?.dataset.bapak||"";
-      localStorage.setItem(homeInteractiveKey(),JSON.stringify({done,want,hug,bapak}));
+      const day=new Date().toISOString().slice(0,10);
+      const statePayload={done,want,hug,bapak};
+
+      // Keep the UI working locally as a fallback.
+      localStorage.setItem(homeInteractiveKey(),JSON.stringify(statePayload));
+
+      try{
+        const {data:{user}}=await db.auth.getUser();
+        if(!user) return;
+
+        const {error}=await db.from("wife_daily_interactions").upsert({
+          user_id:user.id,
+          day,
+          done,
+          want,
+          hug_choice:hug,
+          bapak_choice:bapak,
+          updated_at:new Date().toISOString()
+        },{onConflict:"user_id,day"});
+
+        if(error){
+          console.error("wife_daily_interactions:",error);
+          return;
+        }
+
+        await logActivity(
+          "home_interaction",
+          "Memperbarui pilihan Beranda",
+          {day,done,want,hug,bapak}
+        );
+      }catch(err){
+        console.error("saveHomeInteractive:",err);
+      }
     }
     function homeBapakArt(){
       return `<svg viewBox="0 0 120 120" aria-hidden="true">
@@ -2377,7 +2409,7 @@ async function loadProfileStats(){ await loadHome();
         };
         const {error}=await db.from("food_logs").insert(payload);
         if(error){ console.error(error); showToast("Belum tersimpan"); return; }
-        void logActivity("food_log_saved","Menyimpan cerita makanan",{meal_type:payload.meal_type,food_ids:payload.food_ids,mood_id:payload.mood_id,soundtrack:payload.soundtrack,love_answer:payload.love_answer,one_word:payload.one_word,has_comment:!!payload.comment});
+        void logActivity("food_log_saved","Menyimpan cerita lengkap",{meal_type:payload.meal_type,food_ids:payload.food_ids,mood_id:payload.mood_id,soundtrack:payload.soundtrack,love_answer:payload.love_answer,one_word:payload.one_word,comment:payload.comment||""});
 
         state.meal=""; state.foods=new Set(); state.moods=new Set(); state.loveAnswer=""; $("comment").value=""; $("customFood").value=""; $("soundtrack").value=""; $("oneWord").value=""; document.querySelectorAll("[data-love-answer]").forEach(btn=>btn.classList.remove("sel"));
         render(); await loadHome(); await loadHistory(); goPage("riwayat"); showToast("Tersimpan");
@@ -2436,24 +2468,12 @@ async function loadProfileStats(){ await loadHome();
 
 
 
-    
-    document.addEventListener("change",async(event)=>{
-      const el=event.target;
-      if(el.matches("[data-home-check],[data-home-want]")){
-        const label=el.dataset.homeCheck||el.dataset.homeWant||el.value||el.id;
-        void logActivity("checklist",`${el.checked?"Mencentang":"Membatalkan"}: ${label}`,{item:label,checked:el.checked});
-      }
-      if(el.matches("[data-activity-field]")){
-        const key=el.dataset.activityField;
-        void logActivity("daily_answer",`Mengisi ${key}`,{field:key,value:el.value||""});
-      }
-    });
-document.addEventListener("change",event=>{
+    document.addEventListener("change",event=>{
       if(event.target.matches("[data-home-check]") || event.target.matches("[data-home-want]")){
         const kind=event.target.matches("[data-home-check]")?"check":"want";
         const value=event.target.dataset.homeCheck||event.target.dataset.homeWant;
         void logActivity(kind==="check"?"checklist_done":"daily_want",kind==="check"?`${event.target.checked?"Mencentang":"Membatalkan"}: ${value}`:`Memilih keinginan: ${value}`,{item:value,checked:event.target.checked});
-        saveHomeInteractive();
+        void saveHomeInteractive();
       }
     });
     document.addEventListener("click",event=>{
@@ -2463,7 +2483,7 @@ document.addEventListener("change",event=>{
         hug.classList.add("selected");
         void logActivity("hug_choice",`Memilih pelukan: ${hug.dataset.hug}`,{choice:hug.dataset.hug});
         $("hugResponse").textContent=`Oke, dicatat. Nanti Bapak kasih ${hug.dataset.hug.toLowerCase()} ya`;
-        saveHomeInteractive();
+        void saveHomeInteractive();
         return;
       }
 
@@ -2473,7 +2493,7 @@ document.addEventListener("change",event=>{
         bapak.classList.add("selected");
         void logActivity("bapak_guess",`Menebak Bapak: ${bapak.dataset.bapak}`,{choice:bapak.dataset.bapak});
         $("bapakResponse").textContent=homeBapakResponse(bapak.dataset.bapak);
-        saveHomeInteractive();
+        void saveHomeInteractive();
       }
     });
         startApp();
@@ -2525,18 +2545,6 @@ document.addEventListener("change",event=>{
         bindRewardPopup();
       }
     })();
-  
-    const activityFieldTimers={};
-    function logTextFieldActivity(el){
-      const key=el.dataset.activityField;
-      clearTimeout(activityFieldTimers[key]);
-      activityFieldTimers[key]=setTimeout(()=>{
-        if((el.value||"").trim()) void logActivity("daily_answer",`Mengisi ${key}`,{field:key,value:el.value.trim()});
-      },700);
-    }
-    document.addEventListener("input",e=>{
-      if(e.target.matches("[data-activity-field]")) logTextFieldActivity(e.target);
-    });
-</script>
+  </script>
 </body>
 </html>
