@@ -153,11 +153,20 @@ button{font:inherit}
     .activity-time{font-size:9px;color:#9A846A;white-space:nowrap}
     .dashboard-piyo-icon{width:28px;height:28px;display:block}
 
-/* ===== DASHBOARD DETAIL POPUP — SINGLE OWNER ===== */
-#detailModal{position:fixed!important;inset:0!important;z-index:10000!important;display:none;align-items:center;justify-content:center;padding:14px;box-sizing:border-box;background:rgba(54,41,29,.48);backdrop-filter:blur(3px)}
-#detailModal.open{display:flex}
-#detailModal .detail-card{width:min(620px,94vw);max-height:88vh;overflow:auto}
-#detailModal .detail-close{cursor:pointer}
+    .detail-modal{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(55,42,30,.48)}
+    .detail-modal.open{display:flex}
+    .detail-card{width:min(680px,96vw);max-height:88vh;overflow:auto;background:#FFFEF4;border:1px solid #F0DFA3;border-radius:24px;box-shadow:0 22px 70px rgba(0,0,0,.25);padding:18px}
+    .detail-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+    .detail-kicker{font-size:9px;text-transform:uppercase;letter-spacing:.6px;color:#9A846A;font-weight:900}
+    .detail-title{margin:3px 0 0;font:700 20px "Fredoka","Nunito",sans-serif;color:#5C4536}
+    .detail-close{border:0;background:#FFF3A8;color:#5C4536;width:36px;height:36px;border-radius:50%;font-size:21px;cursor:pointer}
+    .detail-grid{display:grid;gap:9px;margin-top:14px}
+    .detail-row{background:#FFFDF2;border:1px solid #F0DFA3;border-radius:15px;padding:10px 12px}
+    .detail-label{font-size:9px;color:#9A846A;text-transform:uppercase;letter-spacing:.45px;font-weight:900}
+    .detail-value{margin-top:4px;color:#5C4536;font-size:12px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
+    .entry.clickable{cursor:pointer}
+    .entry.clickable:hover{box-shadow:0 7px 18px rgba(118,93,39,.10);transform:translateY(-1px)}
+
 
 </style></head>
 <body>
@@ -391,7 +400,7 @@ function piyoDashArt(kind="happy"){
         return;
       }
       const rows=data||[];
- window.__activityRows=rows;
+      window.__activityRows=rows;
       const todayKey=new Date().toISOString().slice(0,10);
       const todayRows=rows.filter(x=>x.created_at.slice(0,10)===todayKey);
       $("activityTotal").textContent=rows.length;
@@ -407,7 +416,7 @@ function piyoDashArt(kind="happy"){
         const t=new Date(row.created_at);
         const time=new Intl.DateTimeFormat("id-ID",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}).format(t);
         const typeLabel=row.activity_type.replaceAll("_"," ");
-        return `<div class="activity-item">
+        return `<div class="activity-item" data-activity-index="${rows.indexOf(row)}" tabindex="0" role="button">
           <div class="activity-icon">${activityIcon(row.activity_type)}</div>
           <div class="activity-main">
             <div class="activity-label">${String(row.activity_label||typeLabel).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>
@@ -418,8 +427,68 @@ function piyoDashArt(kind="happy"){
       }).join("");
     }
 
+
+const escDetail=v=>String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+function openDetail(title,kicker,rows){
+  $("detailKicker").textContent=kicker||"Detail";
+  $("detailTitle").textContent=title||"Cerita Istriku";
+  $("detailGrid").innerHTML=rows.map(([k,v])=>`<div class="detail-row"><div class="detail-label">${escDetail(k)}</div><div class="detail-value">${escDetail(v||"—")}</div></div>`).join("");
+  $("detailModal").classList.add("open");
+  $("detailModal").setAttribute("aria-hidden","false");
+}
+function closeDetail(){
+  $("detailModal").classList.remove("open");
+  $("detailModal").setAttribute("aria-hidden","true");
+}
+function openFoodLogDetail(x){
+  const meal=meals.find(m=>m[0]===x.meal_type);
+  const ids=Array.isArray(x.mood_id)?x.mood_id:(x.mood_id?[x.mood_id]:[]);
+  const moodNames=ids.map(id=>moods.find(m=>m[0]===id)?.[2]||id).join(", ");
+  const foodsText=(x.food_ids||[]).map(id=>{
+    if(String(id).startsWith("custom::")) return String(id).slice(9);
+    const f=foods.find(f=>f[0]===id); return f?f[2]:id;
+  }).join(", ");
+  const rows=[
+    ["Waktu",new Date(x.eaten_at).toLocaleString("id-ID",{dateStyle:"full",timeStyle:"medium"})],
+    ["Waktu makan",meal?meal[1]:x.meal_type],
+    ["Makanan",foodsText||"—"],
+    ["Mood",moodNames||"—"],
+    ["Soundtrack apa hari ini?",x.soundtrack||"—"],
+    ["Ibuk sayang Bapak nda?",x.love_answer||"—"],
+    ["Satu kata buat hari ini",x.one_word||"—"],
+    ["Cerita",x.comment||"—"]
+  ];
+  openDetail("Cerita Istriku","Detail cerita makanan",rows);
+}
+function openActivityDetail(row){
+  const rows=[
+    ["Aktivitas",row.activity_label||row.activity_type],
+    ["Jenis",row.activity_type],
+    ["Waktu",new Date(row.created_at).toLocaleString("id-ID",{dateStyle:"full",timeStyle:"medium"})]
+  ];
+  const meta=row.meta&&typeof row.meta==="object"?row.meta:{};
+  Object.entries(meta).forEach(([k,v])=>{
+    rows.push([k.replaceAll("_"," "),typeof v==="object"?JSON.stringify(v,null,2):String(v)]);
+  });
+  openDetail("Aktivitas Istriku","Detail aktivitas",rows);
+}
+document.addEventListener("click",e=>{
+  const entry=e.target.closest(".entry[data-food-index]");
+  if(entry && window.__foodRows) openFoodLogDetail(window.__foodRows[Number(entry.dataset.foodIndex)]);
+  const activity=e.target.closest(".activity-item[data-activity-index]");
+  if(activity && window.__activityRows) openActivityDetail(window.__activityRows[Number(activity.dataset.activityIndex)]);
+  if(e.target.id==="detailClose"||e.target.id==="detailModal") closeDetail();
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape") closeDetail();
+  if((e.key==="Enter"||e.key===" ") && e.target.matches(".entry[data-food-index]")){
+    e.preventDefault(); const row=window.__foodRows?.[Number(e.target.dataset.foodIndex)]; if(row) openFoodLogDetail(row);
+  }
+  if((e.key==="Enter"||e.key===" ") && e.target.matches(".activity-item[data-activity-index]")){
+    e.preventDefault(); const row=window.__activityRows?.[Number(e.target.dataset.activityIndex)]; if(row) openActivityDetail(row);
+  }
+});
 async function load(){
- window.__foodRows=[];
  $("list").innerHTML='<div class="empty">Memuat...</div>';
  const {data,error}=await db.from("food_logs").select("*").order("eaten_at",{ascending:false}).limit(500);
  if(error){console.error(error);$("list").innerHTML='<div class="empty">Gagal memuat data.</div>';return}
@@ -451,7 +520,7 @@ async function load(){
   const m=moods.find(x=>x[0]===id)||["neutral","",id];
   return `<div class="barrow"><div><span style="display:inline-flex;vertical-align:middle">${piyoDashArt(m[0]||"neutral")}</span> ${m[2]}</div><div class="bar"><div class="fill" style="width:${n/maxM*100}%"></div></div><div>${n}</div></div>`;
 }).join("");
- $("list").innerHTML=data.length?data.map(x=>{const meal=meals.find(m=>m[0]===x.meal_type),mood=moods.find(m=>m[0]===((Array.isArray(x.mood_id)?x.mood_id[0]:x.mood_id))),names=(x.food_ids||[]).map(id=>{if(String(id).startsWith("custom::"))return "🐥 "+String(id).slice("custom::".length);const f=foods.find(f=>f[0]===id);return f?f[1]+" "+f[2]:null;}).filter(Boolean).join(" · "),t=new Date(x.eaten_at).toLocaleString("id-ID",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});return `<div class="entry clickable" data-food-index="${data.indexOf(x)}" tabindex="0" role="button" aria-label="Buka detail cerita"><div class="row"><span>${meal?meal[1]+" "+meal[2]:x.meal_type}</span><span>${t}</span></div><div class="main"><div class="foods">${names}</div><div class="mood">${piyoDashArt(mood?mood[0]:"neutral")}</div></div>${x.soundtrack?`<div class="extra-info">🎵 ${String(x.soundtrack).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}
+ $("list").innerHTML=data.length?data.map(x=>{const meal=meals.find(m=>m[0]===x.meal_type),mood=moods.find(m=>m[0]===((Array.isArray(x.mood_id)?x.mood_id[0]:x.mood_id))),names=(x.food_ids||[]).map(id=>{if(String(id).startsWith("custom::"))return "🐥 "+String(id).slice("custom::".length);const f=foods.find(f=>f[0]===id);return f?f[1]+" "+f[2]:null;}).filter(Boolean).join(" · "),t=new Date(x.eaten_at).toLocaleString("id-ID",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});return `<div class="entry clickable" data-food-index="${data.indexOf(x)}" tabindex="0" role="button"><div class="row"><span>${meal?meal[1]+" "+meal[2]:x.meal_type}</span><span>${t}</span></div><div class="main"><div class="foods">${names}</div><div class="mood">${piyoDashArt(mood?mood[0]:"neutral")}</div></div>${x.soundtrack?`<div class="extra-info">🎵 ${String(x.soundtrack).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}
 ${x.love_answer?`<div class="extra-info">💛 ${String(x.love_answer).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}
 ${x.one_word?`<div class="extra-info">✏️ ${String(x.one_word).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}
 ${x.comment?`<div class="comment">💬 ${String(x.comment).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}</div>`}).join(""):'<div class="empty">Belum ada catatan.</div>';
@@ -463,115 +532,15 @@ $("logoutButton").addEventListener("click",async()=>{await db.auth.signOut();win
 startDashboard();
 </script>
 
-<script>
-/* ===== DASHBOARD DETAIL POPUP — SINGLE OWNER ===== */
-(function(){
-  "use strict";
-  const modal=document.getElementById("detailModal");
-  const closeBtn=document.getElementById("detailClose");
-  const grid=document.getElementById("detailGrid");
-  const title=document.getElementById("detailTitle");
-  const kicker=document.getElementById("detailKicker");
-  if(!modal||!closeBtn||!grid||!title)return;
-
-  let lastFocus=null;
-
-  const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
-  const str=v=>{
-    if(Array.isArray(v))return v.join(" • ");
-    if(v&&typeof v==="object")return Object.entries(v).map(([k,x])=>k+": "+x).join("\n");
-    return String(v??"");
-  };
-
-  function open(rows,heading="Cerita Istriku",sub="Detail"){
-    kicker.textContent=sub;
-    title.textContent=heading;
-    grid.innerHTML=rows.map(([k,v])=>
-      '<div class="detail-row"><div class="detail-label">'+esc(k)+
-      '</div><div class="detail-value">'+esc(str(v||"—"))+'</div></div>'
-    ).join("");
-    lastFocus=document.activeElement;
-    modal.classList.add("open");
-    modal.setAttribute("aria-hidden","false");
-    document.body.style.overflow="hidden";
-    closeBtn.focus();
-  }
-
-  function close(){
-    modal.classList.remove("open");
-    modal.setAttribute("aria-hidden","true");
-    document.body.style.overflow="";
-    if(lastFocus&&typeof lastFocus.focus==="function")lastFocus.focus();
-  }
-
-  function foodDetail(x){
-    const meal=(window.meals||[]).find(m=>m[0]===x.meal_type);
-    const moodIds=Array.isArray(x.mood_id)?x.mood_id:(x.mood_id?[x.mood_id]:[]);
-    const moodText=moodIds.map(id=>(window.moods||[]).find(m=>m[0]===id)?.[2]||id).join(" • ");
-    const foodText=(x.food_ids||[]).map(id=>{
-      if(String(id).startsWith("custom::"))return String(id).slice(8);
-      return (window.foods||[]).find(f=>f[0]===id)?.[2]||id;
-    }).join(", ");
-    return [
-      ["Waktu",x.eaten_at?new Date(x.eaten_at).toLocaleString("id-ID",{dateStyle:"full",timeStyle:"medium"}):"—"],
-      ["Waktu makan",meal?meal[2]:x.meal_type],
-      ["Makanan",foodText||"—"],
-      ["Mood",moodText||"—"],
-      ["Soundtrack apa hari ini?",x.soundtrack||"—"],
-      ["Ibuk sayang Bapak nda?",x.love_answer||"—"],
-      ["Satu kata buat hari ini",x.one_word||"—"],
-      ["Cerita",x.comment||"—"]
-    ];
-  }
-
-  function activityDetail(x){
-    const meta=x.meta&&typeof x.meta==="object"?x.meta:{};
-    const rows=[
-      ["Aktivitas",x.activity_label||x.activity_type],
-      ["Jenis",x.activity_type],
-      ["Waktu",x.created_at?new Date(x.created_at).toLocaleString("id-ID",{dateStyle:"full",timeStyle:"medium"}):"—"]
-    ];
-    Object.entries(meta).forEach(([k,v])=>rows.push([k.replaceAll("_"," "),str(v)]));
-    return rows;
-  }
-
-  closeBtn.addEventListener("click",close);
-  modal.addEventListener("click",e=>{if(e.target===modal)close();});
-  document.addEventListener("keydown",e=>{
-    if(e.key==="Escape"&&modal.classList.contains("open")){
-      e.preventDefault();e.stopPropagation();close();
-    }
-  },true);
-
-  document.addEventListener("click",e=>{
-    const entry=e.target.closest(".entry[data-food-index]");
-    if(entry&&Array.isArray(window.__foodRows)){
-      e.preventDefault();
-      e.stopPropagation();
-      const row=window.__foodRows[Number(entry.dataset.foodIndex)];
-      if(row)open(foodDetail(row),"Cerita Istriku","Detail cerita");
-      return;
-    }
-
-    const activity=e.target.closest(".activity-item[data-activity-index]");
-    if(activity&&Array.isArray(window.__activityRows)){
-      e.preventDefault();
-      e.stopPropagation();
-      const row=window.__activityRows[Number(activity.dataset.activityIndex)];
-      if(row)open(activityDetail(row),"Aktivitas Istriku","Detail aktivitas");
-    }
-  },true);
-
-  document.addEventListener("keydown",e=>{
-    if((e.key==="Enter"||e.key===" ")&&e.target.matches(".entry[data-food-index],.activity-item[data-activity-index]")){
-      e.preventDefault();
-      e.target.click();
-    }
-  },true);
-
-  window.__istrikuDashboardPopup={open,close};
-})();
-</script>
+  <div id="detailModal" class="detail-modal" aria-hidden="true">
+    <div class="detail-card" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+      <div class="detail-head">
+        <div><div class="detail-kicker" id="detailKicker">Detail cerita</div><h3 class="detail-title" id="detailTitle">Cerita Istriku</h3></div>
+        <button type="button" class="detail-close" id="detailClose" aria-label="Tutup">×</button>
+      </div>
+      <div id="detailGrid" class="detail-grid"></div>
+    </div>
+  </div>
 
 </body>
 </html>

@@ -1153,6 +1153,8 @@
 
     .section-title .piyo-ui{width:22px;height:22px;vertical-align:-6px;margin-right:4px}
     .home-response .piyo-ui,.catch-reward .piyo-ui,.reward-kicker .piyo-ui{width:18px;height:18px;vertical-align:-5px;margin-right:3px}
+
+
 </style>
 </head>
 <body>
@@ -1461,8 +1463,7 @@
     </section>
 
     <!-- AKU -->
-    <section id="page-aku" class="page">
-      <header style="padding:10px 6px 14px;">
+    <section id="page-aku" class="page"><header style="padding:10px 6px 14px;">
         <div class="page-title"><span class="piyo-ui inline-piyo" data-piyo-ui="love"></span>Ruang Kecilmu</div>
         <div class="page-subtitle">Di sini, cerita kecil tentang harimu punya tempat untuk disimpan.</div>
       </header>
@@ -2091,12 +2092,44 @@ function catchNextReward(){
       }
       $("bapakTodayArt").innerHTML=homeBapakArt();
     }
-    function saveHomeInteractive(){
+    async function saveHomeInteractive(){
       const done=[...document.querySelectorAll("[data-home-check]:checked")].map(x=>x.dataset.homeCheck);
       const want=[...document.querySelectorAll("[data-home-want]:checked")].map(x=>x.dataset.homeWant);
       const hug=document.querySelector("[data-hug].selected")?.dataset.hug||"";
       const bapak=document.querySelector("[data-bapak].selected")?.dataset.bapak||"";
-      localStorage.setItem(homeInteractiveKey(),JSON.stringify({done,want,hug,bapak}));
+      const day=new Date().toISOString().slice(0,10);
+      const statePayload={done,want,hug,bapak};
+
+      // Keep the UI working locally as a fallback.
+      localStorage.setItem(homeInteractiveKey(),JSON.stringify(statePayload));
+
+      try{
+        const {data:{user}}=await db.auth.getUser();
+        if(!user) return;
+
+        const {error}=await db.from("wife_daily_interactions").upsert({
+          user_id:user.id,
+          day,
+          done,
+          want,
+          hug_choice:hug,
+          bapak_choice:bapak,
+          updated_at:new Date().toISOString()
+        },{onConflict:"user_id,day"});
+
+        if(error){
+          console.error("wife_daily_interactions:",error);
+          return;
+        }
+
+        await logActivity(
+          "home_interaction",
+          "Memperbarui pilihan Beranda",
+          {day,done,want,hug,bapak}
+        );
+      }catch(err){
+        console.error("saveHomeInteractive:",err);
+      }
     }
     function homeBapakArt(){
       return `<svg viewBox="0 0 120 120" aria-hidden="true">
@@ -2377,7 +2410,7 @@ async function loadProfileStats(){ await loadHome();
         };
         const {error}=await db.from("food_logs").insert(payload);
         if(error){ console.error(error); showToast("Belum tersimpan"); return; }
-        void logActivity("food_log_saved","Menyimpan cerita makanan",{meal_type:payload.meal_type,food_ids:payload.food_ids,mood_id:payload.mood_id,soundtrack:payload.soundtrack,love_answer:payload.love_answer,one_word:payload.one_word,has_comment:!!payload.comment});
+        void logActivity("food_log_saved","Menyimpan cerita lengkap",{meal_type:payload.meal_type,food_ids:payload.food_ids,mood_id:payload.mood_id,soundtrack:payload.soundtrack,love_answer:payload.love_answer,one_word:payload.one_word,comment:payload.comment||""});
 
         state.meal=""; state.foods=new Set(); state.moods=new Set(); state.loveAnswer=""; $("comment").value=""; $("customFood").value=""; $("soundtrack").value=""; $("oneWord").value=""; document.querySelectorAll("[data-love-answer]").forEach(btn=>btn.classList.remove("sel"));
         render(); await loadHome(); await loadHistory(); goPage("riwayat"); showToast("Tersimpan");
@@ -2441,7 +2474,7 @@ async function loadProfileStats(){ await loadHome();
         const kind=event.target.matches("[data-home-check]")?"check":"want";
         const value=event.target.dataset.homeCheck||event.target.dataset.homeWant;
         void logActivity(kind==="check"?"checklist_done":"daily_want",kind==="check"?`${event.target.checked?"Mencentang":"Membatalkan"}: ${value}`:`Memilih keinginan: ${value}`,{item:value,checked:event.target.checked});
-        saveHomeInteractive();
+        void saveHomeInteractive();
       }
     });
     document.addEventListener("click",event=>{
@@ -2451,7 +2484,7 @@ async function loadProfileStats(){ await loadHome();
         hug.classList.add("selected");
         void logActivity("hug_choice",`Memilih pelukan: ${hug.dataset.hug}`,{choice:hug.dataset.hug});
         $("hugResponse").textContent=`Oke, dicatat. Nanti Bapak kasih ${hug.dataset.hug.toLowerCase()} ya`;
-        saveHomeInteractive();
+        void saveHomeInteractive();
         return;
       }
 
@@ -2461,7 +2494,7 @@ async function loadProfileStats(){ await loadHome();
         bapak.classList.add("selected");
         void logActivity("bapak_guess",`Menebak Bapak: ${bapak.dataset.bapak}`,{choice:bapak.dataset.bapak});
         $("bapakResponse").textContent=homeBapakResponse(bapak.dataset.bapak);
-        saveHomeInteractive();
+        void saveHomeInteractive();
       }
     });
         startApp();
@@ -2514,5 +2547,6 @@ async function loadProfileStats(){ await loadHome();
       }
     })();
   </script>
+
 </body>
 </html>
