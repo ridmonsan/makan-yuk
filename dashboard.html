@@ -167,40 +167,32 @@ button{font:inherit}
     .entry.clickable{cursor:pointer}
     .entry.clickable:hover{box-shadow:0 7px 18px rgba(118,93,39,.10);transform:translateY(-1px)}
 
-/* ===== ISTRIKU THEME ENGINE v2: presentation layer only ===== */
-:root{--te-bg:#FFF8D6;--te-bg2:#FFFDF3;--te-card:#FFFEF4;--te-primary:#FFD95A;--te-secondary:#FFF1A8;--te-text:#5C4536;--te-muted:#806A59;--te-line:#F0DFA3;--te-accent:#F4A62A;--te-shadow:rgba(118,93,39,.10)}
-html[data-istriku-theme="piyo"]{--te-bg:#FFF8D6;--te-bg2:#FFFDF3;--te-card:#FFFEF4;--te-primary:#FFD95A;--te-secondary:#FFF1A8;--te-text:#5C4536;--te-muted:#806A59;--te-line:#F0DFA3;--te-accent:#F4A62A;--te-shadow:rgba(118,93,39,.10)}
-html[data-istriku-theme="spongebob"]{--te-bg:#BFEFFF;--te-bg2:#F5FFFF;--te-card:#FFFDF1;--te-primary:#FFD92F;--te-secondary:#7EDBFF;--te-text:#29435C;--te-muted:#54718A;--te-line:#70C7E8;--te-accent:#E88A2E;--te-shadow:rgba(38,113,150,.16)}
-html[data-istriku-theme="horror"]{--te-bg:#17131B;--te-bg2:#0C0A0F;--te-card:#211B25;--te-primary:#D7B84C;--te-secondary:#3A293D;--te-text:#F2E8D5;--te-muted:#B8A99A;--te-line:#57444D;--te-accent:#9C3038;--te-shadow:rgba(0,0,0,.34)}
-html[data-istriku-theme="ghibli"]{--te-bg:#EAF3DF;--te-bg2:#FBF8EA;--te-card:#FFFDF4;--te-primary:#A8C98C;--te-secondary:#DDECCB;--te-text:#4E5A45;--te-muted:#78806C;--te-line:#C8D8B7;--te-accent:#D58A65;--te-shadow:rgba(78,90,69,.12)}
-
-html[data-istriku-theme] body{background:linear-gradient(180deg,var(--te-bg),var(--te-bg2));color:var(--te-text)}
-html[data-istriku-theme] .card,
-html[data-istriku-theme] .pick,
-html[data-istriku-theme] .history-entry,
-html[data-istriku-theme] .history-detail-card,
-html[data-istriku-theme] .login-card{background:var(--te-card);border-color:var(--te-line);box-shadow:0 10px 24px var(--te-shadow)}
-html[data-istriku-theme] h1,html[data-istriku-theme] h2,html[data-istriku-theme] h3,
-html[data-istriku-theme] .section-title,html[data-istriku-theme] .history-detail-title{color:var(--te-text)}
-html[data-istriku-theme] .mini,html[data-istriku-theme] .section-sub,
-html[data-istriku-theme] .activity-meta{color:var(--te-muted)}
-html[data-istriku-theme] .nav-btn.active{background:var(--te-primary);border-color:var(--te-primary)}
+/* ===== ISTRIKU THEME ENGINE — SAFE SKIN LAYER ===== */
+html[data-istriku-theme="piyo"]{--skin-bg:#FFF8D6;--skin-bg2:#FFFDF3;--skin-card:#FFFEF4;--skin-primary:#FFD95A;--skin-soft:#FFF1A8;--skin-text:#5C4536;--skin-muted:#806A59;--skin-line:#F0DFA3;--skin-accent:#F4A62A;--skin-shadow:rgba(118,93,39,.10)}
+html[data-istriku-theme="spongebob"]{--skin-bg:#BFEFFF;--skin-bg2:#F6FFFF;--skin-card:#FFFDF1;--skin-primary:#FFD92F;--skin-soft:#7EDBFF;--skin-text:#29435C;--skin-muted:#54718A;--skin-line:#70C7E8;--skin-accent:#E88A2E;--skin-shadow:rgba(38,113,150,.16)}
+html[data-istriku-theme="horror"]{--skin-bg:#17131B;--skin-bg2:#0C0A0F;--skin-card:#211B25;--skin-primary:#D7B84C;--skin-soft:#3A293D;--skin-text:#F2E8D5;--skin-muted:#B8A99A;--skin-line:#57444D;--skin-accent:#9C3038;--skin-shadow:rgba(0,0,0,.34)}
+html[data-istriku-theme="ghibli"]{--skin-bg:#EAF3DF;--skin-bg2:#FBF8EA;--skin-card:#FFFDF4;--skin-primary:#A8C98C;--skin-soft:#DDECCB;--skin-text:#4E5A45;--skin-muted:#78806C;--skin-line:#C8D8B7;--skin-accent:#D58A65;--skin-shadow:rgba(78,90,69,.12)}
+html[data-istriku-theme] body{background:linear-gradient(180deg,var(--skin-bg),var(--skin-bg2));color:var(--skin-text)}
+html[data-istriku-theme] .card,html[data-istriku-theme] .history-entry,html[data-istriku-theme] .history-detail-card{background:var(--skin-card);border-color:var(--skin-line)}
+html[data-istriku-theme] h1,html[data-istriku-theme] h2,html[data-istriku-theme] h3,html[data-istriku-theme] .section-title,html[data-istriku-theme] .history-detail-title{color:var(--skin-text)}
+html[data-istriku-theme] .mini,html[data-istriku-theme] .section-sub{color:var(--skin-muted)}
+html[data-istriku-theme] .nav-btn.active{background:var(--skin-primary);border-color:var(--skin-primary)}
+html[data-istriku-theme] .history-detail-close{background:var(--skin-soft);color:var(--skin-text)}
 html[data-istriku-theme="horror"] .deco{opacity:.35}
 .theme-engine-card{margin-top:12px}
 .theme-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}
-.theme-option{border:1px solid var(--te-line);background:var(--te-card);border-radius:18px;padding:11px;text-align:left;cursor:pointer;color:var(--te-text);transition:.15s transform,.15s box-shadow}
+.theme-option{appearance:none;border:1px solid var(--skin-line,#F0DFA3);background:var(--skin-card,#FFFEF4);border-radius:18px;padding:11px;text-align:left;cursor:pointer;color:var(--skin-text,#5C4536);transition:transform .15s,box-shadow .15s}
 .theme-option:hover{transform:translateY(-1px)}
-.theme-option.selected{box-shadow:0 8px 18px var(--te-shadow);outline:2px solid var(--te-primary)}
+.theme-option.selected{box-shadow:0 8px 18px var(--skin-shadow);outline:2px solid var(--skin-primary)}
 .theme-swatch{height:58px;border-radius:14px;margin-bottom:8px;border:1px solid rgba(0,0,0,.08)}
 .theme-option[data-theme-option="piyo"] .theme-swatch{background:linear-gradient(135deg,#FFF8D6 0 50%,#FFD95A 50%)}
 .theme-option[data-theme-option="spongebob"] .theme-swatch{background:linear-gradient(135deg,#BFEFFF 0 50%,#FFD92F 50%)}
 .theme-option[data-theme-option="horror"] .theme-swatch{background:linear-gradient(135deg,#17131B 0 50%,#9C3038 50%)}
 .theme-option[data-theme-option="ghibli"] .theme-swatch{background:linear-gradient(135deg,#EAF3DF 0 50%,#A8C98C 50%)}
-.theme-option-title{font-weight:900;font-size:13px}.theme-option-desc{font-size:10px;margin-top:3px;color:var(--te-muted);line-height:1.35}
-.theme-status{font-size:10px;color:var(--te-muted);margin-top:10px}
+.theme-option-title{font-weight:900;font-size:13px}.theme-option-desc{font-size:10px;margin-top:3px;color:var(--skin-muted);line-height:1.35}.theme-status{font-size:10px;color:var(--skin-muted);margin-top:10px}
 
 </style></head>
-<body>
+<script>document.documentElement.setAttribute('data-istriku-theme',localStorage.getItem('istriku_theme')||'piyo');</script><body>
   <div id="loginScreen" class="login-screen">
     <div class="login-card">
       <div class="brand" style="justify-content:center">
@@ -328,49 +320,7 @@ html[data-istriku-theme="horror"] .deco{opacity:.35}
 <div class="footer">dibuat khusus untuk kalian<br><button id="logoutButton" class="logout-button">Keluar dari akun</button></div>
   </main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-/* ===== ISTRIKU THEME ENGINE v2 =====
-   Important: this engine changes presentation only.
-   It never replaces or hides existing illustration assets. */
-const ISTRIKU_THEME_KEY="istriku_theme_v2";
-const ISTRIKU_THEMES={
-  piyo:{name:"Piyo",desc:"Hangat, kuning, lucu dan manis."},
-  spongebob:{name:"SpongeBob",desc:"Ceria, playful dan penuh warna laut."},
-  horror:{name:"Horror",desc:"Gelap, misterius, tapi tetap milik kita."},
-  ghibli:{name:"Ghibli",desc:"Lembut, natural, hangat dan tenang."}
-};
-function istrikuApplyTheme(theme){
-  if(!ISTRIkU_THEME_FIX && !ISTRUKU_THEME_FIX){} // harmless compatibility guard
-  if(!ISTRikuThemeExists(theme)) theme="piyo";
-  document.documentElement.setAttribute("data-istriku-theme",theme);
-  localStorage.setItem(ISTRIKU_THEME_KEY,theme);
-  document.querySelectorAll("[data-theme-option]").forEach(x=>x.classList.toggle("selected",x.dataset.themeOption===theme));
-  const s=document.getElementById("themeStatus");
-  if(s)s.textContent="Tema sekarang: "+ISTRIKU_THEMES[theme].name;
-}
-function ISTRikuThemeExists(theme){return Object.prototype.hasOwnProperty.call(ISTRIKU_THEMES,theme)}
-async function istrikuLoadTheme(){
-  const theme=localStorage.getItem(ISTRIKU_THEME_KEY)||"piyo";
-  istrikuApplyTheme(theme);
-}
-async function istrikuSetTheme(theme){
-  if(!ISTRikuThemeExists(theme))theme="piyo";
-  istrikuApplyTheme(theme);
-  try{
-    const {data:{user}}=await db.auth.getUser();
-    if(user)await db.from("activity_logs").insert({
-      user_id:user.id,activity_type:"theme_change",
-      activity_label:"Mengganti tema ke "+ISTRIKU_THEMES[theme].name,
-      meta:{theme}
-    });
-  }catch(e){console.debug("theme activity log skipped",e)}
-}
-document.addEventListener("click",e=>{
-  const b=e.target.closest("[data-theme-option]");
-  if(b)void istrikuSetTheme(b.dataset.themeOption);
-});
-
-</script><script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js"></script>
 <script>
 const db=supabase.createClient(APP_CONFIG.SUPABASE_URL,APP_CONFIG.SUPABASE_ANON_KEY);
 const HUSBAND_EMAIL = APP_CONFIG.HUSBAND_EMAIL;
@@ -602,8 +552,7 @@ ${x.comment?`<div class="comment">💬 ${String(x.comment).replace(/</g,"&lt;").
 $("refresh").onclick=load;$("loginButton").addEventListener("click",loginHusband);
 $("loginCode").addEventListener("keydown",e=>{if(e.key==="Enter")loginHusband();});
 $("logoutButton").addEventListener("click",async()=>{await db.auth.signOut();window.location.reload();});
-istrikuLoadTheme();
-  startDashboard();
+startDashboard();
 </script>
 
   <div id="detailModal" class="detail-modal" aria-hidden="true">
@@ -615,5 +564,35 @@ istrikuLoadTheme();
       <div id="detailGrid" class="detail-grid"></div>
     </div>
   </div>
+<script>
+/* ===== ISTRIKU THEME ENGINE — SAFE SKIN LAYER ===== */
+const ISTRIKU_THEME_KEY="istriku_theme";
+const ISTRIKU_THEMES={
+ piyo:{name:"Piyo",desc:"Hangat, kuning, lucu dan manis."},
+ spongebob:{name:"SpongeBob",desc:"Ceria, playful dan penuh warna laut."},
+ horror:{name:"Horror",desc:"Gelap, misterius, tapi tetap milik kita."},
+ ghibli:{name:"Ghibli",desc:"Lembut, natural, hangat dan tenang."}
+};
+function istrikuThemeExists(t){return Object.prototype.hasOwnProperty.call(ISTRIKU_THEMES,t)}
+function applyIstrikuTheme(t){
+ if(!istrikuThemeExists(t))t="piyo";
+ document.documentElement.setAttribute("data-istriku-theme",t);
+ localStorage.setItem(ISTRIKU_THEME_KEY,t);
+ document.querySelectorAll("[data-theme-option]").forEach(b=>b.classList.toggle("selected",b.dataset.themeOption===t));
+ const s=document.getElementById("themeStatus");if(s)s.textContent="Tema sekarang: "+ISTRIKU_THEMES[t].name;
+}
+function loadIstrikuTheme(){applyIstrikuTheme(localStorage.getItem(ISTRIKU_THEME_KEY)||"piyo")}
+async function changeIstrikuTheme(t){
+ applyIstrikuTheme(t);
+ try{
+  const {data:{user}}=await db.auth.getUser();
+  if(user)await db.from("activity_logs").insert({user_id:user.id,activity_type:"theme_change",activity_label:"Mengganti tema ke "+ISTRIKU_THEMES[t].name,meta:{theme:t}});
+ }catch(e){console.debug("theme activity logging skipped",e)}
+}
+document.addEventListener("click",e=>{
+ const b=e.target.closest("[data-theme-option]");
+ if(b)void changeIstrikuTheme(b.dataset.themeOption);
+});
+</script>
 </body>
 </html>
