@@ -1178,6 +1178,23 @@ html[data-istriku-theme="horror"] .deco{opacity:.35}
 .theme-option[data-theme-option="ghibli"] .theme-swatch{background:linear-gradient(135deg,#EAF3DF 0 50%,#A8C98C 50%)}
 .theme-option-title{font-weight:900;font-size:13px}.theme-option-desc{font-size:10px;margin-top:3px;color:var(--skin-muted);line-height:1.35}.theme-status{font-size:10px;color:var(--skin-muted);margin-top:10px}
 
+
+/* ===== CERITAKU HISTORY DETAIL POPUP ===== */
+.history-entry{cursor:pointer;transition:transform .15s,box-shadow .15s}
+.history-entry:hover{transform:translateY(-1px);box-shadow:0 8px 18px var(--skin-shadow,rgba(118,93,39,.10))}
+.history-detail-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(20,16,12,.48);backdrop-filter:blur(4px)}
+.history-detail-modal.show{display:flex}
+.history-detail-card{width:min(560px,100%);max-height:86vh;overflow:auto;border:1px solid var(--skin-line,#F0DFA3);border-radius:24px;background:var(--skin-card,#FFFEF4);color:var(--skin-text,#5C4536);box-shadow:0 22px 60px rgba(0,0,0,.25);padding:20px;position:relative}
+.history-detail-close{position:absolute;right:14px;top:14px;width:36px;height:36px;border:0;border-radius:50%;background:var(--skin-soft,#FFF1A8);color:var(--skin-text,#5C4536);font-size:20px;font-weight:900;cursor:pointer}
+.history-detail-title{font-size:20px;font-weight:1000;padding-right:44px;margin-bottom:4px}
+.history-detail-time{font-size:11px;color:var(--skin-muted,#806A59);margin-bottom:16px}
+.history-detail-grid{display:grid;gap:10px}
+.history-detail-row{padding:11px 12px;border-radius:15px;background:color-mix(in srgb,var(--skin-soft,#FFF1A8) 35%,transparent);border:1px solid var(--skin-line,#F0DFA3)}
+.history-detail-label{font-size:10px;font-weight:900;color:var(--skin-muted,#806A59);margin-bottom:4px}
+.history-detail-value{font-size:13px;line-height:1.5;white-space:pre-wrap}
+.history-detail-empty{color:var(--skin-muted,#806A59)}
+@media(max-width:520px){.history-detail-modal{padding:10px}.history-detail-card{max-height:90vh;border-radius:20px;padding:16px}}
+
 </style>
 </head>
 <script>document.documentElement.setAttribute('data-istriku-theme',localStorage.getItem('istriku_theme')||'piyo');</script><body>
@@ -2609,5 +2626,26 @@ document.addEventListener("click",e=>{
  if(b)void changeIstrikuTheme(b.dataset.themeOption);
 });
 </script>
-</body>
+
+<div id="historyDetailModal" class="history-detail-modal" aria-hidden="true">
+  <div class="history-detail-card" role="dialog" aria-modal="true" aria-labelledby="historyDetailTitle">
+    <button class="history-detail-close" id="historyDetailClose" type="button" aria-label="Tutup">×</button>
+    <div id="historyDetailTitle" class="history-detail-title">Ceritamu</div>
+    <div id="historyDetailTime" class="history-detail-time"></div>
+    <div id="historyDetailBody" class="history-detail-grid"></div>
+  </div>
+</div>
+<script>
+(function(){
+  const selectors=[".history-item",".history-card",".history-row",".history-record",".food-history-item"];
+  const mark=()=>{
+    selectors.forEach(s=>document.querySelectorAll(s).forEach(x=>{
+      if(!x.classList.contains("history-entry"))x.classList.add("history-entry");
+    }));
+  };
+  mark();
+  new MutationObserver(mark).observe(document.body,{subtree:true,childList:true});
+})();
+</script>
+<script>loadIstrikuTheme();</script></body>
 </html>
