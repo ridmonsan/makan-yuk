@@ -1154,13 +1154,24 @@
     .section-title .piyo-ui{width:22px;height:22px;vertical-align:-6px;margin-right:4px}
     .home-response .piyo-ui,.catch-reward .piyo-ui,.reward-kicker .piyo-ui{width:18px;height:18px;vertical-align:-5px;margin-right:3px}
 
-.history-clickable{cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}.history-clickable:hover{transform:translateY(-1px);box-shadow:0 7px 18px rgba(118,93,39,.10)}
-.history-detail-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(60,45,30,.45)}.history-detail-modal.open{display:flex}
-.history-detail-card{width:min(650px,94vw);max-height:88vh;overflow:auto;background:#FFFDF4;border:1px solid #F0DFA3;border-radius:24px;box-shadow:0 24px 70px rgba(0,0,0,.25);padding:18px}
-.history-detail-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.history-detail-title{margin:3px 0 0;font:700 20px "Fredoka","Nunito",sans-serif;color:#5C4536}
-.history-detail-close{border:0;background:#FFF0A5;color:#5C4536;width:36px;height:36px;border-radius:50%;font-size:21px;cursor:pointer}
-.history-detail-grid{display:grid;gap:9px;margin-top:14px}.history-detail-row{background:#FFF9DF;border:1px solid #F0DFA3;border-radius:15px;padding:10px 12px}
-.history-detail-key{font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#9A846A;font-weight:900}.history-detail-value{margin-top:4px;font-size:12px;line-height:1.5;color:#5C4536;white-space:pre-wrap;overflow-wrap:anywhere}
+/* ===== CERITAKU DETAIL POPUP — FINAL ===== */
+.history-clickable{cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}
+.history-clickable:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(118,93,39,.11)}
+.history-clickable:focus-visible{outline:3px solid #FFD95A;outline-offset:2px}
+.istri-history-modal{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(54,41,29,.48);backdrop-filter:blur(3px)}
+.istri-history-modal.open{display:flex}
+.istri-history-card{width:min(620px,94vw);max-height:88vh;overflow:auto;background:#FFFEF4;border:1px solid #F0DFA3;border-radius:24px;box-shadow:0 24px 70px rgba(0,0,0,.25);padding:18px}
+.istri-history-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.istri-history-kicker{font-size:9px;text-transform:uppercase;letter-spacing:.55px;color:#9A846A;font-weight:900}
+.istri-history-title{margin:3px 0 0;font:700 20px "Fredoka","Nunito",sans-serif;color:#5C4536}
+.istri-history-close{border:0;background:#FFF0A5;color:#5C4536;width:38px;height:38px;border-radius:50%;font-size:22px;font-weight:800;cursor:pointer;flex:0 0 auto}
+.istri-history-close:hover{filter:brightness(.97)}
+.istri-history-grid{display:grid;gap:9px;margin-top:14px}
+.istri-history-row{background:#FFF9DF;border:1px solid #F0DFA3;border-radius:15px;padding:10px 12px}
+.istri-history-key{font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#9A846A;font-weight:900}
+.istri-history-value{margin-top:4px;font-size:12px;line-height:1.55;color:#5C4536;white-space:pre-wrap;overflow-wrap:anywhere}
+@media(max-width:480px){.istri-history-modal{padding:9px}.istri-history-card{border-radius:20px;padding:14px}}
+
 </style>
 </head>
 <body>
@@ -2099,15 +2110,12 @@ function catchNextReward(){
       }
       $("bapakTodayArt").innerHTML=homeBapakArt();
     }
-    async function saveHomeInteractive(){
+    function saveHomeInteractive(){
       const done=[...document.querySelectorAll("[data-home-check]:checked")].map(x=>x.dataset.homeCheck);
       const want=[...document.querySelectorAll("[data-home-want]:checked")].map(x=>x.dataset.homeWant);
       const hug=document.querySelector("[data-hug].selected")?.dataset.hug||"";
       const bapak=document.querySelector("[data-bapak].selected")?.dataset.bapak||"";
-      const day=new Date().toISOString().slice(0,10);
-      const payload={day,done,want,hug,bapak};
-      localStorage.setItem(homeInteractiveKey(),JSON.stringify(payload));
-      await logActivity("home_interaction","Memperbarui pilihan Beranda",payload);
+      localStorage.setItem(homeInteractiveKey(),JSON.stringify({done,want,hug,bapak}));
     }
     function homeBapakArt(){
       return `<svg viewBox="0 0 120 120" aria-hidden="true">
@@ -2315,16 +2323,14 @@ async function loadProfileStats(){ await loadHome();
 
       $("historyList").innerHTML=data.map(item=>{
         const meal=meals.find(m=>m.id===item.meal_type)||{label:item.meal_type};
-        const moodIds=Array.isArray(item.mood_id)?item.mood_id:(item.mood_id?[item.mood_id]:[]);
-        const moodList=moodIds.map(id=>moods.find(m=>m.id===id)).filter(Boolean);
-        const mood=moodList[0]||{moodClass:"neutral",label:"Aku biasa aja"};
+        const mood=moods.find(m=>m.id===item.mood_id)||{moodClass:"neutral",label:"Aku biasa aja"};
         const foodNames=(item.food_ids||[]).map(id=>{
           if(String(id).startsWith("custom::")) return String(id).slice(8);
           const f=foods.find(food=>food.id===id);
           return f?f.label:null;
         }).filter(Boolean).join(" • ");
         const time=new Intl.DateTimeFormat("id-ID",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}).format(new Date(item.eaten_at));
-        return `<article class="history-entry history-clickable" data-history-id="${item.id}" tabindex="0" role="button">
+        return `<article class="history-entry history-clickable" data-history-id="${escapeHtml(item.id)}" tabindex="0" role="button" aria-label="Buka detail cerita">
           <div class="history-entry-top"><span>${escapeHtml(meal.label)}</span><span>${time}</span></div>
           <div class="history-main"><div class="history-foods">${escapeHtml(foodNames||"Tidak ada makanan")}</div><div class="history-mood">${piyoArt(mood.moodClass)}</div></div>
           ${item.comment?`<div class="history-comment"><span class="piyo-ui inline-piyo" data-piyo-ui="chat"></span> ${escapeHtml(item.comment)}</div>`:""}
@@ -2332,10 +2338,7 @@ async function loadProfileStats(){ await loadHome();
       }).join("");
     }
 
-    function closeHistoryDetail(){const m=$("historyDetailModal");if(m){m.classList.remove("open");m.setAttribute("aria-hidden","true");}}
-async function openHistoryDetail(id){const {data,error}=await db.from("food_logs").select("id,eaten_at,meal_type,food_ids,mood_id,comment,soundtrack,love_answer,one_word").eq("id",id).maybeSingle();if(error||!data){showToast("Cerita belum bisa dibuka");return;}const meal=meals.find(m=>m.id===data.meal_type)||{label:data.meal_type};const moodIds=Array.isArray(data.mood_id)?data.mood_id:(data.mood_id?[data.mood_id]:[]);const moodNames=moodIds.map(id=>moods.find(m=>m.id===id)?.label||id).join(" • ");const foodNames=(data.food_ids||[]).map(id=>String(id).startsWith("custom::")?String(id).slice(8):(foods.find(f=>f.id===id)?.label||id)).join(" • ");const rows=[["Waktu",new Intl.DateTimeFormat("id-ID",{dateStyle:"full",timeStyle:"medium"}).format(new Date(data.eaten_at))],["Waktu makan",meal.label],["Makanan",foodNames||"Belum ada"],["Mood",moodNames||"Belum ada"],["Soundtrack apa hari ini?",data.soundtrack||"Belum diisi"],["Ibuk sayang Bapak nda?",data.love_answer||"Belum dipilih"],["Satu kata buat hari ini",data.one_word||"Belum diisi"],["Cerita",data.comment||"Belum ada cerita"]];$("historyDetailGrid").innerHTML=rows.map(([k,v])=>`<div class="history-detail-row"><div class="history-detail-key">${escapeHtml(k)}</div><div class="history-detail-value">${escapeHtml(v)}</div></div>`).join("");$("historyDetailModal").classList.add("open");$("historyDetailModal").setAttribute("aria-hidden","false");}
-document.addEventListener("click",event=>{if(event.target.id==="historyDetailClose"||event.target.id==="historyDetailModal"){closeHistoryDetail();return;}const h=event.target.closest(".history-clickable[data-history-id]");if(h)void openHistoryDetail(h.dataset.historyId);});document.addEventListener("keydown",event=>{if(event.key==="Escape")closeHistoryDetail();});
-function showToast(message){
+    function showToast(message){
       const toast=$("toast"); toast.textContent=message; toast.classList.add("show");
       clearTimeout(window.__toastTimer); window.__toastTimer=setTimeout(()=>toast.classList.remove("show"),1800);
     }
@@ -2393,8 +2396,7 @@ function showToast(message){
         };
         const {error}=await db.from("food_logs").insert(payload);
         if(error){ console.error(error); showToast("Belum tersimpan"); return; }
-        void logActivity("food_log_saved","Menyimpan cerita lengkap",{meal_type:payload.meal_type,food_ids:payload.food_ids,mood_id:payload.mood_id,soundtrack:payload.soundtrack,love_answer:payload.love_answer,one_word:payload.one_word,comment:payload.comment||""});
-        void logActivity("food_log_saved","Menyimpan cerita lengkap",{meal_type:payload.meal_type,food_ids:payload.food_ids,mood_id:payload.mood_id,soundtrack:payload.soundtrack,love_answer:payload.love_answer,one_word:payload.one_word,comment:payload.comment||""});
+        void logActivity("food_log_saved","Menyimpan cerita makanan",{meal_type:payload.meal_type,food_ids:payload.food_ids,mood_id:payload.mood_id,soundtrack:payload.soundtrack,love_answer:payload.love_answer,one_word:payload.one_word,has_comment:!!payload.comment});
 
         state.meal=""; state.foods=new Set(); state.moods=new Set(); state.loveAnswer=""; $("comment").value=""; $("customFood").value=""; $("soundtrack").value=""; $("oneWord").value=""; document.querySelectorAll("[data-love-answer]").forEach(btn=>btn.classList.remove("sel"));
         render(); await loadHome(); await loadHistory(); goPage("riwayat"); showToast("Tersimpan");
@@ -2454,32 +2456,31 @@ function showToast(message){
 
 
     document.addEventListener("change",event=>{
-      const el=event.target;
-      if(el.matches("[data-home-check]") || el.matches("[data-home-want]")){
-        const section=el.matches("[data-home-check]")?"Hari ini aku sudah":"Hari ini aku pengen";
-        const item=el.dataset.homeCheck||el.dataset.homeWant||"";
-        void logActivity("checklist",`${el.checked?"Mencentang":"Membatalkan"}: ${item}`,{section,item,checked:el.checked});
-        void saveHomeInteractive();
+      if(event.target.matches("[data-home-check]") || event.target.matches("[data-home-want]")){
+        const kind=event.target.matches("[data-home-check]")?"check":"want";
+        const value=event.target.dataset.homeCheck||event.target.dataset.homeWant;
+        void logActivity(kind==="check"?"checklist_done":"daily_want",kind==="check"?`${event.target.checked?"Mencentang":"Membatalkan"}: ${value}`:`Memilih keinginan: ${value}`,{item:value,checked:event.target.checked});
+        saveHomeInteractive();
       }
     });
-
     document.addEventListener("click",event=>{
       const hug=event.target.closest("[data-hug]");
       if(hug){
         document.querySelectorAll("[data-hug]").forEach(x=>x.classList.remove("selected"));
         hug.classList.add("selected");
-        $("hugResponse").textContent=`Oke, dicatat. Nanti Bapak kasih ${hug.dataset.hug.toLowerCase()} ya`;
         void logActivity("hug_choice",`Memilih pelukan: ${hug.dataset.hug}`,{choice:hug.dataset.hug});
-        void saveHomeInteractive();
+        $("hugResponse").textContent=`Oke, dicatat. Nanti Bapak kasih ${hug.dataset.hug.toLowerCase()} ya`;
+        saveHomeInteractive();
         return;
       }
+
       const bapak=event.target.closest("[data-bapak]");
       if(bapak){
         document.querySelectorAll("[data-bapak]").forEach(x=>x.classList.remove("selected"));
         bapak.classList.add("selected");
+        void logActivity("bapak_guess",`Menebak Bapak: ${bapak.dataset.bapak}`,{choice:bapak.dataset.bapak});
         $("bapakResponse").textContent=homeBapakResponse(bapak.dataset.bapak);
-        void logActivity("bapak_today",`Bapak Hari Ini: ${bapak.dataset.bapak}`,{choice:bapak.dataset.bapak});
-        void saveHomeInteractive();
+        saveHomeInteractive();
       }
     });
         startApp();
@@ -2532,5 +2533,94 @@ function showToast(message){
       }
     })();
   </script>
-<div id="historyDetailModal" class="history-detail-modal" aria-hidden="true"><div class="history-detail-card" role="dialog" aria-modal="true" aria-labelledby="historyDetailTitle"><div class="history-detail-head"><div><div class="section-sub">Cerita lengkap</div><h3 id="historyDetailTitle" class="history-detail-title">Cerita Istriku</h3></div><button id="historyDetailClose" class="history-detail-close" type="button" aria-label="Tutup">×</button></div><div id="historyDetailGrid" class="history-detail-grid"></div></div></div></body>
+
+<div id="istriHistoryModal" class="istri-history-modal" aria-hidden="true">
+  <div class="istri-history-card" role="dialog" aria-modal="true" aria-labelledby="istriHistoryTitle">
+    <div class="istri-history-head">
+      <div>
+        <div class="istri-history-kicker">Ceritaku</div>
+        <h3 id="istriHistoryTitle" class="istri-history-title">Cerita hari ini</h3>
+      </div>
+      <button type="button" id="istriHistoryClose" class="istri-history-close" aria-label="Tutup">×</button>
+    </div>
+    <div id="istriHistoryGrid" class="istri-history-grid"></div>
+  </div>
+</div>
+
+
+<script>
+/* ===== CERITAKU DETAIL POPUP — NAMESPACED ===== */
+(function(){
+  const modal=document.getElementById("istriHistoryModal");
+  const grid=document.getElementById("istriHistoryGrid");
+  const title=document.getElementById("istriHistoryTitle");
+  const closeBtn=document.getElementById("istriHistoryClose");
+  if(!modal||!grid||!title||!closeBtn)return;
+
+  let previousOverflow="";
+
+  const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+  const text=v=>{
+    if(Array.isArray(v))return v.join(" • ");
+    if(v&&typeof v==="object")return Object.entries(v).map(([k,x])=>k+": "+x).join("\n");
+    return String(v??"");
+  };
+  const moodText=v=>{
+    const ids=Array.isArray(v)?v:(v?[v]:[]);
+    return ids.map(id=>moods.find(m=>m.id===id)?.label||id).join(" • ");
+  };
+  const foodText=ids=>(ids||[]).map(id=>{
+    if(String(id).startsWith("custom::"))return String(id).slice(8);
+    return foods.find(f=>f.id===id)?.label||id;
+  }).join(" • ");
+
+  function close(){
+    modal.classList.remove("open");
+    modal.setAttribute("aria-hidden","true");
+    document.body.style.overflow=previousOverflow;
+  }
+
+  async function open(id){
+    const {data,error}=await db.from("food_logs")
+      .select("id,eaten_at,meal_type,food_ids,mood_id,comment,soundtrack,love_answer,one_word")
+      .eq("id",id).maybeSingle();
+
+    if(error||!data){showToast("Cerita belum bisa dibuka");return;}
+
+    const meal=meals.find(m=>m.id===data.meal_type)?.label||data.meal_type||"—";
+    const rows=[
+      ["Waktu",new Intl.DateTimeFormat("id-ID",{dateStyle:"full",timeStyle:"medium"}).format(new Date(data.eaten_at))],
+      ["Waktu makan",meal],
+      ["Makanan",foodText(data.food_ids)||"Belum ada"],
+      ["Mood",moodText(data.mood_id)||"Belum ada"],
+      ["Soundtrack apa hari ini?",data.soundtrack||"Belum diisi"],
+      ["Ibuk sayang Bapak nda?",data.love_answer||"Belum dipilih"],
+      ["Satu kata buat hari ini",data.one_word||"Belum diisi"],
+      ["Cerita",data.comment||"Belum ada cerita"]
+    ];
+
+    title.textContent="Cerita Istriku";
+    grid.innerHTML=rows.map(([k,v])=>`<div class="istri-history-row"><div class="istri-history-key">${esc(k)}</div><div class="istri-history-value">${esc(text(v))}</div></div>`).join("");
+    previousOverflow=document.body.style.overflow;
+    document.body.style.overflow="hidden";
+    modal.classList.add("open");
+    modal.setAttribute("aria-hidden","false");
+  }
+
+  closeBtn.addEventListener("click",close);
+  modal.addEventListener("click",e=>{if(e.target===modal)close();});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&modal.classList.contains("open"))close();});
+  document.addEventListener("click",e=>{
+    const row=e.target.closest(".history-clickable[data-history-id]");
+    if(row)void open(row.dataset.historyId);
+  });
+  document.addEventListener("keydown",e=>{
+    if((e.key==="Enter"||e.key===" ")&&e.target.matches(".history-clickable[data-history-id]")){
+      e.preventDefault();void open(e.target.dataset.historyId);
+    }
+  });
+})();
+</script>
+
+</body>
 </html>
