@@ -1154,64 +1154,16 @@
     .section-title .piyo-ui{width:22px;height:22px;vertical-align:-6px;margin-right:4px}
     .home-response .piyo-ui,.catch-reward .piyo-ui,.reward-kicker .piyo-ui{width:18px;height:18px;vertical-align:-5px;margin-right:3px}
 
-/* ===== ISTRIKU THEME ENGINE — SAFE SKIN LAYER ===== */
-html[data-istriku-theme="piyo"]{--skin-bg:#FFF8D6;--skin-bg2:#FFFDF3;--skin-card:#FFFEF4;--skin-primary:#FFD95A;--skin-soft:#FFF1A8;--skin-text:#5C4536;--skin-muted:#806A59;--skin-line:#F0DFA3;--skin-accent:#F4A62A;--skin-shadow:rgba(118,93,39,.10)}
-html[data-istriku-theme="spongebob"]{--skin-bg:#BFEFFF;--skin-bg2:#F6FFFF;--skin-card:#FFFDF1;--skin-primary:#FFD92F;--skin-soft:#7EDBFF;--skin-text:#29435C;--skin-muted:#54718A;--skin-line:#70C7E8;--skin-accent:#E88A2E;--skin-shadow:rgba(38,113,150,.16)}
-html[data-istriku-theme="horror"]{--skin-bg:#17131B;--skin-bg2:#0C0A0F;--skin-card:#211B25;--skin-primary:#D7B84C;--skin-soft:#3A293D;--skin-text:#F2E8D5;--skin-muted:#B8A99A;--skin-line:#57444D;--skin-accent:#9C3038;--skin-shadow:rgba(0,0,0,.34)}
-html[data-istriku-theme="ghibli"]{--skin-bg:#EAF3DF;--skin-bg2:#FBF8EA;--skin-card:#FFFDF4;--skin-primary:#A8C98C;--skin-soft:#DDECCB;--skin-text:#4E5A45;--skin-muted:#78806C;--skin-line:#C8D8B7;--skin-accent:#D58A65;--skin-shadow:rgba(78,90,69,.12)}
-html[data-istriku-theme] body{background:linear-gradient(180deg,var(--skin-bg),var(--skin-bg2));color:var(--skin-text)}
-html[data-istriku-theme] .card,html[data-istriku-theme] .history-entry,html[data-istriku-theme] .history-detail-card{background:var(--skin-card);border-color:var(--skin-line)}
-html[data-istriku-theme] h1,html[data-istriku-theme] h2,html[data-istriku-theme] h3,html[data-istriku-theme] .section-title,html[data-istriku-theme] .history-detail-title{color:var(--skin-text)}
-html[data-istriku-theme] .mini,html[data-istriku-theme] .section-sub{color:var(--skin-muted)}
-html[data-istriku-theme] .nav-btn.active{background:var(--skin-primary);border-color:var(--skin-primary)}
-html[data-istriku-theme] .history-detail-close{background:var(--skin-soft);color:var(--skin-text)}
-html[data-istriku-theme="horror"] .deco{opacity:.35}
-.theme-engine-card{margin-top:12px}
-.theme-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}
-.theme-option{appearance:none;border:1px solid var(--skin-line,#F0DFA3);background:var(--skin-card,#FFFEF4);border-radius:18px;padding:11px;text-align:left;cursor:pointer;color:var(--skin-text,#5C4536);transition:transform .15s,box-shadow .15s}
-.theme-option:hover{transform:translateY(-1px)}
-.theme-option.selected{box-shadow:0 8px 18px var(--skin-shadow);outline:2px solid var(--skin-primary)}
-.theme-swatch{height:58px;border-radius:14px;margin-bottom:8px;border:1px solid rgba(0,0,0,.08)}
-.theme-option[data-theme-option="piyo"] .theme-swatch{background:linear-gradient(135deg,#FFF8D6 0 50%,#FFD95A 50%)}
-.theme-option[data-theme-option="spongebob"] .theme-swatch{background:linear-gradient(135deg,#BFEFFF 0 50%,#FFD92F 50%)}
-.theme-option[data-theme-option="horror"] .theme-swatch{background:linear-gradient(135deg,#17131B 0 50%,#9C3038 50%)}
-.theme-option[data-theme-option="ghibli"] .theme-swatch{background:linear-gradient(135deg,#EAF3DF 0 50%,#A8C98C 50%)}
-.theme-option-title{font-weight:900;font-size:13px}.theme-option-desc{font-size:10px;margin-top:3px;color:var(--skin-muted);line-height:1.35}.theme-status{font-size:10px;color:var(--skin-muted);margin-top:10px}
-
-
-
-
-
-
-
-
-/* ===== ISOLATED CERITAKU POPUP ===== */
-#istrikuHistoryPopupHost{
-  position:fixed!important;
-  inset:0!important;
-  z-index:2147483647!important;
-  display:none!important;
-  pointer-events:none!important;
-}
-#istrikuHistoryPopupHost.is-open{
-  display:block!important;
-  pointer-events:auto!important;
-}
-#istrikuHistoryPopupHost .ihp-backdrop{
-  position:fixed;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:16px;
-  box-sizing:border-box;
-  background:rgba(20,16,12,.52);
-  backdrop-filter:blur(4px);
-}
-
+.history-clickable{cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}.history-clickable:hover{transform:translateY(-1px);box-shadow:0 7px 18px rgba(118,93,39,.10)}
+.history-detail-modal{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(60,45,30,.45)}.history-detail-modal.open{display:flex}
+.history-detail-card{width:min(650px,94vw);max-height:88vh;overflow:auto;background:#FFFDF4;border:1px solid #F0DFA3;border-radius:24px;box-shadow:0 24px 70px rgba(0,0,0,.25);padding:18px}
+.history-detail-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.history-detail-title{margin:3px 0 0;font:700 20px "Fredoka","Nunito",sans-serif;color:#5C4536}
+.history-detail-close{border:0;background:#FFF0A5;color:#5C4536;width:36px;height:36px;border-radius:50%;font-size:21px;cursor:pointer}
+.history-detail-grid{display:grid;gap:9px;margin-top:14px}.history-detail-row{background:#FFF9DF;border:1px solid #F0DFA3;border-radius:15px;padding:10px 12px}
+.history-detail-key{font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#9A846A;font-weight:900}.history-detail-value{margin-top:4px;font-size:12px;line-height:1.5;color:#5C4536;white-space:pre-wrap;overflow-wrap:anywhere}
 </style>
 </head>
-<script>document.documentElement.setAttribute('data-istriku-theme',localStorage.getItem('istriku_theme')||'piyo');</script><body>
+<body>
 
   <!-- LOGIN -->
   <div id="loginScreen" class="login-screen">
@@ -1576,15 +1528,7 @@ html[data-istriku-theme="horror"] .deco{opacity:.35}
           <div><h2 class="section-title">Akses Ruang Kecilku</h2></div>
         </div>
         <p class="section-sub">Selama kamu tetap di sini, ruang kecil ini akan selalu siap menemani ceritamu.</p>
-        <button id="logoutButton" class="danger-btn">Atur Akses Ruangku</button><section class="card theme-engine-card">
-<div class="card-head"><div class="card-icon">🎨</div><div><h2>Pilih Tema</h2><div class="mini">Pilih suasana yang paling kamu suka.</div></div></div>
-<div class="theme-options">
-<button type="button" class="theme-option" data-theme-option="piyo"><div class="theme-swatch"></div><div class="theme-option-title">Piyo</div><div class="theme-option-desc">Hangat, kuning, lucu dan manis.</div></button>
-<button type="button" class="theme-option" data-theme-option="spongebob"><div class="theme-swatch"></div><div class="theme-option-title">SpongeBob</div><div class="theme-option-desc">Ceria, playful dan penuh warna laut.</div></button>
-<button type="button" class="theme-option" data-theme-option="horror"><div class="theme-swatch"></div><div class="theme-option-title">Horror</div><div class="theme-option-desc">Gelap, misterius, tapi tetap milik kita.</div></button>
-<button type="button" class="theme-option" data-theme-option="ghibli"><div class="theme-swatch"></div><div class="theme-option-title">Ghibli</div><div class="theme-option-desc">Lembut, natural, hangat dan tenang.</div></button>
-</div><div id="themeStatus" class="theme-status"></div>
-</section>
+        <button id="logoutButton" class="danger-btn">Atur Akses Ruangku</button>
       </section>
     </section>
 
@@ -2161,38 +2105,9 @@ function catchNextReward(){
       const hug=document.querySelector("[data-hug].selected")?.dataset.hug||"";
       const bapak=document.querySelector("[data-bapak].selected")?.dataset.bapak||"";
       const day=new Date().toISOString().slice(0,10);
-      const statePayload={done,want,hug,bapak};
-
-      // Keep the UI working locally as a fallback.
-      localStorage.setItem(homeInteractiveKey(),JSON.stringify(statePayload));
-
-      try{
-        const {data:{user}}=await db.auth.getUser();
-        if(!user) return;
-
-        const {error}=await db.from("wife_daily_interactions").upsert({
-          user_id:user.id,
-          day,
-          done,
-          want,
-          hug_choice:hug,
-          bapak_choice:bapak,
-          updated_at:new Date().toISOString()
-        },{onConflict:"user_id,day"});
-
-        if(error){
-          console.error("wife_daily_interactions:",error);
-          return;
-        }
-
-        await logActivity(
-          "home_interaction",
-          "Memperbarui pilihan Beranda",
-          {day,done,want,hug,bapak}
-        );
-      }catch(err){
-        console.error("saveHomeInteractive:",err);
-      }
+      const payload={day,done,want,hug,bapak};
+      localStorage.setItem(homeInteractiveKey(),JSON.stringify(payload));
+      await logActivity("home_interaction","Memperbarui pilihan Beranda",payload);
     }
     function homeBapakArt(){
       return `<svg viewBox="0 0 120 120" aria-hidden="true">
@@ -2400,14 +2315,16 @@ async function loadProfileStats(){ await loadHome();
 
       $("historyList").innerHTML=data.map(item=>{
         const meal=meals.find(m=>m.id===item.meal_type)||{label:item.meal_type};
-        const mood=moods.find(m=>m.id===item.mood_id)||{moodClass:"neutral",label:"Aku biasa aja"};
+        const moodIds=Array.isArray(item.mood_id)?item.mood_id:(item.mood_id?[item.mood_id]:[]);
+        const moodList=moodIds.map(id=>moods.find(m=>m.id===id)).filter(Boolean);
+        const mood=moodList[0]||{moodClass:"neutral",label:"Aku biasa aja"};
         const foodNames=(item.food_ids||[]).map(id=>{
           if(String(id).startsWith("custom::")) return String(id).slice(8);
           const f=foods.find(food=>food.id===id);
           return f?f.label:null;
         }).filter(Boolean).join(" • ");
         const time=new Intl.DateTimeFormat("id-ID",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}).format(new Date(item.eaten_at));
-        return `<article class="history-entry">
+        return `<article class="history-entry history-clickable" data-history-id="${item.id}" tabindex="0" role="button">
           <div class="history-entry-top"><span>${escapeHtml(meal.label)}</span><span>${time}</span></div>
           <div class="history-main"><div class="history-foods">${escapeHtml(foodNames||"Tidak ada makanan")}</div><div class="history-mood">${piyoArt(mood.moodClass)}</div></div>
           ${item.comment?`<div class="history-comment"><span class="piyo-ui inline-piyo" data-piyo-ui="chat"></span> ${escapeHtml(item.comment)}</div>`:""}
@@ -2415,7 +2332,10 @@ async function loadProfileStats(){ await loadHome();
       }).join("");
     }
 
-    function showToast(message){
+    function closeHistoryDetail(){const m=$("historyDetailModal");if(m){m.classList.remove("open");m.setAttribute("aria-hidden","true");}}
+async function openHistoryDetail(id){const {data,error}=await db.from("food_logs").select("id,eaten_at,meal_type,food_ids,mood_id,comment,soundtrack,love_answer,one_word").eq("id",id).maybeSingle();if(error||!data){showToast("Cerita belum bisa dibuka");return;}const meal=meals.find(m=>m.id===data.meal_type)||{label:data.meal_type};const moodIds=Array.isArray(data.mood_id)?data.mood_id:(data.mood_id?[data.mood_id]:[]);const moodNames=moodIds.map(id=>moods.find(m=>m.id===id)?.label||id).join(" • ");const foodNames=(data.food_ids||[]).map(id=>String(id).startsWith("custom::")?String(id).slice(8):(foods.find(f=>f.id===id)?.label||id)).join(" • ");const rows=[["Waktu",new Intl.DateTimeFormat("id-ID",{dateStyle:"full",timeStyle:"medium"}).format(new Date(data.eaten_at))],["Waktu makan",meal.label],["Makanan",foodNames||"Belum ada"],["Mood",moodNames||"Belum ada"],["Soundtrack apa hari ini?",data.soundtrack||"Belum diisi"],["Ibuk sayang Bapak nda?",data.love_answer||"Belum dipilih"],["Satu kata buat hari ini",data.one_word||"Belum diisi"],["Cerita",data.comment||"Belum ada cerita"]];$("historyDetailGrid").innerHTML=rows.map(([k,v])=>`<div class="history-detail-row"><div class="history-detail-key">${escapeHtml(k)}</div><div class="history-detail-value">${escapeHtml(v)}</div></div>`).join("");$("historyDetailModal").classList.add("open");$("historyDetailModal").setAttribute("aria-hidden","false");}
+document.addEventListener("click",event=>{if(event.target.id==="historyDetailClose"||event.target.id==="historyDetailModal"){closeHistoryDetail();return;}const h=event.target.closest(".history-clickable[data-history-id]");if(h)void openHistoryDetail(h.dataset.historyId);});document.addEventListener("keydown",event=>{if(event.key==="Escape")closeHistoryDetail();});
+function showToast(message){
       const toast=$("toast"); toast.textContent=message; toast.classList.add("show");
       clearTimeout(window.__toastTimer); window.__toastTimer=setTimeout(()=>toast.classList.remove("show"),1800);
     }
@@ -2473,6 +2393,7 @@ async function loadProfileStats(){ await loadHome();
         };
         const {error}=await db.from("food_logs").insert(payload);
         if(error){ console.error(error); showToast("Belum tersimpan"); return; }
+        void logActivity("food_log_saved","Menyimpan cerita lengkap",{meal_type:payload.meal_type,food_ids:payload.food_ids,mood_id:payload.mood_id,soundtrack:payload.soundtrack,love_answer:payload.love_answer,one_word:payload.one_word,comment:payload.comment||""});
         void logActivity("food_log_saved","Menyimpan cerita lengkap",{meal_type:payload.meal_type,food_ids:payload.food_ids,mood_id:payload.mood_id,soundtrack:payload.soundtrack,love_answer:payload.love_answer,one_word:payload.one_word,comment:payload.comment||""});
 
         state.meal=""; state.foods=new Set(); state.moods=new Set(); state.loveAnswer=""; $("comment").value=""; $("customFood").value=""; $("soundtrack").value=""; $("oneWord").value=""; document.querySelectorAll("[data-love-answer]").forEach(btn=>btn.classList.remove("sel"));
@@ -2533,30 +2454,31 @@ async function loadProfileStats(){ await loadHome();
 
 
     document.addEventListener("change",event=>{
-      if(event.target.matches("[data-home-check]") || event.target.matches("[data-home-want]")){
-        const kind=event.target.matches("[data-home-check]")?"check":"want";
-        const value=event.target.dataset.homeCheck||event.target.dataset.homeWant;
-        void logActivity(kind==="check"?"checklist_done":"daily_want",kind==="check"?`${event.target.checked?"Mencentang":"Membatalkan"}: ${value}`:`Memilih keinginan: ${value}`,{item:value,checked:event.target.checked});
+      const el=event.target;
+      if(el.matches("[data-home-check]") || el.matches("[data-home-want]")){
+        const section=el.matches("[data-home-check]")?"Hari ini aku sudah":"Hari ini aku pengen";
+        const item=el.dataset.homeCheck||el.dataset.homeWant||"";
+        void logActivity("checklist",`${el.checked?"Mencentang":"Membatalkan"}: ${item}`,{section,item,checked:el.checked});
         void saveHomeInteractive();
       }
     });
+
     document.addEventListener("click",event=>{
       const hug=event.target.closest("[data-hug]");
       if(hug){
         document.querySelectorAll("[data-hug]").forEach(x=>x.classList.remove("selected"));
         hug.classList.add("selected");
-        void logActivity("hug_choice",`Memilih pelukan: ${hug.dataset.hug}`,{choice:hug.dataset.hug});
         $("hugResponse").textContent=`Oke, dicatat. Nanti Bapak kasih ${hug.dataset.hug.toLowerCase()} ya`;
+        void logActivity("hug_choice",`Memilih pelukan: ${hug.dataset.hug}`,{choice:hug.dataset.hug});
         void saveHomeInteractive();
         return;
       }
-
       const bapak=event.target.closest("[data-bapak]");
       if(bapak){
         document.querySelectorAll("[data-bapak]").forEach(x=>x.classList.remove("selected"));
         bapak.classList.add("selected");
-        void logActivity("bapak_guess",`Menebak Bapak: ${bapak.dataset.bapak}`,{choice:bapak.dataset.bapak});
         $("bapakResponse").textContent=homeBapakResponse(bapak.dataset.bapak);
+        void logActivity("bapak_today",`Bapak Hari Ini: ${bapak.dataset.bapak}`,{choice:bapak.dataset.bapak});
         void saveHomeInteractive();
       }
     });
@@ -2610,276 +2532,5 @@ async function loadProfileStats(){ await loadHome();
       }
     })();
   </script>
-<script>
-/* ===== ISTRIKU THEME ENGINE — SAFE SKIN LAYER ===== */
-const ISTRIKU_THEME_KEY="istriku_theme";
-const ISTRIKU_THEMES={
- piyo:{name:"Piyo",desc:"Hangat, kuning, lucu dan manis."},
- spongebob:{name:"SpongeBob",desc:"Ceria, playful dan penuh warna laut."},
- horror:{name:"Horror",desc:"Gelap, misterius, tapi tetap milik kita."},
- ghibli:{name:"Ghibli",desc:"Lembut, natural, hangat dan tenang."}
-};
-function istrikuThemeExists(t){return Object.prototype.hasOwnProperty.call(ISTRIKU_THEMES,t)}
-function applyIstrikuTheme(t){
- if(!istrikuThemeExists(t))t="piyo";
- document.documentElement.setAttribute("data-istriku-theme",t);
- localStorage.setItem(ISTRIKU_THEME_KEY,t);
- document.querySelectorAll("[data-theme-option]").forEach(b=>b.classList.toggle("selected",b.dataset.themeOption===t));
- const s=document.getElementById("themeStatus");if(s)s.textContent="Tema sekarang: "+ISTRIKU_THEMES[t].name;
-}
-function loadIstrikuTheme(){applyIstrikuTheme(localStorage.getItem(ISTRIKU_THEME_KEY)||"piyo")}
-async function changeIstrikuTheme(t){
- applyIstrikuTheme(t);
- try{
-  const {data:{user}}=await db.auth.getUser();
-  if(user)await db.from("activity_logs").insert({user_id:user.id,activity_type:"theme_change",activity_label:"Mengganti tema ke "+ISTRIKU_THEMES[t].name,meta:{theme:t}});
- }catch(e){console.debug("theme activity logging skipped",e)}
-}
-document.addEventListener("click",e=>{
- const b=e.target.closest("[data-theme-option]");
- if(b)void changeIstrikuTheme(b.dataset.themeOption);
-});
-</script>
-
-
-</div>
-
-<script>loadIstrikuTheme();</script></div>
-
-
-<script>
-/* ===== ISTRIKU CERITAKU POPUP — ISOLATED SHADOW ROOT ===== */
-(function(){
-  "use strict";
-
-  const HOST_ID = "istrikuHistoryPopupHost";
-  let host = null, shadow = null, previousOverflow = "";
-
-  function esc(v){
-    return String(v ?? "").replace(/[&<>"']/g, m => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-    }[m]));
-  }
-
-  function val(obj, keys){
-    for(const k of keys){
-      if(obj && obj[k] !== undefined && obj[k] !== null && obj[k] !== "")
-        return obj[k];
-    }
-    return "";
-  }
-
-  function stringify(v){
-    if(Array.isArray(v))
-      return v.map(x => typeof x === "object" ? JSON.stringify(x) : x).join(" · ");
-    if(v && typeof v === "object")
-      return Object.entries(v).map(([k,x]) => k + ": " + x).join("\n");
-    return String(v ?? "");
-  }
-
-  function ensure(){
-    if(host) return;
-
-    host = document.createElement("div");
-    host.id = HOST_ID;
-    host.setAttribute("aria-hidden","true");
-
-    shadow = host.attachShadow({mode:"closed"});
-
-    const style = document.createElement("style");
-    style.textContent = `
-      :host{all:initial}
-      .backdrop{
-        position:fixed;inset:0;z-index:2147483647;
-        display:flex;align-items:center;justify-content:center;
-        padding:16px;box-sizing:border-box;
-        background:rgba(20,16,12,.52);
-        backdrop-filter:blur(4px);
-        font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      }
-      .card{
-        position:relative;
-        width:min(560px,100%);
-        max-height:88vh;
-        overflow:auto;
-        box-sizing:border-box;
-        border:1px solid #F0DFA3;
-        border-radius:24px;
-        background:#FFFEF4;
-        color:#5C4536;
-        padding:20px;
-        box-shadow:0 24px 70px rgba(0,0,0,.28);
-      }
-      .close{
-        position:absolute;right:12px;top:12px;
-        width:38px;height:38px;border:0;border-radius:50%;
-        cursor:pointer;background:#FFF1A8;color:#5C4536;
-        font-size:22px;font-weight:900;line-height:38px;
-      }
-      .close:hover{filter:brightness(.96)}
-      .title{font-size:20px;font-weight:900;padding-right:45px}
-      .time{font-size:11px;color:#806A59;margin:5px 0 16px}
-      .grid{display:grid;gap:9px}
-      .row{padding:11px 12px;border-radius:15px;background:#FFF8D6;border:1px solid #F0DFA3}
-      .label{font-size:10px;font-weight:900;color:#806A59;margin-bottom:3px}
-      .value{font-size:13px;line-height:1.5;white-space:pre-wrap}
-      .empty{font-size:13px;color:#806A59}
-    `;
-
-    const backdrop = document.createElement("div");
-    backdrop.className = "backdrop";
-    backdrop.setAttribute("role","presentation");
-
-    const card = document.createElement("div");
-    card.className = "card";
-    card.setAttribute("role","dialog");
-    card.setAttribute("aria-modal","true");
-    card.setAttribute("aria-labelledby","ihp-title");
-
-    const close = document.createElement("button");
-    close.className = "close";
-    close.type = "button";
-    close.textContent = "×";
-    close.setAttribute("aria-label","Tutup");
-
-    const title = document.createElement("div");
-    title.className = "title";
-    title.id = "ihp-title";
-    title.textContent = "Ceritamu";
-
-    const time = document.createElement("div");
-    time.className = "time";
-
-    const grid = document.createElement("div");
-    grid.className = "grid";
-
-    card.append(close,title,time,grid);
-    backdrop.appendChild(card);
-    shadow.append(style,backdrop);
-    document.body.appendChild(host);
-
-    close.addEventListener("click", closePopup);
-    backdrop.addEventListener("click", e => {
-      if(e.target === backdrop) closePopup();
-    });
-  }
-
-  function closePopup(){
-    if(!host) return;
-    host.classList.remove("is-open");
-    host.setAttribute("aria-hidden","true");
-    host.style.setProperty("display","none","important");
-    host.style.setProperty("pointer-events","none","important");
-    document.body.style.overflow = previousOverflow;
-    document.removeEventListener("keydown", keyHandler, true);
-  }
-
-  function keyHandler(e){
-    if(e.key === "Escape"){
-      e.preventDefault();
-      e.stopPropagation();
-      closePopup();
-    }
-  }
-
-  function openPopup(data){
-    ensure();
-
-    const title = shadow.querySelector(".title");
-    const time = shadow.querySelector(".time");
-    const grid = shadow.querySelector(".grid");
-
-    const rows = [
-      ["Makanan", val(data,["food_name","food","meal","makanan","name"])],
-      ["Mood", val(data,["mood_id","moods","mood"])],
-      ["Soundtrack apa hari ini?", val(data,["soundtrack","daily_soundtrack"])],
-      ["Ibuk sayang Bapak nda?", val(data,["ibuk_sayang_bapak","love_answer","love_response"])],
-      ["Satu kata buat hari ini", val(data,["one_word","satu_kata","daily_word"])],
-      ["Cerita", val(data,["story","note","catatan","cerita"])],
-      ["Checklist hari ini", val(data,["checklist","checks","home_checks"])],
-      ["Hari ini aku pengen", val(data,["wants","today_wants","hari_ini_aku_pengen"])]
-    ].filter(x => x[1] !== "" && x[1] !== null && x[1] !== undefined);
-
-    const t = val(data,["created_at","date","timestamp","logged_at"]);
-
-    title.textContent = data.title || "Ceritamu";
-    time.textContent = t
-      ? (isNaN(new Date(t)) ? stringify(t) :
-         new Date(t).toLocaleString("id-ID",{dateStyle:"full",timeStyle:"short"}))
-      : "";
-
-    grid.innerHTML = rows.length
-      ? rows.map(([k,v]) =>
-          '<div class="row"><div class="label">'+esc(k)+
-          '</div><div class="value">'+esc(stringify(v))+
-          '</div></div>').join("")
-      : '<div class="empty">Belum ada detail yang tersimpan.</div>';
-
-    previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    host.style.setProperty("display","block","important");
-    host.style.setProperty("pointer-events","auto","important");
-    host.classList.add("is-open");
-    host.setAttribute("aria-hidden","false");
-    document.addEventListener("keydown", keyHandler, true);
-  }
-
-  function extract(row){
-    let data = {};
-    const raw = row.getAttribute("data-history-detail");
-
-    if(raw){
-      try{ data = JSON.parse(raw); }catch(_){}
-    }
-
-    if(!Object.keys(data).length && row.__historyData)
-      data = row.__historyData;
-
-    if(!Object.keys(data).length){
-      data = {
-        created_at: row.dataset.createdAt || row.dataset.date || "",
-        food_name: row.dataset.food || row.dataset.foodName || row.textContent.trim(),
-        mood_id: row.dataset.mood || "",
-        soundtrack: row.dataset.soundtrack || "",
-        ibuk_sayang_bapak: row.dataset.loveAnswer || "",
-        one_word: row.dataset.oneWord || "",
-        story: row.dataset.story || row.dataset.note || ""
-      };
-    }
-    return data;
-  }
-
-  /*
-   * One isolated delegated handler.
-   * We intentionally don't use or overwrite any existing history functions.
-   */
-  document.addEventListener("click", function(e){
-    const row = e.target.closest(
-      "[data-history-detail],.history-entry,.history-item,.history-card,.history-row,.history-record,.food-history-item"
-    );
-    if(!row) return;
-    if(row.closest("#"+HOST_ID)) return;
-
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    openPopup(extract(row));
-  }, true);
-
-  window.istrikuOpenHistoryPopup = openPopup;
-  window.istrikuCloseHistoryPopup = closePopup;
-})();
-</script>
-
-
-<script>
-(function(){
-  const mark = () => document.querySelectorAll(
-    ".history-item,.history-card,.history-row,.history-record,.food-history-item"
-  ).forEach(x => x.classList.add("history-entry"));
-  mark();
-  new MutationObserver(mark).observe(document.body,{subtree:true,childList:true});
-})();
-</script>
-
-</body>
+<div id="historyDetailModal" class="history-detail-modal" aria-hidden="true"><div class="history-detail-card" role="dialog" aria-modal="true" aria-labelledby="historyDetailTitle"><div class="history-detail-head"><div><div class="section-sub">Cerita lengkap</div><h3 id="historyDetailTitle" class="history-detail-title">Cerita Istriku</h3></div><button id="historyDetailClose" class="history-detail-close" type="button" aria-label="Tutup">×</button></div><div id="historyDetailGrid" class="history-detail-grid"></div></div></div></body>
 </html>
