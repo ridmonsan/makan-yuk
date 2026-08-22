@@ -595,26 +595,40 @@ function piyoDashArt(kind="happy"){
         console.error("loadInsights activity_logs",err);
       }
 
-      const countMeta=(types)=>{
-        const map=new Map();
+      const homeWantLabels={
+        eat_good:"Mam enak",
+        sleep_well:"Bobok nyenyak",
+        watch:"Netpikan",
+        pacalan:"Pacalan",
+        hug:"Dipeluk",
+        pampered:"Dimanja"
+      };
 
-        const addValue=(value)=>{
-          const v=String(value??'').trim();
-          if(v) map.set(v,(map.get(v)||0)+1);
-        };
+      const homeCheckLabels={
+        drink:"Minum air",
+        eat:"Mam atau nyemil",
+        rest:"Istirahat sebentar"
+      };
+
+      const countMeta=(types, mode="want")=>{
+        const map=new Map();
 
         activityRows.forEach(r=>{
           if(!types.includes(r.activity_type)) return;
 
           const meta=r.meta&&typeof r.meta==='object'?r.meta:{};
-          const candidates=[
-            meta.item, meta.choice, meta.value, meta.label, meta.text,
-            meta.name, meta.title, meta.option, meta.activity_label,
-            r.activity_label
-          ];
+          const value=String(meta.item||meta.choice||meta.value||'').trim();
+          if(!value) return;
 
-          const value=candidates.find(v=>String(v??'').trim()!=='');
-          addValue(value);
+          // "Yang sudah dilakukan" hanya menghitung aksi ketika checkbox
+          // benar-benar dicentang. Event membatalkan/uncheck tidak dihitung.
+          if(mode==="check" && meta.checked!==true) return;
+
+          const label=mode==="check"
+            ? (homeCheckLabels[value]||value)
+            : (homeWantLabels[value]||value);
+
+          map.set(label,(map.get(label)||0)+1);
         });
 
         return [...map.entries()].sort((a,b)=>b[1]-a[1]);
@@ -622,12 +636,12 @@ function piyoDashArt(kind="happy"){
 
       renderInsightList(
         $("wantInsights"),
-        countMeta(["daily_want","home_want","want"]),
+        countMeta(["daily_want","home_want","want"],"want"),
         "Belum ada keinginan yang tercatat."
       );
       renderInsightList(
         $("checkInsights"),
-        countMeta(["checklist_done","home_check","check"]),
+        countMeta(["checklist_done","home_check","check"],"check"),
         "Belum ada ceklis yang selesai."
       );
 
@@ -638,8 +652,8 @@ function piyoDashArt(kind="happy"){
       });
       const topMood=[...moodCounts.entries()].sort((a,b)=>b[1]-a[1])[0];
       const moodLabel=topMood?(moods.find(m=>m[0]===topMood[0])?.[2]||topMood[0]):'';
-      const topWant=countMeta(["daily_want","home_want","want"])[0]?.[0]||'';
-      const topCheck=countMeta(["checklist_done","home_check","check"])[0]?.[0]||'';
+      const topWant=countMeta(["daily_want","home_want","want"],"want")[0]?.[0]||'';
+      const topCheck=countMeta(["checklist_done","home_check","check"],"check")[0]?.[0]||'';
       const latest=rows[0];
 
       if($("wifeInsight")){
