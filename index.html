@@ -1209,6 +1209,17 @@
 #page-bucketlist .page-header-art{width:44px;height:44px;flex:0 0 44px}
 #page-bucketlist .page-header-art svg{width:44px;height:44px;display:block}
 #page-bucketlist .bucketlist-card{background:#FFFEF4}
+#page-bucketlist .bucketlist-place-field{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:12px 14px;border:1px solid #F0DFA3;border-radius:16px;background:linear-gradient(135deg,#FFFDF2 0%,#FFF8DE 100%);box-shadow:0 3px 10px rgba(122,90,60,.07)}
+#page-bucketlist .bucketlist-field-art{width:52px;height:52px;flex:0 0 52px;display:flex;align-items:center;justify-content:center;border-radius:14px;background:#FFF3B8}
+#page-bucketlist .bucketlist-field-art .piyo-ui{width:46px;height:40px;display:block}
+#page-bucketlist .bucketlist-field-content{min-width:0;flex:1}
+#page-bucketlist .bucketlist-field-content label{display:block;margin:0 0 7px;font-weight:800;color:#76552F}
+#page-bucketlist .bucketlist-input-wrap{position:relative}
+#page-bucketlist .bucketlist-input-piyo{position:absolute;left:10px;top:50%;width:25px;height:25px;transform:translateY(-50%);pointer-events:none;z-index:1}
+#page-bucketlist .bucketlist-input-piyo svg{width:25px;height:25px;display:block}
+#page-bucketlist #bucketlistPlace{width:100%;padding-left:42px;border:1.5px solid #E8CB72;background:#FFFDF7;color:#5C4536;border-radius:12px;box-sizing:border-box}
+#page-bucketlist #bucketlistPlace:focus{border-color:#D8AD42;box-shadow:0 0 0 3px rgba(240,207,112,.25);outline:none}
+#page-bucketlist #bucketlistPlace::placeholder{color:#B39A72}
 #page-bucketlist .bucketlist-card label{display:flex;align-items:center;gap:6px}
 #page-bucketlist .bucketlist-card label .piyo-ui{width:20px;height:20px;flex:0 0 20px}
 #page-bucketlist .bucketlist-card button{display:inline-flex;align-items:center;justify-content:center;gap:7px}
@@ -1550,9 +1561,19 @@
 
   <div class="card bucketlist-card">
     <form id="bucketlistForm" autocomplete="off">
-      <label for="bucketlistPlace"><span class="piyo-ui inline-piyo" data-piyo-ui="bucketlist"></span> Mau pergi ke mana, sayang?</label>
-      <input id="bucketlistPlace" name="place" type="text"
-             maxlength="160" placeholder="Nama tempat atau lokasi..." required>
+      <div class="bucketlist-field bucketlist-place-field">
+        <div class="bucketlist-field-art" aria-hidden="true">
+          <span class="piyo-ui" data-piyo-ui="bucketlist"></span>
+        </div>
+        <div class="bucketlist-field-content">
+          <label for="bucketlistPlace">Mau pergi ke mana, sayang?</label>
+          <div class="bucketlist-input-wrap">
+            <span class="bucketlist-input-piyo piyo-ui" aria-hidden="true" data-piyo-ui="bucketlist"></span>
+            <input id="bucketlistPlace" name="place" type="text"
+                   maxlength="160" placeholder="Nama tempat atau lokasi..." required>
+          </div>
+        </div>
+      </div>
 
       <label for="bucketlistComment"><span class="piyo-ui inline-piyo" data-piyo-ui="chat"></span> Catatan kecil</label>
       <textarea id="bucketlistComment" name="comment" maxlength="1000"
