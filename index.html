@@ -1233,8 +1233,8 @@
         </div>
         <p class="section-sub">Pilih aja di menu ya sayang.</p>
         <div class="quick-grid">
-          <button class="quick-btn" data-go="makan"><span class="piyo-ui inline-piyo" data-piyo-ui="food"></span> Menu makanan dan kolom cerita ada disini →</button>
-          <button class="quick-btn" data-go="riwayat"><span class="piyo-ui inline-piyo" data-piyo-ui="history"></span> Cerita-cerita yg udah kamu buat ada disini →</button>
+          <button class="quick-btn" data-go="makan"><span class="piyo-ui inline-piyo" data-piyo-ui="food"></span> Mau mam...</button>
+          <button class="quick-btn" data-go="cerita"><span class="piyo-ui inline-piyo" data-piyo-ui="chat"></span> Mau cerita...</button>
         </div>
       </section>
 
@@ -1374,7 +1374,7 @@
     <section id="page-makan" class="page">
       <header style="padding:10px 6px 14px;">
         <div class="page-title"><span class="piyo-ui inline-piyo" data-piyo-ui="food"></span> Makan</div>
-        <div class="page-subtitle">Isi makanan, mood, dan cerita kamu.</div>
+        <div class="page-subtitle">Pilih dan catat apa yang kamu makan hari ini.</div>
       </header>
 
       <section class="card">
@@ -1402,6 +1402,16 @@
           <input id="customFood" class="custom-food-input" type="text" maxlength="100" placeholder="Ketik makanan lain yang kamu makan..." autocomplete="off">
         </div>
       </section>
+
+    </section>
+
+
+    <!-- CERITA -->
+    <section id="page-cerita" class="page">
+      <header style="padding:10px 6px 14px;">
+        <div class="page-title"><span class="piyo-ui inline-piyo" data-piyo-ui="chat"></span> Cerita</div>
+        <div class="page-subtitle">Sini, ceritain sedikit tentang hari kamu.</div>
+      </header>
 
       <section class="card">
         <div class="section-head">
@@ -1459,6 +1469,7 @@
         </button>
         <div class="save-note">Aku simpan ceritamu di sini ya.</div>
       </section>
+
     </section>
 
     <!-- RIWAYAT -->
@@ -1553,6 +1564,7 @@
     <div class="nav-inner">
       <button class="nav-btn active" data-page="home"><span class="nav-icon"><span class="piyo-ui" data-piyo-ui="home"></span></span><span class="nav-label">Beranda</span></button>
       <button class="nav-btn" data-page="makan"><span class="nav-icon"><span class="piyo-ui" data-piyo-ui="food"></span></span><span class="nav-label">Makan</span></button>
+      <button class="nav-btn" data-page="cerita"><span class="nav-icon"><span class="piyo-ui" data-piyo-ui="chat"></span></span><span class="nav-label">Cerita</span></button>
       <button class="nav-btn" data-page="riwayat"><span class="nav-icon"><span class="piyo-ui" data-piyo-ui="history"></span></span><span class="nav-label">Ceritaku</span></button>
       <button class="nav-btn" data-page="aku"><span class="nav-icon"><span class="piyo-ui" data-piyo-ui="love"></span></span><span class="nav-label">Ruang Kecilku</span></button>
     </div>
@@ -2165,6 +2177,7 @@ function goPage(page){
       const nav = document.querySelector('.nav-btn[data-page="'+page+'"]');
       if(target) target.classList.add("active");
       if(nav) nav.classList.add("active");
+      render();
       if(page === "riwayat") loadHistory();
       if(page === "home") loadHome();
       if(page === "aku") loadProfileStats();
@@ -2213,11 +2226,14 @@ function goPage(page){
       ];
       $("selectedFoods").innerHTML = chips.length ? chips.join("") : `<div class="empty">Belum ada makanan yang dipilih.</div>`;
 
-      $("moodGrid").innerHTML = moods.map(m=>`
-        <button class="pick mood-btn ${state.moods.has(m.id)?"sel":""}" data-mood="${m.id}">
-          <span class="icon">${piyoArt(m.moodClass)}</span>
-          <span class="label">${m.label}</span>
-        </button>`).join("");
+      const moodGrid = $("moodGrid");
+      if(moodGrid){
+        moodGrid.innerHTML = moods.map(m=>`
+          <button class="pick mood-btn ${state.moods.has(m.id)?"sel":""}" data-mood="${m.id}">
+            <span class="icon">${piyoArt(m.moodClass)}</span>
+            <span class="label">${m.label}</span>
+          </button>`).join("");
+      }
 
       const selectedMoods = moods.filter(m=>state.moods.has(m.id));
       if($("selectedMoods")){
@@ -2226,7 +2242,10 @@ function goPage(page){
           : `<div class="empty">Belum ada mood yang dipilih.</div>`;
       }
       const hasCustom = customFood.length>0;
-      $("save").disabled = !(state.meal && (state.foods.size||hasCustom) && state.moods.size);
+      const saveBtn = $("save");
+      if(saveBtn){
+        saveBtn.disabled = !(state.meal && (state.foods.size||hasCustom) && state.moods.size);
+      }
     }
 
     async function loadTodayCount(){
