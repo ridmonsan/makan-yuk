@@ -557,10 +557,11 @@ function piyoDashArt(kind="happy"){
       }).join("");
     }
 
+// Data layer: request only fields used by the dashboard; keep the existing 500-row window.
 async function load(){
  window.__foodRows=[];
  $("list").innerHTML='<div class="empty">Memuat...</div>';
- const {data,error}=await db.from("food_logs").select("*").order("eaten_at",{ascending:false}).limit(500);
+ const {data,error}=await db.from("food_logs").select("id,eaten_at,meal_type,food_ids,mood_id,comment,soundtrack,love_answer,one_word").order("eaten_at",{ascending:false}).limit(500);
  if(error){console.error(error);$("list").innerHTML='<div class="empty">Gagal memuat data.</div>';return}
  window.__foodRows=data;
  const total=data.length,todayKey=new Date().toISOString().slice(0,10),today=data.filter(x=>x.eaten_at.slice(0,10)===todayKey).length;
