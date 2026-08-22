@@ -152,6 +152,126 @@ button{font:inherit}
     .activity-meta{font-size:9px;color:#9A846A;margin-top:2px;line-height:1.3}
     .activity-time{font-size:9px;color:#9A846A;white-space:nowrap}
     .dashboard-piyo-icon{width:28px;height:28px;display:block}
+
+/* ===== DASHBOARD INSIGHTS ===== */
+.insight-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
+.insight-card{min-width:0}
+.insight-list{display:grid;gap:8px;margin-top:10px}
+.insight-item{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:center;background:#FFFDF2;border:1px solid #F0DFA3;border-radius:14px;padding:8px 9px}
+.insight-icon{width:26px;height:26px;border-radius:9px;background:#FFF1A1;display:grid;place-items:center;font-size:13px}
+.insight-main{min-width:0}.insight-name{font-size:10px;font-weight:900;color:#604A37;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.insight-meta{font-size:9px;color:#9A846A;margin-top:2px}
+.insight-count{font-size:11px;font-weight:900;color:#76552F;white-space:nowrap}
+.insight-quote{margin-top:10px;padding:11px 12px;border-radius:15px;background:#FFF3CC;border:1px solid #EED78C;color:#715738;font-size:10px;line-height:1.55;font-weight:800}
+
+.insight-row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#FFFDF2;border:1px solid #F0DFA3;border-radius:14px;padding:9px 10px}
+.insight-row-main{min-width:0;font-size:10px;font-weight:800;color:#604A37;line-height:1.35;overflow-wrap:anywhere}
+.insight-row-count{flex:0 0 auto;font-size:10px;font-weight:900;color:#9A846A}
+.insight-empty{padding:12px 4px;text-align:center;color:#A18C76;font-size:10px;font-weight:700}
+.entry.clickable,.activity-item.clickable{cursor:pointer}
+.entry.clickable:focus-visible,.activity-item.clickable:focus-visible{outline:3px solid #FFD95A;outline-offset:2px}
+@media(max-width:720px){.insight-grid{grid-template-columns:1fr}}
+
+
+/* ===== DASHBOARD DETAIL POPUP — ISOLATED FIX ===== */
+.detail-modal{
+  position:fixed;
+  inset:0;
+  z-index:100000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  background:rgba(55,42,30,.52);
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+}
+.detail-modal.open{display:flex !important}
+.detail-card{
+  width:min(680px,96vw);
+  max-height:88vh;
+  overflow:auto;
+  background:#FFFEF4;
+  border:1px solid #F0DFA3;
+  border-radius:24px;
+  box-shadow:0 22px 70px rgba(0,0,0,.28);
+  padding:18px;
+  color:#5C4536;
+}
+.detail-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+.detail-kicker{
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.6px;
+  color:#9A846A;
+  font-weight:900;
+}
+.detail-title{
+  margin:3px 0 0;
+  font:700 20px "Fredoka","Nunito",sans-serif;
+  color:#5C4536;
+}
+.detail-close{
+  border:0;
+  background:#FFF3A8;
+  color:#5C4536;
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  font-size:21px;
+  line-height:1;
+  cursor:pointer;
+  flex:0 0 auto;
+}
+.detail-close:hover{filter:brightness(.97)}
+.detail-grid{
+  display:grid;
+  gap:9px;
+  margin-top:14px;
+}
+.detail-row{
+  background:#FFFDF2;
+  border:1px solid #F0DFA3;
+  border-radius:15px;
+  padding:10px 12px;
+}
+.detail-label{
+  font-size:9px;
+  color:#9A846A;
+  text-transform:uppercase;
+  letter-spacing:.45px;
+  font-weight:900;
+}
+.detail-value{
+  margin-top:4px;
+  color:#5C4536;
+  font-size:12px;
+  line-height:1.5;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+.entry.clickable{
+  cursor:pointer;
+}
+.entry.clickable:hover{
+  box-shadow:0 7px 18px rgba(118,93,39,.10);
+  transform:translateY(-1px);
+}
+@media(max-width:600px){
+  .detail-modal{padding:9px}
+  .detail-card{
+    width:96vw;
+    max-height:90vh;
+    border-radius:20px;
+    padding:14px;
+  }
+}
+
 </style></head>
 <body>
   <div id="loginScreen" class="login-screen">
@@ -262,6 +382,36 @@ button{font:inherit}
     </section>
 
     
+
+<section class="insight-grid">
+  <div class="card insight-card">
+    <div class="card-head"><div class="card-icon">🎵</div><div><h2>Lagu yang menemani Ibuk</h2></div></div>
+    <div class="mini">Soundtrack yang paling sering dititipkan.</div>
+    <div id="soundtrackInsights" class="insight-list"><div class="insight-empty">Memuat...</div></div>
+  </div>
+  <div class="card insight-card">
+    <div class="card-head"><div class="card-icon">🌷</div><div><h2>Kata-kata Ibuk</h2></div></div>
+    <div class="mini">Satu kata yang paling sering muncul.</div>
+    <div id="oneWordInsights" class="insight-list"><div class="insight-empty">Memuat...</div></div>
+  </div>
+  <div class="card insight-card">
+    <div class="card-head"><div class="card-icon">☀️</div><div><h2>Yang sering Ibuk pengen</h2></div></div>
+    <div class="mini">Keinginan yang paling sering dipilih.</div>
+    <div id="wantInsights" class="insight-list"><div class="insight-empty">Memuat...</div></div>
+  </div>
+  <div class="card insight-card">
+    <div class="card-head"><div class="card-icon">🌱</div><div><h2>Yang sudah dilakukan</h2></div></div>
+    <div class="mini">Ceklis kecil yang paling sering selesai.</div>
+    <div id="checkInsights" class="insight-list"><div class="insight-empty">Memuat...</div></div>
+  </div>
+</section>
+
+<section class="card" style="margin-top:12px">
+  <div class="card-head"><div class="card-icon">💛</div><div><h2>Tentang Ibuk akhir-akhir ini</h2></div></div>
+  <div class="mini">Sedikit rangkuman dari cerita-cerita kecilnya.</div>
+  <div id="wifeInsight" class="insight-quote">Sedang membaca cerita Ibuk...</div>
+</section>
+
     <section class="card activity-card">
       <div class="card-head">
         <div class="card-icon" id="activityCardIcon"></div>
@@ -376,6 +526,103 @@ function piyoDashArt(kind="happy"){
       return dashboardPiyoIcon("happy");
     }
 
+
+    function renderInsightList(el, entries, emptyText){
+      if(!el) return;
+      if(!entries.length){
+        el.innerHTML=`<div class="insight-empty">${emptyText}</div>`;
+        return;
+      }
+      el.innerHTML=entries.slice(0,5).map(([label,count])=>`
+        <div class="insight-row">
+          <div class="insight-row-main"><span>${String(label).replace(/[<>&\"]/g,m=>({"<":"&lt;",">":"&gt;","&":"&amp;",'"':'&quot;'}[m]))}</span></div>
+          <div class="insight-row-count">${count}×</div>
+        </div>`).join('');
+    }
+
+    async function loadInsights(data){
+      const rows=Array.isArray(data)?data:[];
+      const countField=(field)=>{
+        const map=new Map();
+        rows.forEach(r=>{
+          const v=String(r?.[field]??'').trim();
+          if(v) map.set(v,(map.get(v)||0)+1);
+        });
+        return [...map.entries()].sort((a,b)=>b[1]-a[1]);
+      };
+
+      renderInsightList(
+        $("soundtrackInsights"),
+        countField("soundtrack"),
+        "Belum ada lagu yang dititipkan."
+      );
+      renderInsightList(
+        $("oneWordInsights"),
+        countField("one_word"),
+        "Belum ada kata yang dititipkan."
+      );
+
+      // Beranda choices are recorded in activity_logs by index.html.
+      let activityRows=[];
+      try{
+        const {data:activityData,error}=await db
+          .from("activity_logs")
+          .select("id,activity_type,activity_label,meta,created_at")
+          .order("created_at",{ascending:false})
+          .limit(500);
+        if(error) throw error;
+        activityRows=activityData||[];
+      }catch(err){
+        console.error("loadInsights activity_logs",err);
+      }
+
+      const countMeta=(types)=>{
+        const map=new Map();
+        activityRows.forEach(r=>{
+          if(!types.includes(r.activity_type)) return;
+          const meta=r.meta&&typeof r.meta==='object'?r.meta:{};
+          const value=String(meta.item||meta.choice||meta.value||'').trim();
+          if(value) map.set(value,(map.get(value)||0)+1);
+        });
+        return [...map.entries()].sort((a,b)=>b[1]-a[1]);
+      };
+
+      renderInsightList(
+        $("wantInsights"),
+        countMeta(["daily_want","home_want","want"]),
+        "Belum ada keinginan yang tercatat."
+      );
+      renderInsightList(
+        $("checkInsights"),
+        countMeta(["checklist_done","home_check","check"]),
+        "Belum ada ceklis yang selesai."
+      );
+
+      const moodCounts=new Map();
+      rows.forEach(r=>{
+        const ids=Array.isArray(r.mood_id)?r.mood_id:(r.mood_id?[r.mood_id]:[]);
+        ids.forEach(id=>moodCounts.set(id,(moodCounts.get(id)||0)+1));
+      });
+      const topMood=[...moodCounts.entries()].sort((a,b)=>b[1]-a[1])[0];
+      const moodLabel=topMood?(moods.find(m=>m[0]===topMood[0])?.[2]||topMood[0]):'';
+      const topWant=countMeta(["daily_want","home_want","want"])[0]?.[0]||'';
+      const topCheck=countMeta(["checklist_done","home_check","check"])[0]?.[0]||'';
+      const latest=rows[0];
+
+      if($("wifeInsight")){
+        if(!rows.length){
+          $("wifeInsight").textContent="Belum ada cukup cerita untuk dibaca. Nanti kalau Ibuk sudah banyak cerita, Bapak bisa melihat polanya di sini.";
+        }else{
+          const parts=[];
+          if(moodLabel) parts.push(`Akhir-akhir ini mood yang paling sering muncul adalah ${moodLabel.toLowerCase()}.`);
+          if(topWant) parts.push(`Yang paling sering Ibuk pengen: ${topWant}.`);
+          if(topCheck) parts.push(`Dan yang paling sering berhasil dilakukan: ${topCheck}.`);
+          if(latest?.soundtrack) parts.push(`Terakhir, ada lagu "${latest.soundtrack}" yang menemani.`);
+          $("wifeInsight").textContent=parts.join(' ')||"Belum cukup banyak cerita untuk membuat rangkuman kecil tentang Ibuk.";
+        }
+      }
+    }
+
     async function loadActivities(){
       const {data,error}=await db.from("activity_logs").select("id,activity_type,activity_label,meta,created_at").order("created_at",{ascending:false}).limit(200);
       if(error){
@@ -384,6 +631,7 @@ function piyoDashArt(kind="happy"){
         return;
       }
       const rows=data||[];
+      window.__activityRows=rows;
       const todayKey=new Date().toISOString().slice(0,10);
       const todayRows=rows.filter(x=>x.created_at.slice(0,10)===todayKey);
       $("activityTotal").textContent=rows.length;
@@ -399,7 +647,7 @@ function piyoDashArt(kind="happy"){
         const t=new Date(row.created_at);
         const time=new Intl.DateTimeFormat("id-ID",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}).format(t);
         const typeLabel=row.activity_type.replaceAll("_"," ");
-        return `<div class="activity-item">
+        return `<div class="activity-item clickable" data-activity-index="${rows.indexOf(row)}" tabindex="0" role="button" aria-label="Buka detail aktivitas">
           <div class="activity-icon">${activityIcon(row.activity_type)}</div>
           <div class="activity-main">
             <div class="activity-label">${String(row.activity_label||typeLabel).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>
@@ -410,10 +658,13 @@ function piyoDashArt(kind="happy"){
       }).join("");
     }
 
+// Data layer: request only fields used by the dashboard; keep the existing 500-row window.
 async function load(){
+ window.__foodRows=[];
  $("list").innerHTML='<div class="empty">Memuat...</div>';
- const {data,error}=await db.from("food_logs").select("*").order("eaten_at",{ascending:false}).limit(500);
+ const {data,error}=await db.from("food_logs").select("id,eaten_at,meal_type,food_ids,mood_id,comment,soundtrack,love_answer,one_word").order("eaten_at",{ascending:false}).limit(500);
  if(error){console.error(error);$("list").innerHTML='<div class="empty">Gagal memuat data.</div>';return}
+ window.__foodRows=data;
  const total=data.length,todayKey=new Date().toISOString().slice(0,10),today=data.filter(x=>x.eaten_at.slice(0,10)===todayKey).length;
   let moodTotalSelections=0;
   data.forEach(x=>{
@@ -429,7 +680,7 @@ async function load(){
   });
   $("positive").textContent=(total?Math.round(positiveRows.length/total*100):0)+"%";
  const fc={};data.forEach(x=>(x.food_ids||[]).forEach(id=>fc[id]=(fc[id]||0)+1));const topF=Object.entries(fc).sort((a,b)=>b[1]-a[1]).slice(0,8),maxF=topF[0]?.[1]||1;
- $("foodBars").innerHTML=topF.length?topF.map(([id,n])=>{const f=foods.find(x=>x[0]===id);const label=String(id).startsWith("custom::")?String(id).slice("custom::".length):(f?f[2]:id);const icon=String(id).startsWith("custom::")?piyoDashArt("happy"):piyoDashArt("happy");return `<div class="barrow"><div>${icon} ${label}</div><div class="bar"><div class="fill" style="width:${n/maxF*100}%"></div></div><div>${n}</div></div>`}).join(""):'<div class="empty">Belum ada data.</div>';
+ $("foodBars").innerHTML=topF.length?topF.map(([id,n])=>{const f=foods.find(x=>x[0]===id);const label=String(id).startsWith("custom::")?String(id).slice("custom::".length):(f?f[2]:id);const icon=String(id).startsWith("custom::")?"🐥":(f?f[1]:"🍽️");return `<div class="barrow"><div>${icon} ${label}</div><div class="bar"><div class="fill" style="width:${n/maxF*100}%"></div></div><div>${n}</div></div>`}).join(""):'<div class="empty">Belum ada data.</div>';
  const mc={};data.forEach(x=>{
     const ids=Array.isArray(x.mood_id)?x.mood_id:[x.mood_id];
     ids.forEach(id=>mc[id]=(mc[id]||0)+1);
@@ -441,10 +692,11 @@ async function load(){
   const m=moods.find(x=>x[0]===id)||["neutral","",id];
   return `<div class="barrow"><div><span style="display:inline-flex;vertical-align:middle">${piyoDashArt(m[0]||"neutral")}</span> ${m[2]}</div><div class="bar"><div class="fill" style="width:${n/maxM*100}%"></div></div><div>${n}</div></div>`;
 }).join("");
- $("list").innerHTML=data.length?data.map(x=>{const meal=meals.find(m=>m[0]===x.meal_type),mood=moods.find(m=>m[0]===((Array.isArray(x.mood_id)?x.mood_id[0]:x.mood_id))),names=(x.food_ids||[]).map(id=>{if(String(id).startsWith("custom::"))return `<span style="display:inline-flex;vertical-align:middle">${piyoDashArt("happy")}</span> `+String(id).slice("custom::".length);const f=foods.find(f=>f[0]===id);return f?f[1]+" "+f[2]:null;}).filter(Boolean).join(" · "),t=new Date(x.eaten_at).toLocaleString("id-ID",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});return `<div class="entry"><div class="row"><span>${meal?`<span style="display:inline-flex;vertical-align:middle">${piyoDashArt(meal[0])}</span> ${meal[2]}`:x.meal_type}</span><span>${t}</span></div><div class="main"><div class="foods">${names}</div><div class="mood">${piyoDashArt(mood?mood[0]:"neutral")}</div></div>${x.soundtrack?`<div class="extra-info"><span style="display:inline-flex;vertical-align:middle">${piyoDashArt("happy")}</span> ${String(x.soundtrack).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}
-${x.love_answer?`<div class="extra-info"><span style="display:inline-flex;vertical-align:middle">${piyoDashArt("love")}</span> ${String(x.love_answer).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}
+ $("list").innerHTML=data.length?data.map(x=>{const meal=meals.find(m=>m[0]===x.meal_type),mood=moods.find(m=>m[0]===((Array.isArray(x.mood_id)?x.mood_id[0]:x.mood_id))),names=(x.food_ids||[]).map(id=>{if(String(id).startsWith("custom::"))return "🐥 "+String(id).slice("custom::".length);const f=foods.find(f=>f[0]===id);return f?f[1]+" "+f[2]:null;}).filter(Boolean).join(" · "),t=new Date(x.eaten_at).toLocaleString("id-ID",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});return `<div class="entry clickable" data-food-index="${data.indexOf(x)}" tabindex="0" role="button" aria-label="Buka detail cerita"><div class="row"><span>${meal?meal[1]+" "+meal[2]:x.meal_type}</span><span>${t}</span></div><div class="main"><div class="foods">${names}</div><div class="mood">${piyoDashArt(mood?mood[0]:"neutral")}</div></div>${x.soundtrack?`<div class="extra-info">🎵 ${String(x.soundtrack).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}
+${x.love_answer?`<div class="extra-info">💛 ${String(x.love_answer).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}
 ${x.one_word?`<div class="extra-info">✏️ ${String(x.one_word).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}
-${x.comment?`<div class="comment"><span style="display:inline-flex;vertical-align:middle">${piyoDashArt("happy")}</span> ${String(x.comment).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}</div>`}).join(""):'<div class="empty">Belum ada catatan.</div>';
+${x.comment?`<div class="comment">💬 ${String(x.comment).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}</div>`}).join(""):'<div class="empty">Belum ada catatan.</div>';
+  await loadInsights(data);
   await loadActivities();
 }
 $("refresh").onclick=load;$("loginButton").addEventListener("click",loginHusband);
@@ -452,5 +704,174 @@ $("loginCode").addEventListener("keydown",e=>{if(e.key==="Enter")loginHusband();
 $("logoutButton").addEventListener("click",async()=>{await db.auth.signOut();window.location.reload();});
 startDashboard();
 </script>
+
+<div id="detailModal" class="detail-modal" aria-hidden="true">
+  <div class="detail-card" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+    <div class="detail-head">
+      <div><div class="detail-kicker" id="detailKicker">Detail</div><h3 class="detail-title" id="detailTitle">Cerita Istriku</h3></div>
+      <button type="button" class="detail-close" id="detailClose" aria-label="Tutup">×</button>
+    </div>
+    <div id="detailGrid" class="detail-grid"></div>
+  </div>
+</div>
+
+
+<script>
+/* ===== DASHBOARD DETAIL POPUP — ISOLATED CONTROLLER ===== */
+(function(){
+  "use strict";
+
+  const modal = document.getElementById("detailModal");
+  const grid = document.getElementById("detailGrid");
+  const title = document.getElementById("detailTitle");
+  const kicker = document.getElementById("detailKicker");
+  const closeButton = document.getElementById("detailClose");
+
+  if(!modal || !grid || !title || !kicker || !closeButton){
+    console.error("Dashboard detail popup: elemen popup tidak lengkap.");
+    return;
+  }
+
+  const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  }[char]));
+
+  const closeDetail = () => {
+    modal.classList.remove("open");
+    modal.setAttribute("aria-hidden","true");
+    document.body.style.overflow = "";
+  };
+
+  const openDetail = (heading, subheading, rows) => {
+    title.textContent = heading || "Cerita Istriku";
+    kicker.textContent = subheading || "Detail";
+
+    grid.innerHTML = rows.map(([label,value]) => `
+      <div class="detail-row">
+        <div class="detail-label">${escapeHtml(label)}</div>
+        <div class="detail-value">${escapeHtml(value || "—")}</div>
+      </div>
+    `).join("");
+
+    modal.classList.add("open");
+    modal.setAttribute("aria-hidden","false");
+    document.body.style.overflow = "hidden";
+  };
+
+  const openFoodLogDetail = row => {
+    if(!row) return;
+
+    const meal = meals.find(item => item[0] === row.meal_type);
+    const moodIds = Array.isArray(row.mood_id)
+      ? row.mood_id
+      : (row.mood_id ? [row.mood_id] : []);
+
+    const moodNames = moodIds
+      .map(id => moods.find(item => item[0] === id)?.[2] || id)
+      .join(" • ");
+
+    const foodNames = (row.food_ids || [])
+      .map(id => {
+        if(String(id).startsWith("custom::")){
+          return String(id).slice("custom::".length);
+        }
+        return foods.find(item => item[0] === id)?.[2] || id;
+      })
+      .join(", ");
+
+    openDetail("Cerita Istriku","Detail cerita makanan",[
+      [
+        "Waktu",
+        new Date(row.eaten_at).toLocaleString("id-ID",{
+          dateStyle:"full",
+          timeStyle:"medium"
+        })
+      ],
+      ["Waktu makan", meal ? meal[1] : (row.meal_type || "—")],
+      ["Makanan", foodNames || "—"],
+      ["Mood", moodNames || "—"],
+      ["Soundtrack apa hari ini?", row.soundtrack || "—"],
+      ["Ibuk sayang Bapak nda?", row.love_answer || "—"],
+      ["Satu kata buat hari ini", row.one_word || "—"],
+      ["Cerita", row.comment || "—"]
+    ]);
+  };
+
+  const openActivityDetail = row => {
+    if(!row) return;
+
+    const rows = [
+      ["Aktivitas", row.activity_label || row.activity_type || "—"],
+      ["Jenis", row.activity_type || "—"],
+      [
+        "Waktu",
+        new Date(row.created_at).toLocaleString("id-ID",{
+          dateStyle:"full",
+          timeStyle:"medium"
+        })
+      ]
+    ];
+
+    const meta = row.meta && typeof row.meta === "object" ? row.meta : {};
+    Object.entries(meta).forEach(([key,value]) => {
+      rows.push([
+        key.replaceAll("_"," "),
+        typeof value === "object"
+          ? JSON.stringify(value,null,2)
+          : String(value)
+      ]);
+    });
+
+    openDetail("Aktivitas Istriku","Detail aktivitas",rows);
+  };
+
+  closeButton.addEventListener("click", closeDetail);
+
+  modal.addEventListener("click", event => {
+    if(event.target === modal) closeDetail();
+  });
+
+  document.addEventListener("keydown", event => {
+    if(event.key === "Escape" && modal.classList.contains("open")){
+      closeDetail();
+      return;
+    }
+
+    if(
+      (event.key === "Enter" || event.key === " ") &&
+      event.target instanceof HTMLElement &&
+      event.target.matches(".entry[data-food-index],.activity-item[data-activity-index]")
+    ){
+      event.preventDefault();
+      event.target.click();
+    }
+  });
+
+  document.addEventListener("click", event => {
+    const entry = event.target.closest(".entry[data-food-index]");
+    if(entry && Array.isArray(window.__foodRows)){
+      openFoodLogDetail(
+        window.__foodRows[Number(entry.dataset.foodIndex)]
+      );
+      return;
+    }
+
+    const activity = event.target.closest(".activity-item[data-activity-index]");
+    if(activity && Array.isArray(window.__activityRows)){
+      openActivityDetail(
+        window.__activityRows[Number(activity.dataset.activityIndex)]
+      );
+    }
+  });
+
+  window.__openDashboardDetail = openDetail;
+  window.__closeDashboardDetail = closeDetail;
+})();
+</script>
+
 </body>
 </html>
