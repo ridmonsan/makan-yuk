@@ -797,8 +797,22 @@
     .quick-btn{width:100%;border:1px solid #EED78C;background:#FFFDF2;border-radius:17px;padding:12px;text-align:left;cursor:pointer;color:#604A37;font-weight:800}
     .quick-grid{display:grid;gap:9px}
     .nav-bar{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:rgba(255,253,243,.94);backdrop-filter:blur(14px);border-top:1px solid #EFDFA9}
-    .nav-inner{width:min(100%,720px);margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-    .nav-btn{border:0;background:transparent;color:#9A846A;border-radius:16px;padding:7px 4px 6px;cursor:pointer}
+    .nav-inner{  width:100%;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:6px
+  display:flex;
+
+  flex-wrap:nowrap;
+
+  overflow-x:hidden;
+}
+    .nav-btn{border:0;background:transparent;color:#9A846A;border-radius:16px;padding:7px 4px 6px;cursor:pointer
+  flex:1 1 0;
+
+  min-width:0;
+
+  max-width:none;
+
+  white-space:nowrap;
+}
     .nav-btn.active{background:#FFF1A1;color:#6C512F;box-shadow:0 4px 12px rgba(215,168,29,.14)}
     .nav-icon{display:block;font-size:20px;line-height:1}
     .piyo-ui{
@@ -1172,6 +1186,10 @@
 .istri-history-value{margin-top:4px;font-size:12px;line-height:1.55;color:#5C4536;white-space:pre-wrap;overflow-wrap:anywhere}
 @media(max-width:480px){.istri-history-modal{padding:9px}.istri-history-card{border-radius:20px;padding:14px}}
 
+
+/* Final_V6: five-page bottom navigation stays on one horizontal row */
+.nav-inner{display:flex !important;flex-wrap:nowrap !important;width:100% !important;overflow:hidden !important;}
+.nav-inner .nav-btn{flex:1 1 0 !important;min-width:0 !important;max-width:none !important;white-space:nowrap !important;}
 </style>
 </head>
 <body>
@@ -1391,7 +1409,7 @@
           <div class="section-icon"><span class="piyo-ui" data-piyo-ui="food"></span></div>
           <div><h2 class="section-title">Mau mam apa kamu hari ini istriku?</h2></div>
         </div>
-        <p class="section-sub">Boleh pilih lebih dari satu, kalau bingung, tulis aja makanan lain di bawah.</p>
+        <p class="section-sub">Boleh pilih lebih dari satu, kalau bingung, tulis aja makanan lain di bawah ya sayang.</p>
         <div id="foodGrid" class="grid food-grid"></div>
         <div id="selectedFoods" class="selected-foods">
           <div class="empty">Belum ada makanan yang dipilih.</div>
@@ -1399,7 +1417,7 @@
 
         <div class="custom-food-wrap">
           <label class="custom-food-label" for="customFood"><span class="piyo-ui inline-piyo" data-piyo-ui="kicker"></span> Makanan lainnya</label>
-          <input id="customFood" class="custom-food-input" type="text" maxlength="100" placeholder="Ketik makanan lain yang kamu makan..." autocomplete="off">
+          <input id="customFood" class="custom-food-input" type="text" maxlength="100" placeholder="Tulis makanan lainnya disini ya sayang..." autocomplete="off">
         </div>
       </section>
 
@@ -1418,7 +1436,7 @@
           <div class="section-icon"><span class="piyo-ui" data-piyo-ui="love"></span></div>
           <div><h2 class="section-title">Mood kamu sekarang?</h2></div>
         </div>
-        <p class="section-sub">Pilih yang paling menggambarkan perasaanmu.</p>
+        <p class="section-sub">Pilih yang paling menggambarkan perasaan ibuk sekarang.</p>
         <div id="moodGrid" class="grid mood-grid"></div><div id="selectedMoods" class="selected-foods"></div><div class="mood-selection-note">Boleh pilih lebih dari satu mood.</div>
       </section>
 
@@ -1450,7 +1468,7 @@
           <div class="section-icon"><span class="piyo-ui" data-piyo-ui="chat"></span></div>
           <div><h2 class="section-title">Satu kata buat hari ini</h2></div>
         </div>
-        <p class="section-sub">Satu kata aja, boleh apa aja.</p>
+        <p class="section-sub">Boleh apa aja sayang.</p>
         <input id="oneWord" class="extra-input" type="text" maxlength="60" placeholder="Contoh: tenang" autocomplete="off">
       </section>
 
@@ -1493,8 +1511,8 @@
     <!-- AKU -->
     <section id="page-aku" class="page">
       <header style="padding:10px 6px 14px;">
-        <div class="page-title"><span class="piyo-ui inline-piyo" data-piyo-ui="love"></span>Ruang Kecilmu</div>
-        <div class="page-subtitle">Di sini, cerita kecil tentang harimu punya tempat untuk disimpan.</div>
+        <div class="page-title"><span class="piyo-ui inline-piyo" data-piyo-ui="love"></span>Ruang Kecilku</div>
+        <div class="page-subtitle">Disini, kamu bisa lihat semua ringkasan singkat yang sudah kamu tulis ya sayang.</div>
       </header>
 
       <section class="card profile-card">
@@ -1550,7 +1568,7 @@
           <div><h2 class="section-title">Akses Ruang Kecilku</h2></div>
         </div>
         <p class="section-sub">Selama kamu tetap di sini, ruang kecil ini akan selalu siap menemani ceritamu.</p>
-        <button id="logoutButton" class="danger-btn">Atur Akses Ruangku</button>
+        <button id="logoutButton" class="danger-btn">Keluar dari apps :( Jangan lupa balik lagi ya sayang.</button>
       </section>
     </section>
 
