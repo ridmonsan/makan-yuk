@@ -1191,6 +1191,23 @@
 .nav-inner{display:flex !important;flex-wrap:nowrap !important;width:100% !important;overflow:hidden !important;}
 .nav-inner .nav-btn{flex:1 1 0 !important;min-width:0 !important;max-width:none !important;white-space:nowrap !important;}
 </style>
+
+<style id="bucketlist-styles">
+#page-bucketlist .bucketlist-card{margin-bottom:20px}
+#page-bucketlist #bucketlistForm{display:flex;flex-direction:column;gap:10px}
+#page-bucketlist #bucketlistPlace,#page-bucketlist #bucketlistComment{width:100%;box-sizing:border-box}
+#page-bucketlist #bucketlistComment{min-height:110px;resize:vertical}
+#page-bucketlist .bucketlist-title-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+#page-bucketlist #bucketlistCount{opacity:.7;font-size:.9em}
+#page-bucketlist #bucketlistList{display:grid;gap:12px}
+#page-bucketlist .bucketlist-item{position:relative;padding:16px;border-radius:16px}
+#page-bucketlist .bucketlist-place{font-weight:700;font-size:1.05em}
+#page-bucketlist .bucketlist-comment{margin-top:7px;white-space:pre-wrap}
+#page-bucketlist .bucketlist-date{margin-top:10px;opacity:.6;font-size:.82em}
+#page-bucketlist .bucketlist-delete{margin-top:10px;cursor:pointer}
+#page-bucketlist .bucketlist-empty{opacity:.7;padding:16px 0}
+</style>
+
 </head>
 <body>
 
@@ -1509,7 +1526,42 @@
     </section>
 
     <!-- AKU -->
-    <section id="page-aku" class="page">
+    <section class="page" id="page-bucketlist" data-page="bucketlist" aria-label="Bucketlist">
+  <div class="page-header">
+    <div class="page-header-art piyo-ui" aria-hidden="true" data-piyo="bucketlist"></div>
+    <div>
+      <h2>Bucketlist Kita</h2>
+      <p>Tempat-tempat yang suatu hari ingin kita kunjungi bersama.</p>
+    </div>
+  </div>
+
+  <div class="card bucketlist-card">
+    <form id="bucketlistForm" autocomplete="off">
+      <label for="bucketlistPlace">Mau pergi ke mana, sayang?</label>
+      <input id="bucketlistPlace" name="place" type="text"
+             maxlength="160" placeholder="Nama tempat atau lokasi..." required>
+
+      <label for="bucketlistComment">Catatan kecil</label>
+      <textarea id="bucketlistComment" name="comment" maxlength="1000"
+                placeholder="Kenapa ingin ke sana? Mau ngapain?"></textarea>
+
+      <button id="bucketlistSave" type="submit">Simpan Bucketlist</button>
+    </form>
+  </div>
+
+  <div class="bucketlist-history">
+    <div class="bucketlist-title-row">
+      <h3>Tempat yang ingin kita kunjungi</h3>
+      <span id="bucketlistCount">0 tempat</span>
+    </div>
+    <div id="bucketlistList" aria-live="polite"></div>
+    <div id="bucketlistEmpty" class="bucketlist-empty">
+      Belum ada tempat yang disimpan. Yuk pilih tempat pertama kita.
+    </div>
+  </div>
+</section>
+
+<section id="page-aku" class="page">
       <header style="padding:10px 6px 14px;">
         <div class="page-title"><span class="piyo-ui inline-piyo" data-piyo-ui="love"></span>Ruang Kecilku</div>
         <div class="page-subtitle">Disini, kamu bisa lihat semua ringkasan singkat yang sudah kamu tulis ya sayang.</div>
@@ -1584,7 +1636,11 @@
       <button class="nav-btn" data-page="makan"><span class="nav-icon"><span class="piyo-ui" data-piyo-ui="food"></span></span><span class="nav-label">Makan</span></button>
       <button class="nav-btn" data-page="cerita"><span class="nav-icon"><span class="piyo-ui" data-piyo-ui="chat"></span></span><span class="nav-label">Cerita</span></button>
       <button class="nav-btn" data-page="riwayat"><span class="nav-icon"><span class="piyo-ui" data-piyo-ui="history"></span></span><span class="nav-label">Ceritaku</span></button>
-      <button class="nav-btn" data-page="aku"><span class="nav-icon"><span class="piyo-ui" data-piyo-ui="love"></span></span><span class="nav-label">Ruang Kecilku</span></button>
+      <button class="nav-btn" data-page="bucketlist" type="button">
+  <span class="nav-icon piyo-ui" aria-hidden="true" data-piyo="bucketlist"></span>
+  <span>Bucketlist</span>
+</button>
+<button class="nav-btn" data-page="aku"><span class="nav-icon"><span class="piyo-ui" data-piyo-ui="love"></span></span><span class="nav-label">Ruang Kecilku</span></button>
     </div>
   </nav>
 
@@ -2656,6 +2712,97 @@ async function loadProfileStats(){ await loadHome();
       e.preventDefault();void open(e.target.dataset.historyId);
     }
   });
+})();
+</script>
+
+
+<script id="bucketlist-script">
+(() => {
+  "use strict";
+
+  const form = document.getElementById("bucketlistForm");
+  const placeInput = document.getElementById("bucketlistPlace");
+  const commentInput = document.getElementById("bucketlistComment");
+  const list = document.getElementById("bucketlistList");
+  const empty = document.getElementById("bucketlistEmpty");
+  const count = document.getElementById("bucketlistCount");
+
+  if (!form || !placeInput || !commentInput || !list) return;
+
+  const storageKey = "istriku_bucketlist_v1";
+  let items = [];
+
+  function load() {
+    try {
+      const raw = localStorage.getItem(storageKey);
+      const parsed = raw ? JSON.parse(raw) : [];
+      items = Array.isArray(parsed) ? parsed : [];
+    } catch (_) {
+      items = [];
+    }
+  }
+
+  function save() {
+    localStorage.setItem(storageKey, JSON.stringify(items));
+  }
+
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, ch => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[ch]));
+  }
+
+  function render() {
+    list.innerHTML = "";
+    count.textContent = `${items.length} tempat`;
+    empty.style.display = items.length ? "none" : "";
+
+    items.forEach(item => {
+      const card = document.createElement("article");
+      card.className = "bucketlist-item card";
+      card.innerHTML = `
+        <div class="bucketlist-place">${escapeHTML(item.place)}</div>
+        ${item.comment ? `<div class="bucketlist-comment">${escapeHTML(item.comment)}</div>` : ""}
+        <div class="bucketlist-date">${escapeHTML(item.date)}</div>
+        <button class="bucketlist-delete" type="button" data-id="${escapeHTML(item.id)}">Hapus</button>
+      `;
+      list.appendChild(card);
+    });
+  }
+
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+
+    const place = placeInput.value.trim();
+    const comment = commentInput.value.trim();
+    if (!place) return;
+
+    items.unshift({
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2, 8),
+      place,
+      comment,
+      date: new Date().toLocaleDateString("id-ID", {
+        day:"2-digit", month:"long", year:"numeric"
+      })
+    });
+
+    save();
+    render();
+    form.reset();
+    placeInput.focus();
+  });
+
+  list.addEventListener("click", event => {
+    const button = event.target.closest(".bucketlist-delete");
+    if (!button) return;
+
+    items = items.filter(item => item.id !== button.dataset.id);
+    save();
+    render();
+  });
+
+  load();
+  render();
 })();
 </script>
 
