@@ -763,8 +763,14 @@ async function load(){
  window.__foodRows=[];
  $("list").innerHTML='<div class="empty">Memuat...</div>';
  const {data,error}=await db.from("food_logs").select("id,eaten_at,meal_type,food_ids,mood_id,comment,soundtrack,love_answer,one_word").order("eaten_at",{ascending:false}).limit(500);
- if(error){console.error(error);$("list").innerHTML='<div class="empty">Gagal memuat data.</div>';return}
- window.__foodRows=data;
+ if(error){
+   console.error("food_logs load error:",error);
+   window.__foodRows=[];
+   $("list").innerHTML='<div class="empty">Data cerita makan belum bisa dimuat.</div>';
+   data=[];
+ }else{
+   window.__foodRows=data;
+ }
  const total=data.length,todayKey=new Date().toISOString().slice(0,10),today=data.filter(x=>x.eaten_at.slice(0,10)===todayKey).length;
   let moodTotalSelections=0;
   data.forEach(x=>{
