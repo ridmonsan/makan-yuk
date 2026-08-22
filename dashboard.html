@@ -299,6 +299,20 @@ button{font:inherit}
 </style>
 </head>
 <body>
+<div id="activityDebugPanel" data-debug-panel style="display:none;position:fixed;left:12px;right:12px;bottom:12px;z-index:99999;background:#fff;border:1px solid #d8c9b8;border-radius:12px;padding:12px;font:12px/1.45 system-ui,sans-serif;color:#3f332b;box-shadow:0 8px 30px rgba(0,0,0,.15)">
+  <div style="font-weight:700;margin-bottom:6px">Status Dashboard</div>
+  <pre id="activityDebugText" style="white-space:pre-wrap;margin:0">Memeriksa...</pre>
+</div>
+<script>
+window.__activityDebug = function(status){
+  const panel=document.getElementById("activityDebugPanel");
+  const text=document.getElementById("activityDebugText");
+  if(!panel || !text) return;
+  panel.style.display="block";
+  text.textContent=String(status||"");
+};
+</script>
+
   <div id="loginScreen" class="login-screen">
     <div class="login-card">
       <div class="brand" style="justify-content:center">
@@ -592,6 +606,21 @@ function piyoDashArt(kind="happy"){
     }
 
     async function loadInsights(data){
+try{
+  const q=await db.from("activity_logs")
+    .select("id,activity_type,activity_label,meta,created_at")
+    .order("created_at",{ascending:false}).limit(500);
+  const rows=Array.isArray(q.data)?q.data:[];
+  window.__activityDebug(
+    "activity_logs query: "+(q.error ? "ERROR" : "OK")+
+    "\nRows returned: "+rows.length+
+    (q.error ? "\nError: "+q.error.message : "")+
+    "\nTypes: "+[...new Set(rows.map(r=>r.activity_type).filter(Boolean))].join(", ")
+  );
+}catch(debugError){
+  window.__activityDebug("INSIGHT DEBUG ERROR: "+debugError.message);
+}
+
       const rows=Array.isArray(data)?data:[];
       const countField=(field)=>{
         const map=new Map();
@@ -703,6 +732,21 @@ function piyoDashArt(kind="happy"){
     }
 
     async function loadActivities(){
+try{
+  const s=await db.auth.getSession();
+  window.__activityDebug("Session: "+(s?.data?.session ? "OK" : "TIDAK ADA")+
+    "\nUser: "+(s?.data?.session?.user?.id || "—")+
+    "\nactivity_logs: memuat...");
+  const q=await db.from("activity_logs").select("id,activity_type,activity_label,meta,created_at",{count:"exact",head:true});
+  window.__activityDebug("Session: "+(s?.data?.session ? "OK" : "TIDAK ADA")+
+    "\nUser: "+(s?.data?.session?.user?.id || "—")+
+    "\nactivity_logs status: "+(q.error ? "ERROR" : "OK")+
+    "\nactivity_logs count: "+(q.count ?? "—")+
+    (q.error ? "\nError: "+q.error.message : ""));
+}catch(debugError){
+  window.__activityDebug("DEBUG ERROR: "+debugError.message);
+}
+
       const {data,error}=await db.from("activity_logs").select("id,activity_type,activity_label,meta,created_at").order("created_at",{ascending:false}).limit(200);
       if(error){
         console.error(error);
@@ -763,14 +807,8 @@ async function load(){
  window.__foodRows=[];
  $("list").innerHTML='<div class="empty">Memuat...</div>';
  const {data,error}=await db.from("food_logs").select("id,eaten_at,meal_type,food_ids,mood_id,comment,soundtrack,love_answer,one_word").order("eaten_at",{ascending:false}).limit(500);
- if(error){
-   console.error("food_logs load error:",error);
-   window.__foodRows=[];
-   $("list").innerHTML='<div class="empty">Data cerita makan belum bisa dimuat.</div>';
-   data=[];
- }else{
-   window.__foodRows=data;
- }
+ if(error){console.error(error);$("list").innerHTML='<div class="empty">Gagal memuat data.</div>';return}
+ window.__foodRows=data;
  const total=data.length,todayKey=new Date().toISOString().slice(0,10),today=data.filter(x=>x.eaten_at.slice(0,10)===todayKey).length;
   let moodTotalSelections=0;
   data.forEach(x=>{
