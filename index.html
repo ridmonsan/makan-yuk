@@ -1206,6 +1206,19 @@
 #page-bucketlist .bucketlist-date{margin-top:10px;opacity:.6;font-size:.82em}
 #page-bucketlist .bucketlist-delete{margin-top:10px;cursor:pointer}
 #page-bucketlist .bucketlist-empty{opacity:.7;padding:16px 0}
+#page-bucketlist .page-header-art{width:44px;height:44px;flex:0 0 44px}
+#page-bucketlist .page-header-art svg{width:44px;height:44px;display:block}
+#page-bucketlist .bucketlist-card{background:#FFFEF4}
+#page-bucketlist .bucketlist-card label{display:flex;align-items:center;gap:6px}
+#page-bucketlist .bucketlist-card label .piyo-ui{width:20px;height:20px;flex:0 0 20px}
+#page-bucketlist .bucketlist-card button{display:inline-flex;align-items:center;justify-content:center;gap:7px}
+#page-bucketlist .bucketlist-title-row h3{display:flex;align-items:center;gap:6px}
+#page-bucketlist .bucketlist-title-row .piyo-ui{width:22px;height:22px;flex:0 0 22px}
+#page-bucketlist .bucketlist-item{background:#FFFDF2;border:1px solid #F0DFA3}
+#page-bucketlist .bucketlist-item-head{display:flex;align-items:center;gap:8px}
+#page-bucketlist .bucketlist-item-art{width:28px;height:28px;flex:0 0 28px}
+#page-bucketlist .bucketlist-item-art svg{width:28px;height:28px;display:block}
+#page-bucketlist .bucketlist-delete{border:1px solid #F0DFA3;background:#FFF8DE;color:#76552F;border-radius:10px;padding:6px 9px;font-weight:800}
 </style>
 
 </head>
@@ -1528,7 +1541,7 @@
     <!-- AKU -->
     <section class="page" id="page-bucketlist" data-page="bucketlist" aria-label="Bucketlist">
   <div class="page-header">
-    <div class="page-header-art piyo-ui" aria-hidden="true" data-piyo="bucketlist"></div>
+    <div class="page-header-art piyo-ui" aria-hidden="true" data-piyo-ui="bucketlist"></div>
     <div>
       <h2>Bucketlist Kita</h2>
       <p>Tempat-tempat yang suatu hari ingin kita kunjungi bersama.</p>
@@ -1537,21 +1550,21 @@
 
   <div class="card bucketlist-card">
     <form id="bucketlistForm" autocomplete="off">
-      <label for="bucketlistPlace">Mau pergi ke mana, sayang?</label>
+      <label for="bucketlistPlace"><span class="piyo-ui inline-piyo" data-piyo-ui="bucketlist"></span> Mau pergi ke mana, sayang?</label>
       <input id="bucketlistPlace" name="place" type="text"
              maxlength="160" placeholder="Nama tempat atau lokasi..." required>
 
-      <label for="bucketlistComment">Catatan kecil</label>
+      <label for="bucketlistComment"><span class="piyo-ui inline-piyo" data-piyo-ui="chat"></span> Catatan kecil</label>
       <textarea id="bucketlistComment" name="comment" maxlength="1000"
                 placeholder="Kenapa ingin ke sana? Mau ngapain?"></textarea>
 
-      <button id="bucketlistSave" type="submit">Simpan Bucketlist</button>
+      <button id="bucketlistSave" type="submit"><span class="piyo-ui inline-piyo" data-piyo-ui="love"></span> Simpan Bucketlist</button>
     </form>
   </div>
 
   <div class="bucketlist-history">
     <div class="bucketlist-title-row">
-      <h3>Tempat yang ingin kita kunjungi</h3>
+      <h3><span class="piyo-ui" data-piyo-ui="history"></span> Tempat yang ingin kita kunjungi</h3>
       <span id="bucketlistCount">0 tempat</span>
     </div>
     <div id="bucketlistList" aria-live="polite"></div>
@@ -1637,7 +1650,7 @@
       <button class="nav-btn" data-page="cerita"><span class="nav-icon"><span class="piyo-ui" data-piyo-ui="chat"></span></span><span class="nav-label">Cerita</span></button>
       <button class="nav-btn" data-page="riwayat"><span class="nav-icon"><span class="piyo-ui" data-piyo-ui="history"></span></span><span class="nav-label">Ceritaku</span></button>
       <button class="nav-btn" data-page="bucketlist" type="button">
-  <span class="nav-icon piyo-ui" aria-hidden="true" data-piyo="bucketlist"></span>
+  <span class="nav-icon"><span class="piyo-ui" aria-hidden="true" data-piyo-ui="bucketlist"></span></span>
   <span>Bucketlist</span>
 </button>
 <button class="nav-btn" data-page="aku"><span class="nav-icon"><span class="piyo-ui" data-piyo-ui="love"></span></span><span class="nav-label">Ruang Kecilku</span></button>
@@ -1876,6 +1889,10 @@
         case "history": return base(`<path class="white outline" d="M20 17 H37 Q40 17 40 20 V33 Q40 36 37 36 H20 Q17 36 17 33 V20 Q17 17 20 17Z"/><path d="M21 23 H36 M21 28 H36 M21 33 H31" fill="none" stroke="#7A5A3C" stroke-width="1.5" stroke-linecap="round"/>`);
         case "love": return base(`<path d="M28 31 C23 25 18 31 28 37 C38 31 33 25 28 31Z" fill="#FFD95A"/>`);
         case "chat": return base(`<path class="white outline" d="M16 18 Q16 14 20 14 H36 Q40 14 40 18 V28 Q40 32 36 32 H27 L22 37 V32 H20 Q16 32 16 28Z"/><circle cx="23" cy="23" r="1.4" fill="#7A5A3C"/><circle cx="28" cy="23" r="1.4" fill="#7A5A3C"/><circle cx="33" cy="23" r="1.4" fill="#7A5A3C"/>`);
+        case "bucketlist":
+          return base(`<path class="white outline" d="M19 17 H37 Q40 17 40 20 V33 Q40 36 37 36 H19 Q16 36 16 33 V20 Q16 17 19 17Z"/>
+            <path d="M21 23 H35 M21 28 H35 M21 33 H29" fill="none" stroke="#7A5A3C" stroke-width="1.45" stroke-linecap="round"/>
+            <path d="M24 14 Q28 11 32 14" fill="none" stroke="#7A5A3C" stroke-width="1.5" stroke-linecap="round"/>`);
         case "kicker": return base(mouth("M24 29 Q28 33 32 29"));
         case "happy": default: return base(mouth("M24 29 Q28 34 32 29"));
       }
@@ -2761,9 +2778,12 @@ async function loadProfileStats(){ await loadHome();
       const card = document.createElement("article");
       card.className = "bucketlist-item card";
       card.innerHTML = `
-        <div class="bucketlist-place">${escapeHTML(item.place)}</div>
-        ${item.comment ? `<div class="bucketlist-comment">${escapeHTML(item.comment)}</div>` : ""}
-        <div class="bucketlist-date">${escapeHTML(item.date)}</div>
+        <div class="bucketlist-item-head">
+          <div class="bucketlist-item-art">${piyoUI("bucketlist")}</div>
+          <div class="bucketlist-place">${escapeHTML(item.place)}</div>
+        </div>
+        ${item.comment ? `<div class="bucketlist-comment"><span class="piyo-ui inline-piyo">${piyoUI("chat")}</span> ${escapeHTML(item.comment)}</div>` : ""}
+        <div class="bucketlist-date"><span class="piyo-ui inline-piyo">${piyoUI("history")}</span> ${escapeHTML(item.date)}</div>
         <button class="bucketlist-delete" type="button" data-id="${escapeHTML(item.id)}">Hapus</button>
       `;
       list.appendChild(card);

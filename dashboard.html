@@ -273,6 +273,21 @@ button{font:inherit}
 }
 
 </style><style id="piyo-visual-only">.piyo-illustration{width:1.35em;height:1.35em;object-fit:contain;vertical-align:-.28em;display:inline-block}</style>
+<style id="index-piyo-visual-system">
+.piyo-art,.dashboard-piyo-icon,.illustration{overflow:visible}
+.piyo-art .outline,.dashboard-piyo-icon .outline,.illustration .outline{stroke:#7A5A3C;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.piyo-art .body,.dashboard-piyo-icon .body,.illustration .body{fill:#FFE26A}
+.piyo-art .beakfill,.dashboard-piyo-icon .beakfill,.illustration .beakfill{fill:#EF9E26}
+.piyo-art .cheekfill,.dashboard-piyo-icon .cheekfill,.illustration .cheekfill{fill:#F2A0A0}
+.piyo-art .eyeFill,.dashboard-piyo-icon .eyeFill,.illustration .eyeFill{fill:#5C4536}
+.piyo-art .wing,.dashboard-piyo-icon .wing,.illustration .wing{fill:#FFD857}
+.piyo-art .white,.dashboard-piyo-icon .white,.illustration .white{fill:#FFFDF1}
+.piyo-art .blue,.dashboard-piyo-icon .blue,.illustration .blue{fill:#8FC9EA}
+.piyo-art .green,.dashboard-piyo-icon .green,.illustration .green{fill:#9FC57C}
+.piyo-art .orange,.dashboard-piyo-icon .orange,.illustration .orange{fill:#F2A347}
+.piyo-art .pink,.dashboard-piyo-icon .pink,.illustration .pink{fill:#F2A2A2}
+.piyo-art .mouth,.dashboard-piyo-icon .mouth,.illustration .mouth{fill:none;stroke:#6B4B37;stroke-width:1.35;stroke-linecap:round}
+</style>
 <style id="bucketlist-dashboard-styles">
 .bucketlist-dashboard-list{display:grid;gap:10px;margin-top:12px}
 .bucketlist-dashboard-item{padding:12px 14px;border:1px solid #F0DFA3;background:#FFFDF2;border-radius:14px}
@@ -497,41 +512,58 @@ const meals=[["breakfast","", "Sarapan"],["lunch","", "Makan siang"],["dinner","
 const moods=[["happy",piyoDashArt("happy"),"Senang"],["love",piyoDashArt("love"),"Bahagia"],["good",piyoDashArt("happy"),"Biasa"],["neutral",piyoDashArt("neutral"),"Netral"],["tired",piyoDashArt("tired"),"Capek"],["sad",piyoDashArt("sad"),"Sedih"],["angry",piyoDashArt("angry"),"Kesal"],["stressed",piyoDashArt("stressed"),"Stres"],["sick",piyoDashArt("sick"),"Tidak enak"],["excited",piyoDashArt("happy"),"Semangat"]];
 const $=id=>document.getElementById(id);
 function piyoDashArt(kind="happy"){
-  const S=inner=>`<svg class="illustration" viewBox="0 0 56 48" aria-hidden="true">${inner}</svg>`;
-  const eye=(x,y)=>`<circle fill="#5C4536" cx="${x}" cy="${y}" r="1.6"/>`;
+  const S=inner=>`<svg class="illustration piyo-art" viewBox="0 0 56 48" aria-hidden="true">${inner}</svg>`;
+  const eye=(x,y)=>`<circle class="eyeFill" cx="${x}" cy="${y}" r="1.6"/>`;
+  const cheek=(x,y)=>`<ellipse class="cheekfill" cx="${x}" cy="${y}" rx="3.2" ry="1.7"/>`;
+  const mouth=d=>`<path class="mouth" d="${d}"/>`;
   const base=(extras="")=>S(`
-    <path fill="#FFE26A" stroke="#7A5A3C" stroke-width="1.7" d="M10 23 Q10 10 28 8 Q46 10 46 23 Q46 39 28 40 Q10 39 10 23Z"/>
-    <circle fill="#F2A0A0" cx="16" cy="27" r="2.7"/><circle fill="#F2A0A0" cx="40" cy="27" r="2.7"/>
-    ${eye(22,22)}${eye(34,22)}
-    <path fill="#EF9E26" stroke="#7A5A3C" stroke-width="1.6" d="M24 26 L28 30 L32 26 Q28 22 24 26Z"/>
+    <ellipse class="white" cx="28" cy="42" rx="13" ry="3.2" opacity=".9"/>
+    <path class="body outline" d="M10 23 Q10 10 28 8 Q46 10 46 23 Q46 39 28 40 Q10 39 10 23Z"/>
+    <path class="wing outline" d="M10 25 Q3 23 7 31 Q9 35 15 32"/>
+    <path class="wing outline" d="M46 25 Q53 23 49 31 Q47 35 41 32"/>
+    ${eye(22,22)}${eye(34,22)}${cheek(16,27)}${cheek(40,27)}
+    <path class="beakfill outline" d="M24 26 L28 30 L32 26 Q28 22 24 26Z"/>
     ${extras}
   `);
-  const mouth=d=>`<path d="${d}" fill="none" stroke="#6B4B37" stroke-width="1.35" stroke-linecap="round"/>`;
   switch(kind){
     case "love": return base(`<path d="M28 30 C23 24 18 31 28 37 C38 31 33 24 28 30Z" fill="#FFD95A"/>`);
     case "neutral": return base(mouth("M24 30 H32"));
-    case "tired": return base(`<path fill="#5C4536" d="M20 21 h5 l-2 2 h-3z"/><path fill="#5C4536" d="M31 21 h5 l-2 2 h-3z"/>`);
-    case "sleepy": return base(`<path d="M20 22 Q23 20 26 22 M30 22 Q33 20 36 22" fill="none" stroke="#5C4536" stroke-width="1.5"/><text x="42" y="11" font-size="9" font-family="Fredoka,Arial" font-weight="700" fill="#8B7BAA">z</text>`);
-    case "sad": return base(`${mouth("M24 33 Q28 29 32 33")}<path fill="#8FC9EA" stroke="#7A5A3C" stroke-width="1" d="M38 25 Q41 30 38 33 Q35 30 38 25Z"/>`);
-    case "angry": return base(`${mouth("M24 31 Q28 28 32 31")}<path fill="#5C4536" d="M19 20 L26 22 L25 24 L18 22Z"/><path fill="#5C4536" d="M30 22 L37 20 L38 22 L31 24Z"/>`);
-    case "stressed": return base(`${mouth("M24 31 Q28 28 32 31")}<text x="41" y="10" font-size="10" fill="#A1A1A1">〰</text>`);
-    case "sick": return base(`${mouth("M24 31 Q28 29 32 31")}<path fill="#8FC9EA" stroke="#7A5A3C" stroke-width="1" d="M39 26 Q42 30 39 33 Q36 30 39 26Z"/>`);
-    case "excited": return base(`${mouth("M23 29 Q28 36 33 29")}<text x="42" y="12" font-size="9" fill="#F1B93A">✦</text>`);
+    case "tired": return base(`<path class="mouth" d="M24 31 Q28 28 32 31"/><path class="eyeFill" d="M20 21 h5 l-2 2 h-3z"/><path class="eyeFill" d="M31 21 h5 l-2 2 h-3z"/>`);
+    case "sleepy": return base(`<path class="mouth" d="M24 31 Q28 35 32 31"/><path class="eyeFill" d="M20 22 Q23 20 26 22" fill="none" stroke="#5C4536" stroke-width="1.5"/><path class="eyeFill" d="M30 22 Q33 20 36 22" fill="none" stroke="#5C4536" stroke-width="1.5"/><text x="42" y="11" font-size="9" font-weight="700" fill="#8B7BAA">z</text>`);
+    case "sad": return base(`<path class="mouth" d="M24 33 Q28 29 32 33"/><path class="blue outline" d="M38 25 Q41 30 38 33 Q35 30 38 25Z"/>`);
+    case "angry": return base(`<path class="mouth" d="M24 31 Q28 28 32 31"/><path class="eyeFill" d="M19 20 L26 22 L25 24 L18 22Z"/><path class="eyeFill" d="M30 22 L37 20 L38 22 L31 24Z"/>`);
+    case "stressed": return base(`<path class="mouth" d="M24 31 Q28 28 32 31"/><text x="41" y="10" font-size="10" fill="#A1A1A1">〰</text>`);
+    case "sick": return base(`<path class="mouth" d="M24 31 Q28 29 32 31"/><path class="blue outline" d="M39 26 Q42 30 39 33 Q36 30 39 26Z"/><path class="green outline" d="M15 11 Q19 7 21 11"/>`);
+    case "excited": return base(`<path class="mouth" d="M23 29 Q28 36 33 29"/><text x="42" y="12" font-size="9" fill="#F1B93A">✦</text>`);
     case "happy": default: return base(mouth("M24 29 Q28 34 32 29"));
   }
 }
 
     function dashboardPiyoIcon(kind="happy"){
       const S=inner=>`<svg class="dashboard-piyo-icon" viewBox="0 0 56 48" aria-hidden="true">${inner}</svg>`;
-      const base=(extra="")=>S(`
-        <path fill="#FFE26A" stroke="#7A5A3C" stroke-width="1.7" d="M10 23 Q10 10 28 8 Q46 10 46 23 Q46 39 28 40 Q10 39 10 23Z"/>
-        <circle fill="#F2A0A0" cx="16" cy="27" r="2.7"/><circle fill="#F2A0A0" cx="40" cy="27" r="2.7"/>
-        <circle fill="#5C4536" cx="22" cy="22" r="1.6"/><circle fill="#5C4536" cx="34" cy="22" r="1.6"/>
-        <path fill="#EF9E26" stroke="#7A5A3C" stroke-width="1.6" d="M24 26 L28 30 L32 26 Q28 22 24 26Z"/>
-        ${extra}`);
-      if(kind==="love") return base('<path d="M28 30 C23 24 18 31 28 37 C38 31 33 24 28 30Z" fill="#FFD95A"/>');
-      if(kind==="sad") return base('<path d="M24 33 Q28 29 32 33" fill="none" stroke="#6B4B37" stroke-width="1.35"/><path fill="#8FC9EA" d="M38 25 Q41 30 38 33 Q35 30 38 25Z"/>');
-      return base('<path d="M24 29 Q28 34 32 29" fill="none" stroke="#6B4B37" stroke-width="1.35"/>');
+      const eye=(x,y)=>`<circle class="eyeFill" cx="${x}" cy="${y}" r="1.6"/>`;
+      const base=(extra="",fill="#FFE26A")=>S(`
+        <ellipse class="white" cx="28" cy="42" rx="13" ry="3.1"/>
+        <path class="body outline" style="fill:${fill}" d="M10 23 Q10 10 28 8 Q46 10 46 23 Q46 39 28 40 Q10 39 10 23Z"/>
+        ${eye(22,22)}${eye(34,22)}
+        <ellipse class="cheekfill" cx="16" cy="27" rx="3" ry="1.6"/>
+        <ellipse class="cheekfill" cx="40" cy="27" rx="3" ry="1.6"/>
+        <path class="beakfill outline" d="M24 26 L28 30 L32 26 Q28 22 24 26Z"/>
+        ${extra}
+      `);
+      const mouth=d=>`<path class="mouth" d="${d}"/>`;
+      switch(kind){
+        case "food": return base(`<path class="white outline" d="M13 31 Q19 19 28 20 Q37 19 43 31 Q36 35 28 35 Q20 35 13 31Z"/>`);
+        case "egg": return base(`<path class="white outline" d="M22 33 Q17 27 21 19 Q24 13 28 11 Q32 13 35 19 Q39 27 34 33 Q28 38 22 33Z"/>`);
+        case "history": return base(`<path class="white outline" d="M20 17 H37 Q40 17 40 20 V33 Q40 36 37 36 H20 Q17 36 17 33 V20 Q17 17 20 17Z"/><path d="M21 23 H36 M21 28 H36 M21 33 H31" fill="none" stroke="#7A5A3C" stroke-width="1.5" stroke-linecap="round"/>`);
+        case "bucketlist": return base(`<path class="white outline" d="M19 17 H37 Q40 17 40 20 V33 Q40 36 37 36 H19 Q16 36 16 33 V20 Q16 17 19 17Z"/><path d="M21 23 H35 M21 28 H35 M21 33 H29" fill="none" stroke="#7A5A3C" stroke-width="1.45" stroke-linecap="round"/><path d="M24 14 Q28 11 32 14" fill="none" stroke="#7A5A3C" stroke-width="1.5" stroke-linecap="round"/>`);
+        case "chat": return base(`<path class="white outline" d="M16 18 Q16 14 20 14 H36 Q40 14 40 18 V28 Q40 32 36 32 H27 L22 37 V32 H20 Q16 32 16 28Z"/><circle cx="23" cy="23" r="1.4" fill="#7A5A3C"/><circle cx="28" cy="23" r="1.4" fill="#7A5A3C"/><circle cx="33" cy="23" r="1.4" fill="#7A5A3C"/>`);
+        case "love": return base(`<path d="M28 31 C23 25 18 31 28 37 C38 31 33 25 28 31Z" fill="#FFD95A"/>`);
+        case "sad": return base(`<path class="mouth" d="M24 33 Q28 29 32 33"/><path class="blue outline" d="M38 25 Q41 30 38 33 Q35 30 38 25Z"/>`);
+        case "neutral": return base(mouth("M24 30 H32"));
+        case "tired": return base(`<path class="mouth" d="M24 31 Q28 28 32 31"/><path class="eyeFill" d="M20 21 h5 l-2 2 h-3z"/><path class="eyeFill" d="M31 21 h5 l-2 2 h-3z"/>`);
+        case "happy": default: return base(mouth("M24 29 Q28 34 32 29"));
+      }
     }
 
     function activityIcon(type){
