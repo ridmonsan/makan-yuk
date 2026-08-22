@@ -591,34 +591,7 @@ function piyoDashArt(kind="happy"){
         </div>`).join('');
     }
 
-    /* RF_V2_ACTIVITY_LOGS_SHARED_FETCH */
-let __activityLogsCache = null;
-let __activityLogsPromise = null;
-
-async function __loadActivityLogsShared(){
-  if(Array.isArray(__activityLogsCache)) return __activityLogsCache;
-  if(__activityLogsPromise) return __activityLogsPromise;
-
-  __activityLogsPromise = (async()=>{
-    const {data,error}=await db
-      .from("activity_logs")
-      .select("id,activity_type,activity_label,meta,created_at")
-      .order("created_at",{ascending:false})
-      .limit(500);
-
-    if(error) throw error;
-    __activityLogsCache = Array.isArray(data) ? data : [];
-    return __activityLogsCache;
-  })();
-
-  try{
-    return await __activityLogsPromise;
-  }finally{
-    __activityLogsPromise = null;
-  }
-}
-
-async function loadInsights(data){
+    async function loadInsights(data){
       const rows=Array.isArray(data)?data:[];
       const countField=(field)=>{
         const map=new Map();
@@ -729,10 +702,14 @@ async function loadInsights(data){
       }
     }
 
-    const data = activityData;
-async function loadActivities(){
-      const activityData = await __loadActivityLogsShared();
-const rows=data||[];
+    async function loadActivities(){
+      const {data,error}=await db.from("activity_logs").select("id,activity_type,activity_label,meta,created_at").order("created_at",{ascending:false}).limit(200);
+      if(error){
+        console.error(error);
+        $("activityList").innerHTML='<div class="empty">Aktivitas belum bisa dimuat. Pastikan tabel activity_logs sudah dibuat.</div>';
+        return;
+      }
+      const rows=data||[];
       window.__activityRows=rows;
       const todayKey=new Date().toISOString().slice(0,10);
       const todayRows=rows.filter(x=>x.created_at.slice(0,10)===todayKey);
