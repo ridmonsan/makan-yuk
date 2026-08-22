@@ -163,6 +163,10 @@ button{font:inherit}
 .insight-meta{font-size:9px;color:#9A846A;margin-top:2px}
 .insight-count{font-size:11px;font-weight:900;color:#76552F;white-space:nowrap}
 .insight-quote{margin-top:10px;padding:11px 12px;border-radius:15px;background:#FFF3CC;border:1px solid #EED78C;color:#715738;font-size:10px;line-height:1.55;font-weight:800}
+
+.insight-row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#FFFDF2;border:1px solid #F0DFA3;border-radius:14px;padding:9px 10px}
+.insight-row-main{min-width:0;font-size:10px;font-weight:800;color:#604A37;line-height:1.35;overflow-wrap:anywhere}
+.insight-row-count{flex:0 0 auto;font-size:10px;font-weight:900;color:#9A846A}
 .insight-empty{padding:12px 4px;text-align:center;color:#A18C76;font-size:10px;font-weight:700}
 .entry.clickable,.activity-item.clickable{cursor:pointer}
 .entry.clickable:focus-visible,.activity-item.clickable:focus-visible{outline:3px solid #FFD95A;outline-offset:2px}
@@ -520,6 +524,103 @@ function piyoDashArt(kind="happy"){
       if(type==="food_log_saved") return dashboardPiyoIcon("love");
       if(type==="login" || type==="session_start") return dashboardPiyoIcon("happy");
       return dashboardPiyoIcon("happy");
+    }
+
+
+    function renderInsightList(el, entries, emptyText){
+      if(!el) return;
+      if(!entries.length){
+        el.innerHTML=`<div class="insight-empty">${emptyText}</div>`;
+        return;
+      }
+      el.innerHTML=entries.slice(0,5).map(([label,count])=>`
+        <div class="insight-row">
+          <div class="insight-row-main"><span>${String(label).replace(/[<>&\"]/g,m=>({"<":"&lt;",">":"&gt;","&":"&amp;",'"':'&quot;'}[m]))}</span></div>
+          <div class="insight-row-count">${count}×</div>
+        </div>`).join('');
+    }
+
+    async function loadInsights(data){
+      const rows=Array.isArray(data)?data:[];
+      const countField=(field)=>{
+        const map=new Map();
+        rows.forEach(r=>{
+          const v=String(r?.[field]??'').trim();
+          if(v) map.set(v,(map.get(v)||0)+1);
+        });
+        return [...map.entries()].sort((a,b)=>b[1]-a[1]);
+      };
+
+      renderInsightList(
+        $("soundtrackInsights"),
+        countField("soundtrack"),
+        "Belum ada lagu yang dititipkan."
+      );
+      renderInsightList(
+        $("oneWordInsights"),
+        countField("one_word"),
+        "Belum ada kata yang dititipkan."
+      );
+
+      // Beranda choices are recorded in activity_logs by index.html.
+      let activityRows=[];
+      try{
+        const {data:activityData,error}=await db
+          .from("activity_logs")
+          .select("id,activity_type,activity_label,meta,created_at")
+          .order("created_at",{ascending:false})
+          .limit(500);
+        if(error) throw error;
+        activityRows=activityData||[];
+      }catch(err){
+        console.error("loadInsights activity_logs",err);
+      }
+
+      const countMeta=(types)=>{
+        const map=new Map();
+        activityRows.forEach(r=>{
+          if(!types.includes(r.activity_type)) return;
+          const meta=r.meta&&typeof r.meta==='object'?r.meta:{};
+          const value=String(meta.item||meta.choice||meta.value||'').trim();
+          if(value) map.set(value,(map.get(value)||0)+1);
+        });
+        return [...map.entries()].sort((a,b)=>b[1]-a[1]);
+      };
+
+      renderInsightList(
+        $("wantInsights"),
+        countMeta(["daily_want","home_want","want"]),
+        "Belum ada keinginan yang tercatat."
+      );
+      renderInsightList(
+        $("checkInsights"),
+        countMeta(["checklist_done","home_check","check"]),
+        "Belum ada ceklis yang selesai."
+      );
+
+      const moodCounts=new Map();
+      rows.forEach(r=>{
+        const ids=Array.isArray(r.mood_id)?r.mood_id:(r.mood_id?[r.mood_id]:[]);
+        ids.forEach(id=>moodCounts.set(id,(moodCounts.get(id)||0)+1));
+      });
+      const topMood=[...moodCounts.entries()].sort((a,b)=>b[1]-a[1])[0];
+      const moodLabel=topMood?(moods.find(m=>m[0]===topMood[0])?.[2]||topMood[0]):'';
+      const topWant=countMeta(["daily_want","home_want","want"])[0]?.[0]||'';
+      const topCheck=countMeta(["checklist_done","home_check","check"])[0]?.[0]||'';
+      const latest=rows[0];
+
+      if($("wifeInsight")){
+        if(!rows.length){
+          $("wifeInsight").textContent="Belum ada cukup cerita untuk dibaca. Nanti kalau Ibuk sudah banyak cerita, Bapak bisa melihat polanya di sini.";
+        }else{
+          const parts=[];
+          if(moodLabel) parts.push(`Akhir-akhir ini mood yang paling sering muncul adalah ${moodLabel.toLowerCase()}.`);
+          if(topWant) parts.push(`Yang paling sering Ibuk pengen: ${topWant}.`);
+          if(topCheck) parts.push(`Dan yang paling sering berhasil dilakukan: ${topCheck}.`);
+          if(latest?.soundtrack) parts.push(`Terakhir, ada lagu "${latest.soundtrack}" yang menemani.`);
+          $("wifeInsight").textContent=parts.join(' ')||"Belum cukup banyak cerita untuk membuat rangkuman kecil tentang Ibuk.";
+        }
+      }
     }
 
     async function loadActivities(){
