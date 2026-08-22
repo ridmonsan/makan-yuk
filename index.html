@@ -1209,6 +1209,48 @@
 #page-bucketlist .page-header-art{width:44px;height:44px;flex:0 0 44px}
 #page-bucketlist .page-header-art svg{width:44px;height:44px;display:block}
 #page-bucketlist .bucketlist-card{background:#FFFEF4}
+#page-bucketlist .bucketlist-save-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  width:100%;
+  min-height:48px;
+  margin-top:8px;
+  padding:10px 16px;
+  border:1.5px solid #D8AD42;
+  border-radius:14px;
+  background:linear-gradient(135deg,#FFE98A 0%,#FFD95A 100%);
+  color:#6B4B2A;
+  font-weight:900;
+  font-size:15px;
+  box-shadow:0 4px 0 #E6C65E,0 7px 14px rgba(122,90,60,.10);
+  cursor:pointer;
+  transition:transform .12s ease,box-shadow .12s ease,filter .12s ease;
+}
+#page-bucketlist .bucketlist-save-btn:hover{
+  filter:brightness(1.02);
+  transform:translateY(-1px);
+}
+#page-bucketlist .bucketlist-save-btn:active{
+  transform:translateY(2px);
+  box-shadow:0 2px 0 #E6C65E,0 4px 8px rgba(122,90,60,.08);
+}
+#page-bucketlist .bucketlist-save-btn:focus-visible{
+  outline:3px solid rgba(240,207,112,.45);
+  outline-offset:2px;
+}
+#page-bucketlist .bucketlist-save-piyo{
+  width:30px;
+  height:30px;
+  flex:0 0 30px;
+  display:block;
+}
+#page-bucketlist .bucketlist-save-piyo svg{
+  width:30px;
+  height:30px;
+  display:block;
+}
 #page-bucketlist .bucketlist-place-field{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:12px 14px;border:1px solid #F0DFA3;border-radius:16px;background:linear-gradient(135deg,#FFFDF2 0%,#FFF8DE 100%);box-shadow:0 3px 10px rgba(122,90,60,.07)}
 #page-bucketlist .bucketlist-field-art{width:52px;height:52px;flex:0 0 52px;display:flex;align-items:center;justify-content:center;border-radius:14px;background:#FFF3B8}
 #page-bucketlist .bucketlist-field-art .piyo-ui{width:46px;height:40px;display:block}
@@ -1579,7 +1621,7 @@
       <textarea id="bucketlistComment" name="comment" maxlength="1000"
                 placeholder="Kenapa ingin ke sana? Mau ngapain?"></textarea>
 
-      <button id="bucketlistSave" type="submit"><span class="piyo-ui inline-piyo" data-piyo-ui="love"></span> Simpan Bucketlist</button>
+      <button id="bucketlistSave" class="bucketlist-save-btn" type="submit"><span class="bucketlist-save-piyo piyo-ui" aria-hidden="true" data-piyo-ui="bucketlist"></span><span>Simpan Bucketlist</span></button>
     </form>
   </div>
 
