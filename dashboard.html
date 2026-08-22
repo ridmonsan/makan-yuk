@@ -272,7 +272,17 @@ button{font:inherit}
   }
 }
 
-</style><style id="piyo-visual-only">.piyo-illustration{width:1.35em;height:1.35em;object-fit:contain;vertical-align:-.28em;display:inline-block}</style></head>
+</style><style id="piyo-visual-only">.piyo-illustration{width:1.35em;height:1.35em;object-fit:contain;vertical-align:-.28em;display:inline-block}</style>
+<style id="bucketlist-dashboard-styles">
+.bucketlist-dashboard-list{display:grid;gap:10px;margin-top:12px}
+.bucketlist-dashboard-item{padding:12px 14px;border:1px solid #F0DFA3;background:#FFFDF2;border-radius:14px}
+.bucketlist-dashboard-place{font-weight:800;color:#604A37}
+.bucketlist-dashboard-comment{margin-top:5px;color:#6f5b49;line-height:1.45;white-space:pre-wrap}
+.bucketlist-dashboard-date{margin-top:7px;font-size:9px;color:#9A846A}
+.bucketlist-dashboard-summary{display:flex;gap:10px;align-items:center;margin-top:8px}
+.bucketlist-dashboard-count{font-size:28px;font-weight:900;color:#604A37}
+</style>
+</head>
 <body>
   <div id="loginScreen" class="login-screen">
     <div class="login-card">
@@ -428,6 +438,14 @@ button{font:inherit}
       </div>
     </section>
 
+
+    <section class="card bucketlist-dashboard-card" style="margin-top:12px">
+      <div class="card-head"><div class="card-icon" id="bucketlistCardIcon"></div><div><h2>Bucketlist Istriku</h2></div></div>
+      <div class="mini">Tempat-tempat yang ingin kalian kunjungi bersama.</div>
+      <div class="bucketlist-dashboard-summary"><div class="bucketlist-dashboard-count" id="bucketlistDashboardCount">0</div><div class="mini">tempat tersimpan</div></div>
+      <div id="bucketlistDashboardList" class="bucketlist-dashboard-list"><div class="empty">Memuat bucketlist...</div></div>
+    </section>
+
 <div class="footer">dibuat khusus untuk kalian<br><button id="logoutButton" class="logout-button">Keluar dari akun</button></div>
   </main>
 
@@ -466,6 +484,7 @@ async function startDashboard(){
     $("moodCardIcon").innerHTML=dashboardPiyoIcon("love");
     $("storyCardIcon").innerHTML=dashboardPiyoIcon("happy");
     $("activityCardIcon").innerHTML=dashboardPiyoIcon("love");
+    $("bucketlistCardIcon").innerHTML=dashboardPiyoIcon("happy");
     load();
   }else{
     $("loginScreen").style.display="flex";
@@ -659,7 +678,29 @@ function piyoDashArt(kind="happy"){
     }
 
 // Data layer: request only fields used by the dashboard; keep the existing 500-row window.
+
+async function loadBucketlist(){
+  const container=$("bucketlistDashboardList"), counter=$("bucketlistDashboardCount");
+  if(!container || !counter) return;
+  container.innerHTML='<div class="empty">Memuat bucketlist...</div>';
+  const {data,error}=await db.from("bucketlist").select("id,user_email,place,comment,created_at").order("created_at",{ascending:false}).limit(200);
+  if(error){
+    console.error("Bucketlist Dashboard:",error);
+    counter.textContent="0";
+    container.innerHTML='<div class="empty">Bucketlist belum bisa dimuat. Pastikan tabel bucketlist dan policy Supabase sudah benar.</div>';
+    return;
+  }
+  const rows=data||[]; counter.textContent=rows.length;
+  if(!rows.length){container.innerHTML='<div class="empty">Belum ada tempat di Bucketlist.</div>';return;}
+  const esc=value=>String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[ch]));
+  container.innerHTML=rows.map(row=>{
+    const date=row.created_at?new Intl.DateTimeFormat("id-ID",{day:"2-digit",month:"long",year:"numeric"}).format(new Date(row.created_at)):"";
+    return `<article class="bucketlist-dashboard-item"><div class="bucketlist-dashboard-place">${esc(row.place)}</div>${row.comment?`<div class="bucketlist-dashboard-comment">${esc(row.comment)}</div>`:""}<div class="bucketlist-dashboard-date">${esc(date)}</div></article>`;
+  }).join("");
+}
+
 async function load(){
+ loadBucketlist();
  window.__foodRows=[];
  $("list").innerHTML='<div class="empty">Memuat...</div>';
  const {data,error}=await db.from("food_logs").select("id,eaten_at,meal_type,food_ids,mood_id,comment,soundtrack,love_answer,one_word").order("eaten_at",{ascending:false}).limit(500);
