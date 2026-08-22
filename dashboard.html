@@ -597,12 +597,26 @@ function piyoDashArt(kind="happy"){
 
       const countMeta=(types)=>{
         const map=new Map();
+
+        const addValue=(value)=>{
+          const v=String(value??'').trim();
+          if(v) map.set(v,(map.get(v)||0)+1);
+        };
+
         activityRows.forEach(r=>{
           if(!types.includes(r.activity_type)) return;
+
           const meta=r.meta&&typeof r.meta==='object'?r.meta:{};
-          const value=String(meta.item||meta.choice||meta.value||'').trim();
-          if(value) map.set(value,(map.get(value)||0)+1);
+          const candidates=[
+            meta.item, meta.choice, meta.value, meta.label, meta.text,
+            meta.name, meta.title, meta.option, meta.activity_label,
+            r.activity_label
+          ];
+
+          const value=candidates.find(v=>String(v??'').trim()!=='');
+          addValue(value);
         });
+
         return [...map.entries()].sort((a,b)=>b[1]-a[1]);
       };
 
@@ -678,7 +692,6 @@ function piyoDashArt(kind="happy"){
     }
 
 // Data layer: request only fields used by the dashboard; keep the existing 500-row window.
-
 async function loadBucketlist(){
   const container=$("bucketlistDashboardList"), counter=$("bucketlistDashboardCount");
   if(!container || !counter) return;
