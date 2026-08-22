@@ -567,7 +567,14 @@ function piyoDashArt(kind="happy"){
     }
 
     function activityIcon(type){
-      return dashboardPiyoIcon(type||"activity");
+      if(type==="mood_select") return dashboardPiyoIcon("love");
+      if(type==="hug_choice") return dashboardPiyoIcon("love");
+      if(type==="bapak_guess") return dashboardPiyoIcon("happy");
+      if(type.startsWith("game_")) return dashboardPiyoIcon("happy");
+      if(type==="food_select" || type==="meal_select") return dashboardPiyoIcon("happy");
+      if(type==="food_log_saved") return dashboardPiyoIcon("love");
+      if(type==="login" || type==="session_start") return dashboardPiyoIcon("happy");
+      return dashboardPiyoIcon("happy");
     }
 
 
