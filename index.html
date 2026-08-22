@@ -1215,7 +1215,166 @@
   <main class="app" id="appContent" style="display:none;">
 
     <!-- HOME -->
-    
+    <section id="page-home" class="page active">
+      <header style="padding:10px 6px 14px;">
+        <div class="kicker"><span class="piyo-ui" data-piyo-ui="kicker"></span> Untuk istriku tercinta</div>
+        <div class="brand">
+          <div class="piyo-face">
+            <div class="beak"></div>
+            <div class="blush left"></div>
+            <div class="blush right"></div>
+          </div>
+          <div class="title-wrap">
+            <h1 class="title">Hello Istriku Tersayang!</h1>
+            <div class="subtitle">Ayo aku temenin kamu hari ini.</div>
+          </div>
+        </div>
+        <div class="date" id="homeDate"></div>
+      </header>
+
+      <div class="hero-card">
+        <div class="home-row">
+          <div id="homeMoodArt"></div>
+          <div class="hero-text">
+            <div class="hero-big">Halo Ibu Dori Gortep!</div>
+            <div class="hero-small">Mau mam atau mau cerita? Sini ceritain ke aku ya.</div>
+          </div>
+        </div>
+      </div>
+
+      <section class="card" style="margin-top:12px;">
+        <div class="section-head">
+          <div class="section-icon"><span class="piyo-ui" data-piyo-ui="food"></span></div>
+          <div>
+            <h2 class="section-title">Mau mam atau cerita?</h2>
+          </div>
+        </div>
+        <p class="section-sub">Pilih aja di menu ya sayang.</p>
+        <div class="quick-grid">
+          <button class="quick-btn" data-go="makan"><span class="piyo-ui inline-piyo" data-piyo-ui="food"></span> Mau mam...</button>
+          <button class="quick-btn" data-go="cerita"><span class="piyo-ui inline-piyo" data-piyo-ui="chat"></span> Mau cerita...</button>
+        </div>
+      </section>
+
+
+      
+      
+
+
+      <section class="card home-interactive-card">
+        <div class="section-head">
+          <div class="section-icon"><span class="piyo-ui" data-piyo-ui="love"></span></div>
+          <div><h2 class="section-title"><span class="piyo-ui" data-piyo-ui="food"></span> Hari ini ibuk udah...</h2></div>
+        </div>
+        <p class="section-sub">Jangan lupa mam sama minum ya sayang.</p>
+        <div class="home-checklist">
+          <label class="home-check">
+            <input type="checkbox" data-home-check="drink">
+            <span>Minum air</span>
+          </label>
+          <label class="home-check">
+            <input type="checkbox" data-home-check="eat">
+            <span>Mam atau nyemil</span>
+          </label>
+          <label class="home-check">
+            <input type="checkbox" data-home-check="rest">
+            <span>Istirahat sebentar</span>
+          </label>
+        </div>
+      </section>
+
+      <section class="card home-interactive-card">
+        <div class="section-head">
+          <div class="section-icon"><span class="piyo-ui" data-piyo-ui="love"></span></div>
+          <div><h2 class="section-title"><span class="piyo-ui" data-piyo-ui="home"></span> Hari ini ibuk pengen...</h2></div>
+        </div>
+        <p class="section-sub">Mau apa hayo?</p>
+        <div class="home-checklist">
+          <label class="home-check"><input type="checkbox" data-home-want="eat_good"><span>Mam enak</span></label>
+          <label class="home-check"><input type="checkbox" data-home-want="sleep_well"><span>Bobok nyenyak</span></label>
+          <label class="home-check"><input type="checkbox" data-home-want="watch"><span>Netpikan</span></label>
+          <label class="home-check"><input type="checkbox" data-home-want="pacalan"><span>Pacalan</span></label>
+          <label class="home-check"><input type="checkbox" data-home-want="hug"><span>Dipeluk</span></label>
+          <label class="home-check"><input type="checkbox" data-home-want="pampered"><span>Dimanja</span></label>
+        </div>
+      </section>
+
+      <section class="card home-interactive-card">
+        <div class="section-head">
+          <div class="section-icon"><span class="piyo-ui" data-piyo-ui="love"></span></div>
+          <div><h2 class="section-title"><span class="piyo-ui" data-piyo-ui="love"></span> Pilih Pelukan Hari Ini</h2></div>
+        </div>
+        <p class="section-sub">Hari ini Ibuk pengen dipeluk yang mana?</p>
+        <div class="home-choice-grid" id="hugChoices">
+          <button type="button" class="home-choice" data-hug="Peluk biasa">Peluk biasa</button>
+          <button type="button" class="home-choice" data-hug="Peluk lama">Peluk lama</button>
+          <button type="button" class="home-choice" data-hug="Peluk erat">Peluk erat</button>
+          <button type="button" class="home-choice" data-hug="Peluk sambil diem">Peluk sambil diem</button>
+          <button type="button" class="home-choice" data-hug="Peluk sampai ketiduran">Peluk sampai ketiduran</button>
+        </div>
+        <div class="home-response" id="hugResponse">Pilih satu ya sayang</div>
+      </section>
+
+      <section class="card home-interactive-card">
+        <div class="section-head">
+          <div class="section-icon"><span class="piyo-ui" data-piyo-ui="love"></span></div>
+          <div><h2 class="section-title"><span class="piyo-ui" data-piyo-ui="happy"></span> Bapak Hari Ini</h2></div>
+        </div>
+        <p class="section-sub">Menurut Ibuk, Bapak hari ini lagi apa?</p>
+        <div class="home-bapak" id="bapakTodayArt"></div>
+        <div class="home-choice-grid" id="bapakChoices">
+          <button type="button" class="home-choice" data-bapak="Kangen">Kangen</button>
+          <button type="button" class="home-choice" data-bapak="Lapar">Lapar</button>
+          <button type="button" class="home-choice" data-bapak="Ngantuk">Ngantuk</button>
+          <button type="button" class="home-choice" data-bapak="Pengen dipeluk">Pengen dipeluk</button>
+          <button type="button" class="home-choice" data-bapak="Lagi jail">Lagi jail</button>
+        </div>
+        <div class="home-response" id="bapakResponse">Coba tebak dulu ya...</div>
+      </section>
+
+
+
+      <section class="card catch-game">
+        <div class="catch-head">
+          <div class="section-icon">
+            <span class="piyo-ui" data-piyo-ui="happy"></span>
+          </div>
+          <div>
+            <h2 class="catch-title">Tangkap Aku!</h2>
+            <p class="catch-sub">Bapak lagi ngumpet nih... ayo kejar bapak.</p>
+          </div>
+        </div>
+
+        <div class="catch-arena" id="catchArena">
+          <div class="catch-instruction">Tangkap yang muncul di sini ya, sayang.</div>
+
+          <button type="button" class="catch-target" id="catchTarget" aria-label="Tangkap Aku!">
+            <svg id="catchTargetSvg" viewBox="0 0 80 80" aria-hidden="true"></svg>
+          </button>
+
+          <div class="catch-score" id="catchScore">Tangkap: 0</div>
+          <div class="catch-reward" id="catchReward">Ayo semangat sayang... ada hadiahnya lho</div>
+        </div>
+
+        <div class="catch-message" id="catchMessage">
+          Ayo tangkap aku! Hehe...
+        </div>
+
+        <div class="catch-tools">
+          <button type="button" class="catch-tool" id="catchStart">Mulai lagi</button>
+          <button type="button" class="catch-tool" id="catchChangeTarget">Ganti aku</button>
+        </div>
+      </section>
+
+      <section class="card" style="margin-top:12px;">
+        <div class="section-head">
+          <div class="section-icon"><span class="piyo-ui" data-piyo-ui="love"></span></div>
+          <div><h2 class="section-title">Mood terakhir</h2></div>
+        </div>
+        <p class="section-sub">Yang terakhir kamu pilih.</p>
+        <div id="lastMoodCard" class="empty">Belum ada cerita yang kamu titipkan di sini..</div>
+      </section>
+    </section>
 
     <!-- MAKAN -->
     <section id="page-makan" class="page">
