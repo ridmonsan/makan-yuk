@@ -152,12 +152,6 @@ button{font:inherit}
     .activity-meta{font-size:9px;color:#9A846A;margin-top:2px;line-height:1.3}
     .activity-time{font-size:9px;color:#9A846A;white-space:nowrap}
     .dashboard-piyo-icon{width:28px;height:28px;display:block}
-
-    .piyo-small-art{width:22px;height:22px;display:inline-block;vertical-align:-6px}
-    .piyo-food-art,.piyo-meal-art{width:30px;height:28px;display:inline-block;vertical-align:middle}
-    .piyo-food-art{margin-right:3px}
-    .piyo-meta-art{width:20px;height:20px}
-
 </style></head>
 <body>
   <div id="loginScreen" class="login-screen">
@@ -329,9 +323,9 @@ async function startDashboard(){
   }
 }
 
-const foods=[["rice","","Nasi"],["sate","","Sate"],["soto_mie","","Soto Mie"],["pempek","","Pempek"],["telur_dadar","","Telur Dadar"],["indomie","","Indomie"],["mie_sedap_laksa","","Mie Sedap Laksa"],["ayam_penyet","","Ayam Penyet"],["brokoli","","Brokoli"],["tahu","","Tahu"],["tempe","","Tempe"],["mie_ayam","","Mie Ayam"]];
-const meals=[["breakfast","","Sarapan"],["lunch","","Makan siang"],["dinner","","Makan malam"],["snack","","Snack"]];
-const moods=[["happy","","Senang"],["love","","Bahagia"],["good","","Biasa"],["neutral","","Netral"],["tired","","Capek"],["sad","","Sedih"],["angry","","Kesal"],["stressed","","Stres"],["sick","","Tidak enak"],["excited","","Semangat"]];
+const foods=[["rice","🍚","Nasi"],["sate","🍢","Sate"],["soto_mie","🍜","Soto Mie"],["pempek","🥟","Pempek"],["telur_dadar","🍳","Telur Dadar"],["indomie","🍜","Indomie"],["mie_sedap_laksa","🍜","Mie Sedap Laksa"],["ayam_penyet","🍗","Ayam Penyet"],["brokoli","🥦","Brokoli"],["tahu","🟫","Tahu"],["tempe","🟫","Tempe"],["mie_ayam","🍜","Mie Ayam"]];
+const meals=[["breakfast","🌤️","Sarapan"],["lunch","☀️","Makan siang"],["dinner","🌙","Makan malam"],["snack","🍪","Snack"]];
+const moods=[["happy","😊","Senang"],["love","🥰","Bahagia"],["good","🙂","Biasa"],["neutral","😐","Netral"],["tired","😴","Capek"],["sad","😞","Sedih"],["angry","😡","Kesal"],["stressed","😩","Stres"],["sick","🤢","Tidak enak"],["excited","🤩","Semangat"]];
 const $=id=>document.getElementById(id);
 function piyoDashArt(kind="happy"){
   const S=inner=>`<svg class="illustration" viewBox="0 0 56 48" aria-hidden="true">${inner}</svg>`;
@@ -357,65 +351,6 @@ function piyoDashArt(kind="happy"){
     case "happy": default: return base(mouth("M24 29 Q28 34 32 29"));
   }
 }
-
-
-    /* ===== FINAL_V4 PIYO VISUALS =====
-       Visual replacements for dashboard emoji icons.
-       The underlying data structure is unchanged. */
-    function piyoSmallArt(kind="happy"){
-      return piyoDashArt(kind).replace(
-        'class="illustration"',
-        'class="illustration piyo-small-art"'
-      );
-    }
-
-    function piyoFoodArt(foodId){
-      const S=inner=>`<svg class="illustration piyo-food-art" viewBox="0 0 56 48" aria-hidden="true">${inner}</svg>`;
-      const base=(extra="")=>S(`
-        <path fill="#FFE26A" stroke="#7A5A3C" stroke-width="1.7"
-          d="M10 23 Q10 10 28 8 Q46 10 46 23 Q46 39 28 40 Q10 39 10 23Z"/>
-        <circle fill="#F2A0A0" cx="16" cy="27" r="2.7"/>
-        <circle fill="#F2A0A0" cx="40" cy="27" r="2.7"/>
-        <circle fill="#5C4536" cx="22" cy="22" r="1.6"/>
-        <circle fill="#5C4536" cx="34" cy="22" r="1.6"/>
-        <path fill="#EF9E26" stroke="#7A5A3C" stroke-width="1.6"
-          d="M24 26 L28 30 L32 26 Q28 22 24 26Z"/>
-        ${extra}
-      `);
-      const plate=`<ellipse cx="28" cy="38" rx="13" ry="3.2" fill="#FFFDF1" stroke="#7A5A3C" stroke-width="1.2"/>`;
-      const food = {
-        rice:`<path fill="#FFFDF1" stroke="#7A5A3C" stroke-width="1.1" d="M19 35 Q20 29 28 29 Q36 29 37 35Z"/>`,
-        sate:`<path d="M22 37 L34 28" stroke="#A86F47" stroke-width="1.5"/><circle cx="26" cy="34" r="2.2" fill="#A86F47"/><circle cx="29" cy="32" r="2.2" fill="#A86F47"/><circle cx="32" cy="29.5" r="2.2" fill="#A86F47"/>`,
-        soto_mie:`<path fill="#FFFDF1" stroke="#7A5A3C" stroke-width="1.1" d="M18 34 Q28 39 38 34 L36 38 Q28 42 20 38Z"/><path d="M21 34 Q25 30 29 34 T37 33" fill="none" stroke="#E6B85C" stroke-width="1.4"/>`,
-        pempek:`<path fill="#D7A86E" stroke="#7A5A3C" stroke-width="1.1" d="M21 35 Q24 29 28 32 Q32 28 36 35 Q30 39 21 35Z"/>`,
-        telur_dadar:`<ellipse cx="28" cy="34" rx="10" ry="4.5" fill="#F3C95B" stroke="#7A5A3C" stroke-width="1.1"/>`,
-        indomie:`<path d="M19 34 Q28 29 37 34" fill="none" stroke="#E4B84F" stroke-width="2.4"/><path d="M20 37 Q28 33 36 37" fill="none" stroke="#E4B84F" stroke-width="1.7"/>`,
-        mie_sedap_laksa:`<path d="M19 34 Q28 29 37 34" fill="none" stroke="#E7B45C" stroke-width="2.5"/><circle cx="34" cy="32" r="2" fill="#EF9E26"/>`,
-        ayam_penyet:`<path fill="#C9874F" stroke="#7A5A3C" stroke-width="1.1" d="M20 35 Q24 29 29 32 Q34 29 37 35 Q29 39 20 35Z"/>`,
-        brokoli:`<circle cx="23" cy="33" r="4" fill="#77A85D"/><circle cx="29" cy="31" r="4.5" fill="#77A85D"/><circle cx="35" cy="34" r="4" fill="#77A85D"/><path d="M28 34 V38" stroke="#7A5A3C" stroke-width="1.5"/>`,
-        tahu:`<rect x="22" y="30" width="12" height="8" rx="2" fill="#F1D7A0" stroke="#7A5A3C" stroke-width="1.1"/>`,
-        tempe:`<rect x="21" y="30" width="14" height="8" rx="2" fill="#D6B47A" stroke="#7A5A3C" stroke-width="1.1"/><circle cx="25" cy="33" r="1" fill="#FFF1C8"/><circle cx="30" cy="35" r="1" fill="#FFF1C8"/>`,
-        mie_ayam:`<path d="M19 34 Q28 29 37 34" fill="none" stroke="#E4B84F" stroke-width="2.4"/><path fill="#A86F47" d="M30 31 l5 2 l-2 3 l-5-2z"/>`
-      };
-      return base(`${food[foodId] || food["rice"]}${plate}`);
-    }
-
-    function piyoMealArt(mealId){
-      const extra = {
-        breakfast:`<path fill="#FFFDF1" stroke="#7A5A3C" stroke-width="1.1" d="M20 35 Q28 29 36 35 Q28 39 20 35Z"/><path d="M23 29 Q28 25 33 29" fill="none" stroke="#D9B86A" stroke-width="1.2"/>`,
-        lunch:`<path fill="#FFFDF1" stroke="#7A5A3C" stroke-width="1.1" d="M19 35 Q28 39 37 35 L35 39 Q28 42 21 39Z"/>`,
-        dinner:`<circle cx="28" cy="34" r="7" fill="#FFFDF1" stroke="#7A5A3C" stroke-width="1.1"/><path d="M24 34 Q28 30 32 34" fill="none" stroke="#E5B65B" stroke-width="1.3"/>`,
-        snack:`<path fill="#D7A86E" stroke="#7A5A3C" stroke-width="1.1" d="M21 36 Q24 30 28 33 Q32 29 35 36 Q29 39 21 36Z"/>`
-      }[mealId] || "";
-      return piyoDashArt("happy").replace(
-        'class="illustration"',
-        'class="illustration piyo-meal-art"'
-      ).replace('</svg>', `${extra}</svg>`);
-    }
-
-    function piyoMetaArt(kind="love"){
-      return piyoSmallArt(kind);
-    }
 
     function dashboardPiyoIcon(kind="happy"){
       const S=inner=>`<svg class="dashboard-piyo-icon" viewBox="0 0 56 48" aria-hidden="true">${inner}</svg>`;
@@ -494,7 +429,7 @@ async function load(){
   });
   $("positive").textContent=(total?Math.round(positiveRows.length/total*100):0)+"%";
  const fc={};data.forEach(x=>(x.food_ids||[]).forEach(id=>fc[id]=(fc[id]||0)+1));const topF=Object.entries(fc).sort((a,b)=>b[1]-a[1]).slice(0,8),maxF=topF[0]?.[1]||1;
- $("foodBars").innerHTML=topF.length?topF.map(([id,n])=>{const f=foods.find(x=>x[0]===id);const label=String(id).startsWith("custom::")?String(id).slice("custom::".length):(f?f[2]:id);const icon=piyoFoodArt(String(id).startsWith("custom::")?"rice":id);return `<div class="barrow"><div>${icon} ${label}</div><div class="bar"><div class="fill" style="width:${n/maxF*100}%"></div></div><div>${n}</div></div>`}).join(""):'<div class="empty">Belum ada data.</div>';
+ $("foodBars").innerHTML=topF.length?topF.map(([id,n])=>{const f=foods.find(x=>x[0]===id);const label=String(id).startsWith("custom::")?String(id).slice("custom::".length):(f?f[2]:id);const icon=String(id).startsWith("custom::")?piyoDashArt("happy"):piyoDashArt("happy");return `<div class="barrow"><div>${icon} ${label}</div><div class="bar"><div class="fill" style="width:${n/maxF*100}%"></div></div><div>${n}</div></div>`}).join(""):'<div class="empty">Belum ada data.</div>';
  const mc={};data.forEach(x=>{
     const ids=Array.isArray(x.mood_id)?x.mood_id:[x.mood_id];
     ids.forEach(id=>mc[id]=(mc[id]||0)+1);
@@ -506,10 +441,10 @@ async function load(){
   const m=moods.find(x=>x[0]===id)||["neutral","",id];
   return `<div class="barrow"><div><span style="display:inline-flex;vertical-align:middle">${piyoDashArt(m[0]||"neutral")}</span> ${m[2]}</div><div class="bar"><div class="fill" style="width:${n/maxM*100}%"></div></div><div>${n}</div></div>`;
 }).join("");
- $("list").innerHTML=data.length?data.map(x=>{const meal=meals.find(m=>m[0]===x.meal_type),mood=moods.find(m=>m[0]===((Array.isArray(x.mood_id)?x.mood_id[0]:x.mood_id))),names=(x.food_ids||[]).map(id=>{if(String(id).startsWith("custom::"))return piyoFoodArt("rice")+" "+String(id).slice("custom::".length);const f=foods.find(f=>f[0]===id);return f?piyoFoodArt(f[0])+" "+f[2]:null;}).filter(Boolean).join(" · "),t=new Date(x.eaten_at).toLocaleString("id-ID",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});return `<div class="entry"><div class="row"><span>${meal?piyoMealArt(meal[0])+" "+meal[2]:piyoSmallArt("happy")+" "+x.meal_type}</span><span>${t}</span></div><div class="main"><div class="foods">${names}</div><div class="mood">${piyoDashArt(mood?mood[0]:"neutral")}</div></div>${x.soundtrack?`<div class="extra-info">${piyoMetaArt("happy")} ${String(x.soundtrack).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}
-${x.love_answer?`<div class="extra-info">${piyoMetaArt("love")} ${String(x.love_answer).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}
-${x.one_word?`<div class="extra-info">${piyoMetaArt("happy")} ${String(x.one_word).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}
-${x.comment?`<div class="comment">${piyoMetaArt("happy")} ${String(x.comment).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}</div>`}).join(""):'<div class="empty">Belum ada catatan.</div>';
+ $("list").innerHTML=data.length?data.map(x=>{const meal=meals.find(m=>m[0]===x.meal_type),mood=moods.find(m=>m[0]===((Array.isArray(x.mood_id)?x.mood_id[0]:x.mood_id))),names=(x.food_ids||[]).map(id=>{if(String(id).startsWith("custom::"))return `<span style="display:inline-flex;vertical-align:middle">${piyoDashArt("happy")}</span> `+String(id).slice("custom::".length);const f=foods.find(f=>f[0]===id);return f?f[1]+" "+f[2]:null;}).filter(Boolean).join(" · "),t=new Date(x.eaten_at).toLocaleString("id-ID",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});return `<div class="entry"><div class="row"><span>${meal?`<span style="display:inline-flex;vertical-align:middle">${piyoDashArt(meal[0])}</span> ${meal[2]}`:x.meal_type}</span><span>${t}</span></div><div class="main"><div class="foods">${names}</div><div class="mood">${piyoDashArt(mood?mood[0]:"neutral")}</div></div>${x.soundtrack?`<div class="extra-info"><span style="display:inline-flex;vertical-align:middle">${piyoDashArt("happy")}</span> ${String(x.soundtrack).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}
+${x.love_answer?`<div class="extra-info"><span style="display:inline-flex;vertical-align:middle">${piyoDashArt("love")}</span> ${String(x.love_answer).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}
+${x.one_word?`<div class="extra-info">✏️ ${String(x.one_word).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}
+${x.comment?`<div class="comment"><span style="display:inline-flex;vertical-align:middle">${piyoDashArt("happy")}</span> ${String(x.comment).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>`:""}</div>`}).join(""):'<div class="empty">Belum ada catatan.</div>';
   await loadActivities();
 }
 $("refresh").onclick=load;$("loginButton").addEventListener("click",loginHusband);
